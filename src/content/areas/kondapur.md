@@ -1,0 +1,5 @@
+---
+name: "Kondapur"
+localNotes: ""
+landmarks: []
+---
