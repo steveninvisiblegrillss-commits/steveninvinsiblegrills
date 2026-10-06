@@ -7,8 +7,8 @@ title: "All Sports Nets in Hyderabad"
 seoTitle: "Sports Nets in Hyderabad, Cricket, Football, Tennis"
 description: "Sports nets for cricket, football, badminton, tennis and swimming pool safety in Hyderabad. Custom sizes and professional installation. WhatsApp for a quote."
 answer: "Sports nets keep balls and equipment inside the play area and prevent accidents. Steven Invisible Grills supplies and installs nets for cricket, football, badminton, tennis and swimming pool safety in custom sizes across Hyderabad. Send your area size on WhatsApp for a quote."
-hero: ../../assets/images/services/all-sports-nets-hyderabad.webp
-heroAlt: "Sports net installed around a play area in Hyderabad"
+hero: ../../assets/images/projects/football-turf-sports-net-hyderabad.webp
+heroAlt: "Children playing football on an artificial turf enclosed by a green sports net"
 uses:
   - "Cricket and football"
   - "Badminton and tennis"

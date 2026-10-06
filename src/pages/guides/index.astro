@@ -1,0 +1,26 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const guides = (await getCollection('guides')).sort((a, b) => +b.data.published - +a.data.published);
+---
+<Base title="Guides: safety nets and invisible grills" description="Plain-English guides on invisible grills, balcony safety nets and pigeon nets for Hyderabad homes. Compare options and know what to check." path="/guides/">
+  <div class="mx-auto max-w-7xl px-4 pb-20 pt-10 md:px-8">
+    <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">Guides</h1>
+    <p class="mt-4 max-w-[62ch] text-lg text-ink-soft">Short, practical answers to the questions people ask before they choose a net or an invisible grill.</p>
+    <ul class="mt-10 grid gap-6 md:grid-cols-2">
+      {guides.map((g) => (
+        <li class="group overflow-hidden rounded-[var(--radius-card)] border border-line bg-card">
+          <a href={`/guides/${g.id}/`} class="block h-full">
+            <Picture src={g.data.hero} alt={g.data.heroAlt} widths={[480, 800]} sizes="(min-width: 768px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[16/9] w-full object-cover transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:scale-[1.03]" />
+            <div class="p-5">
+              <h2 class="text-xl font-semibold group-hover:text-brand">{g.data.title}</h2>
+              <p class="mt-2 text-ink-soft">{g.data.description}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>

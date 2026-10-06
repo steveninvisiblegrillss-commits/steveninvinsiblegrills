@@ -8,20 +8,21 @@ import Button from './Button.astro';
 import ProjectGrid from './ProjectGrid.astro';
 import FaqList from './FaqList.astro';
 import AreaChips from './AreaChips.astro';
-import CtaBand from './CtaBand.astro';
 import QuoteForm from './QuoteForm.astro';
+import { headings, priceBasis } from '../config/headings';
 
 interface Props { entry: any; related: any[]; crumbs: { name: string; path: string }[] }
 const { entry, related, crumbs } = Astro.props;
 const d = entry.data;
 const path = Astro.url.pathname;
 const wa = waLink(quoteMessage({ service: d.name, path }));
+const h = headings[entry.id] ?? { solves: `What does ${d.name.toLowerCase()} solve?`, install: `How is ${d.name.toLowerCase()} installed?`, price: `What decides the price?` };
 const facts = [
   ['Used for', d.uses.join(', ')],
   ['Where', `Homes, apartments and buildings across ${site.city}`],
   d.material ? ['Material', d.material] : null,
   site.freeInstallation ? ['Installation', 'Free'] : null,
-  d.priceRange ? ['Price', d.priceRange] : ['Price basis', d.priceFactors.slice(0, 2).join(' and ').toLowerCase()],
+  d.priceRange ? ['Price', d.priceRange] : ['Price basis', priceBasis[d.category]],
 ].filter(Boolean) as string[][];
 ---
 <div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
@@ -48,7 +49,7 @@ const facts = [
       </dl>
 
       <section class="pt-14">
-        <h2 class="text-3xl font-bold md:text-4xl">What problems do {d.name.toLowerCase()} solve?</h2>
+        <h2 class="text-3xl font-bold md:text-4xl">{h.solves}</h2>
         <ul class="mt-6 grid gap-3">
           {d.problems.map((p: string) => (
             <li class="flex gap-3"><Icon name="ph:check-circle-duotone" class="mt-0.5 size-6 shrink-0 text-brand" /><span class="max-w-[65ch]">{p}</span></li>
@@ -62,7 +63,7 @@ const facts = [
 
       {d.installSteps.length > 0 && (
         <section class="py-14">
-          <h2 class="text-3xl font-bold md:text-4xl">How do we install {d.name.toLowerCase()}?</h2>
+          <h2 class="text-3xl font-bold md:text-4xl">{h.install}</h2>
           <ol class="mt-8 grid gap-4 sm:grid-cols-2">
             {d.installSteps.map((s: string, i: number) => (
               <li class="flex gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5">
@@ -76,7 +77,7 @@ const facts = [
 
       {d.priceFactors.length > 0 && (
         <section class="pb-14">
-          <h2 class="text-3xl font-bold md:text-4xl">What decides the price of {d.name.toLowerCase()}?</h2>
+          <h2 class="text-3xl font-bold md:text-4xl">{h.price}</h2>
           <ul class="mt-6 flex flex-wrap gap-3">
             {d.priceFactors.map((f: string) => <li class="rounded-full border border-line bg-card px-4 py-2">{f}</li>)}
           </ul>
@@ -107,4 +108,3 @@ const facts = [
     </aside>
   </div>
 </div>
-<div class="mt-8"><CtaBand service={d.name} /></div>

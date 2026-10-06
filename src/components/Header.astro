@@ -9,23 +9,40 @@ import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
 interface Props { service?: string; area?: string }
 const { service, area } = Astro.props;
 const here = Astro.url.pathname;
+const isHome = here === '/';
 const all = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const hubs = all.filter((s) => s.data.kind === 'hub');
 const wa = waLink(quoteMessage({ service, area, path: here }));
+// Home: in-page section links with scroll-spy. Inner pages: real page links (never jump back to the home page).
+const pageNav = [
+  ...hubs.map((h) => ({ label: h.data.name, href: `/${h.id}/` })),
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Contact', href: '/contact/' },
+];
+const quick = [
+  { label: 'Projects', href: '/projects/' },
+  { label: 'Areas', href: '/areas/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Contact', href: '/contact/' },
+];
 ---
-{/* Zero-height sticky wrapper: the glass bar floats over the page without taking layout space. */}
+{/* Zero-height sticky wrapper: the bar floats over the page without taking layout space. */}
 <header class="sticky top-0 z-30 h-0">
   <div class="mx-auto max-w-7xl px-3 pt-3 md:px-6">
-    <div class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/80 px-4 text-white shadow-lg shadow-black/20 backdrop-blur-md">
-      <a href="/" class="flex items-center gap-2.5 whitespace-nowrap text-base font-bold tracking-tight sm:text-lg" aria-label={`${site.name} home`}>
+    <div class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-brand-deep/95 px-4 text-white shadow-lg shadow-black/25 backdrop-blur-md">
+      <a href="/" class="flex min-h-11 items-center gap-2.5 whitespace-nowrap text-base font-bold tracking-tight sm:text-lg" aria-label={`${site.name} home`}>
         <Image src={markLight} alt="" width={64} height={64} loading="eager" class="size-9" />
         {site.name}
       </a>
 
       <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
-        {site.sections.map((n) => (
-          <a href={n.href} data-spy={n.id} class="rounded-full px-3 py-1.5 text-sm font-medium text-white/75 transition-colors hover:text-white aria-[current=true]:bg-white/10 aria-[current=true]:text-white">{n.label}</a>
-        ))}
+        {isHome
+          ? site.sections.map((n) => (
+              <a href={n.href} data-spy={n.id} class="rounded-full px-3 py-1.5 text-sm font-medium text-white/75 transition-colors hover:text-white aria-[current=true]:bg-white/10 aria-[current=true]:text-white">{n.label}</a>
+            ))
+          : pageNav.map((n) => (
+              <a href={n.href} aria-current={here.startsWith(n.href) ? 'page' : undefined} class="rounded-full px-3 py-1.5 text-sm font-medium text-white/75 transition-colors hover:text-white aria-[current=page]:bg-white/10 aria-[current=page]:text-white">{n.label}</a>
+            ))}
       </nav>
 
       <div class="flex items-center gap-2">
@@ -35,7 +52,7 @@ const wa = waLink(quoteMessage({ service, area, path: here }));
         <a href={wa} data-service={service} data-area={area} class="hidden items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink transition-transform active:scale-[0.97] sm:inline-flex">
           <Icon name="ph:whatsapp-logo-duotone" class="size-5" />WhatsApp
         </a>
-        <button popovertarget="menu" class="grid size-10 place-items-center rounded-full border border-white/15 lg:hidden" aria-label="Open menu">
+        <button popovertarget="menu" class="grid size-11 place-items-center rounded-full border border-white/15 lg:hidden" aria-label="Open menu">
           <Icon name="ph:list-bold" class="size-5" />
         </button>
       </div>
@@ -43,51 +60,62 @@ const wa = waLink(quoteMessage({ service, area, path: here }));
   </div>
 </header>
 
-{/* Native popover: renders in the top layer, so the glass bar above cannot clip it. */}
-<div id="menu" popover class="m-0 size-full max-h-none max-w-none overflow-y-auto border-0 bg-brand-deep p-6 text-white">
+{/* Native popover: top layer, so nothing above can clip it. */}
+<div id="menu" popover class="m-0 size-full max-h-none max-w-none overflow-y-auto border-0 bg-brand-deep p-5 text-white">
   <div class="flex items-center justify-between">
-    <span class="flex items-center gap-2.5 text-lg font-bold"><Image src={markLight} alt="" width={64} height={64} class="size-8" />{site.name}</span>
-    <button popovertarget="menu" popovertargetaction="hide" class="grid size-10 place-items-center rounded-full border border-white/20" aria-label="Close menu">
+    <span class="flex items-center gap-2.5 text-lg font-bold"><Image src={markLight} alt="" width={64} height={64} class="size-9" />{site.name}</span>
+    <button popovertarget="menu" popovertargetaction="hide" class="grid size-11 place-items-center rounded-full border border-white/20" aria-label="Close menu">
       <Icon name="ph:x-bold" class="size-5" />
     </button>
   </div>
-  <ul class="mt-8 grid gap-7 pb-24">
+
+  <div class="mt-6 grid grid-cols-2 gap-2">
+    <a href={telLink()} class="flex min-h-12 items-center justify-center gap-2 rounded-full border border-white/25 font-semibold"><Icon name="ph:phone-duotone" class="size-5 text-accent" />Call now</a>
+    <a href={wa} class="flex min-h-12 items-center justify-center gap-2 rounded-full bg-accent font-semibold text-accent-ink"><Icon name="ph:whatsapp-logo-duotone" class="size-5" />Get a quote</a>
+  </div>
+
+  <ul class="mt-5 grid grid-cols-2 gap-2">
+    {quick.map((n) => (
+      <li><a href={n.href} class="flex min-h-12 items-center rounded-xl border border-white/10 bg-white/5 px-4 font-semibold">{n.label}</a></li>
+    ))}
+  </ul>
+
+  <p class="mb-2 mt-8 text-sm font-semibold text-white/60">Our services</p>
+  <div class="grid gap-2 pb-24">
     {hubs.map((h) => (
-      <li>
-        <a href={`/${h.id}/`} class="text-xl font-bold">{h.data.name}</a>
-        <ul class="mt-2 grid gap-0.5">
+      <details name="menu-group" class="group rounded-xl border border-white/10 bg-white/5 px-4">
+        <summary class="flex min-h-12 cursor-pointer list-none items-center justify-between font-semibold">
+          {h.data.name}
+          <Icon name="ph:caret-down-bold" class="size-5 text-accent transition-transform duration-300 group-open:rotate-180" />
+        </summary>
+        <ul class="grid gap-0.5 pb-3">
+          <li><a href={`/${h.id}/`} class="block py-2 font-medium text-accent">View all {h.data.name.toLowerCase()}</a></li>
           {all.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
-            <li><a href={`/${s.id}/`} class="block py-2 text-white/70">{s.data.name}</a></li>
+            <li><a href={`/${s.id}/`} class="block py-2 text-white/75">{s.data.name}</a></li>
           ))}
         </ul>
-      </li>
+      </details>
     ))}
-    <li class="grid gap-1 border-t border-white/10 pt-5">
-      {site.nav.filter((n) => ['Projects', 'Areas', 'Contact'].includes(n.label)).map((n) => (
-        <a href={n.href} class="py-2 text-lg font-semibold">{n.label}</a>
-      ))}
-    </li>
-  </ul>
+  </div>
 </div>
 
 <script>
-  // Scroll-spy: marks the nav link of the section in view. No-op on pages without these sections.
+  // Scroll-spy (home only): the active link is the section crossing 40% of the viewport. None while the hero is on screen.
   const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-spy]')];
   const targets = links.map((l) => document.getElementById(l.dataset.spy!)).filter(Boolean) as HTMLElement[];
   if (targets.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (!e.isIntersecting) continue;
-          links.forEach((l) => l.setAttribute('aria-current', String(l.dataset.spy === e.target.id)));
-        }
-      },
-      { rootMargin: '-45% 0px -50% 0px' },
-    );
+    const update = () => {
+      const line = innerHeight * 0.4;
+      const active = targets.find((t) => { const r = t.getBoundingClientRect(); return r.top <= line && r.bottom > line; });
+      links.forEach((l) => l.setAttribute('aria-current', String(l.dataset.spy === active?.id)));
+    };
+    const io = new IntersectionObserver(update, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
     targets.forEach((t) => io.observe(t));
+    update();
   }
   // Close the menu after tapping a link inside it.
-  document.getElementById('menu')?.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).closest('a')) (document.getElementById('menu') as HTMLElement).hidePopover();
+  const menu = document.getElementById('menu') as HTMLElement | null;
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) menu.hidePopover();
   });
 </script>

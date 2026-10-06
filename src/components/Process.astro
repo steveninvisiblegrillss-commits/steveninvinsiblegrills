@@ -4,7 +4,7 @@ import { waLink, quoteMessage } from '../lib/whatsapp';
 
 const steps = [
   { icon: 'ph:camera-duotone', title: 'Snap and send a photo', text: 'Send a photo of your balcony or window on WhatsApp, with a rough size.' },
-  { icon: 'ph:receipt-duotone', title: 'Get an upfront quote', text: 'You get the full price in writing before we start. No surprises.' },
+  { icon: 'ph:receipt-duotone', title: 'Get an upfront quote', text: 'You get the full price before we start. No surprises.' },
   { icon: 'ph:hammer-duotone', title: 'We install for free', text: 'Our team measures, fits it neatly and checks it with you. Installation is free.' },
 ];
 const wa = waLink(quoteMessage({ path: '/' }));

@@ -6,9 +6,11 @@ const areas = [{ id: 'kukatpally', localNotes: notes }, { id: 'miyapur', localNo
 const p = (area: string, services: string[]) => ({ area, services });
 
 describe('publish rules', () => {
-  it('area page needs at least one project', () => {
+  it('area page needs real local notes and at least one project', () => {
     expect(publishableAreas(areas, [p('kukatpally', ['pigeon-safety-nets'])])).toEqual(['kukatpally']);
     expect(publishableAreas(areas, [])).toEqual([]);
+    // projects but no notes: not published (would only repeat the projects list)
+    expect(publishableAreas(areas, [p('miyapur', ['pigeon-safety-nets'])])).toEqual([]);
   });
   it('combo needs >= 2 matching projects and local notes', () => {
     const projects = [

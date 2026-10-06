@@ -14,9 +14,9 @@ export function businessNode() {
     logo: { '@type': 'ImageObject', url: abs('/logo.png'), width: 512, height: 512 },
     image: abs('/og-default.jpg'),
     telephone: site.phoneE164,
-    email: site.email,
     areaServed: site.areas.map((a) => ({ '@type': 'Place', name: `${a.name}, ${site.city}` })),
   };
+  if (site.email) n.email = site.email;
   if (site.address)
     n.address = {
       '@type': 'PostalAddress', streetAddress: site.address.street, postalCode: site.address.postalCode,

@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { parse } from 'node-html-parser';
 
 const DIST = 'dist';
-const SITE = 'https://www.mrrinvisiblegrillspigeonnets.in/';
+const SITE = (process.env.PUBLIC_SITE_URL ?? 'https://steven-invisible-grills.steveninvisiblegrillss.workers.dev').replace(/\/$/, '') + '/';
 const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirectory() ? walk(join(d, f)) : [join(d, f)]));
 const files = walk(DIST);
 const errors = [];

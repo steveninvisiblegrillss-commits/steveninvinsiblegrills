@@ -18,9 +18,9 @@ const pillars = all
   <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
     <h2 class="max-w-2xl text-3xl font-bold md:text-4xl">Four ways we protect and improve your space</h2>
     <p class="mt-3 max-w-[60ch] text-ink-soft">Tap a group to see every service we install. Each service page has pricing factors, FAQs and our recent work.</p>
-    <div class="mt-10 grid items-start gap-6 md:grid-cols-2">
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
       {pillars.map(({ hub, items }) => (
-        <article class="overflow-hidden rounded-2xl border border-white/10 bg-brand-deep text-white shadow-[var(--shadow-soft)]">
+        <article class="flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-brand-deep text-white shadow-[var(--shadow-soft)]">
           <a href={`/${hub.id}/`} class="group relative block" aria-label={`${hub.data.name}: view all`}>
             <Picture src={hub.data.hero} alt={hub.data.heroAlt} widths={[480, 800, 1000]} sizes="(min-width: 768px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[16/9] w-full object-cover opacity-90 transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
             <div class="absolute inset-0 bg-gradient-to-t from-brand-deep via-brand-deep/30 to-transparent"></div>
@@ -28,10 +28,10 @@ const pillars = all
               <Icon name={icons[hub.data.category]} class="size-7 text-accent" />
             </span>
           </a>
-          <div class="p-6 pt-4">
-            <h3 class="text-2xl font-bold"><a href={`/${hub.id}/`} class="hover:underline">{hub.data.name}</a></h3>
-            <p class="mt-2 text-white/75">{hub.data.description}</p>
-            <details name="pillar" class="group/d mt-5 border-t border-white/10 pt-4">
+          <div class="flex flex-1 flex-col p-6 pt-4">
+            <h3 class="text-2xl font-bold"><a href={`/${hub.id}/`} class="inline-flex min-h-11 items-center hover:underline">{hub.data.name}</a></h3>
+            <p class="mb-5 mt-2 text-white/75">{hub.data.description}</p>
+            <details name="pillar" class="group/d mt-auto border-t border-white/10 pt-4">
               <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 font-semibold">
                 <span>{items.length} services</span>
                 <Icon name="ph:caret-down-bold" class="size-5 text-accent transition-transform duration-300 group-open/d:rotate-180" />
@@ -41,7 +41,7 @@ const pillars = all
                   <li><a href={`/${s.id}/`} class="inline-block min-h-11 rounded-full border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/15">{s.data.name}</a></li>
                 ))}
               </ul>
-              <a href={`/${hub.id}/`} class="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-accent">View all {hub.data.name.toLowerCase()}<Icon name="ph:arrow-right-bold" class="size-4" /></a>
+              <a href={`/${hub.id}/`} class="mt-2 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-accent">View all {hub.data.name.toLowerCase()}<Icon name="ph:arrow-right-bold" class="size-4" /></a>
             </details>
           </div>
         </article>

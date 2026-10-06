@@ -60,4 +60,12 @@ for (const [file, size] of [['favicon-32.png', 32], ['favicon-192.png', 192], ['
   const mask = Buffer.from(`<svg width="${size}" height="${size}"><rect width="${size}" height="${size}" rx="${r}" fill="#fff"/></svg>`);
   await sharp(tile).composite([{ input: mask, blend: 'dest-in' }]).png().toFile(`public/${file}`);
 }
+// favicon.ico (PNG-in-ICO): browsers request /favicon.ico by default even when <link rel="icon"> exists.
+const { readFileSync, writeFileSync } = await import('node:fs');
+const png = readFileSync('public/favicon-32.png');
+const head = Buffer.alloc(22);
+head.writeUInt16LE(0, 0); head.writeUInt16LE(1, 2); head.writeUInt16LE(1, 4);
+head[6] = 32; head[7] = 32; head.writeUInt16LE(1, 12); head.writeUInt16LE(32, 14);
+head.writeUInt32LE(png.length, 14 + 4); head.writeUInt32LE(22, 18);
+writeFileSync('public/favicon.ico', Buffer.concat([head, png]));
 console.log('logo assets written');

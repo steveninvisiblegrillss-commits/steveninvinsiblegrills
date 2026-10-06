@@ -1,28 +1,65 @@
 ---
 import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { site } from '../config/site';
 import { waLink, quoteMessage } from '../lib/whatsapp';
-import photo from '../assets/images/projects/balcony-safety-net-apartment-hyderabad.webp';
+import photo from '../assets/images/projects/balcony-net-installer-with-fitted-net-hyderabad.webp';
 
 const wa = waLink(quoteMessage({ path: '/about/' }));
+const hubs = (await getCollection('services', (s) => s.data.kind === 'hub')).sort((a, b) => a.data.order - b.data.order);
+const steps = [
+  { t: 'We look at your space', d: 'You send photos on WhatsApp. For most jobs we then visit to measure the openings properly.' },
+  { t: 'You get a clear quote', d: 'The price depends on area, material and access. We explain what drives it before you decide.' },
+  { t: 'Our team installs', d: 'We fix the frame or hooks, stretch the net or wires, and check every corner for gaps or slack.' },
+  { t: 'We check it with you', d: 'Before we leave, we walk through the finished work so you know it is right.' },
+];
 ---
 <Base title="About Steven Invisible Grills, Hyderabad" description="Steven Invisible Grills installs safety nets, pigeon nets, invisible grills and cloth hangers for Hyderabad homes. 10+ years, free installation." path="/about/">
-  <div class="mx-auto grid max-w-7xl gap-12 px-4 py-14 md:px-8 lg:grid-cols-12">
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 pt-10 md:px-8 lg:grid-cols-12">
     <div class="lg:col-span-7">
       <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">Safety work done properly, across Hyderabad</h1>
       <div class="mt-6 grid max-w-[65ch] gap-4 text-lg text-ink-soft">
-        <p>{site.name} installs balcony safety nets, pigeon nets, invisible grills and cloth hangers for homes, apartments and offices in Hyderabad and Secunderabad. We have {site.yearsClaim} of experience.</p>
-        <p>From large commercial projects to a single apartment balcony, our team measures the space, gives a clear quote and installs with durable materials. Installation is free.</p>
-        <p>Send a photo of your balcony or window on WhatsApp and we will tell you what fits.</p>
+        <p>{site.name} installs balcony safety nets, pigeon nets, invisible grills, cloth hangers and sports nets for homes, apartment communities and offices in Hyderabad and Secunderabad. We have {site.yearsClaim} of experience, and installation is free.</p>
+        <p>Most of our work starts with a worry: a child near an open balcony, pigeons nesting in a duct, a window with no protection. The right product is usually simple once we see the space, so we ask for a photo first and recommend the option that fits.</p>
       </div>
       <div class="mt-8"><Button href={wa} variant="accent">Get a free quote</Button></div>
     </div>
     <div class="lg:col-span-5">
-      <Picture src={photo} alt="White balcony safety net fitted along the railing of an apartment balcony" widths={[480, 800]} sizes="(min-width: 1024px) 40vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full rounded-[var(--radius-card)] object-cover" />
+      <Picture src={photo} alt="Our installer standing beside a balcony safety net fitted along a curved apartment railing" widths={[480, 800]} sizes="(min-width: 1024px) 40vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full rounded-[var(--radius-card)] object-cover" />
     </div>
   </div>
+
+  <section class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+    <h2 class="text-3xl font-bold md:text-4xl">What we install</h2>
+    <ul class="mt-8 grid gap-5 sm:grid-cols-2">
+      {hubs.map((h) => (
+        <li class="rounded-[var(--radius-card)] border border-line bg-card p-6">
+          <h3 class="text-xl font-semibold"><a href={`/${h.id}/`} class="inline-flex min-h-11 items-center hover:text-brand hover:underline">{h.data.name}</a></h3>
+          <p class="mt-2 text-ink-soft">{h.data.description}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="bg-surface-2">
+    <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+      <h2 class="text-3xl font-bold md:text-4xl">How a job goes</h2>
+      <ol class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        {steps.map((s, i) => (
+          <li class="rounded-[var(--radius-card)] bg-card p-6">
+            <span class="grid size-9 place-items-center rounded-full bg-brand-deep text-sm font-bold text-accent">{i + 1}</span>
+            <h3 class="mt-4 text-lg font-semibold">{s.t}</h3>
+            <p class="mt-2 text-ink-soft">{s.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-7xl px-4 md:px-8"><ProjectGrid heading="Our work" limit={3} /></div>
   <CtaBand />
 </Base>

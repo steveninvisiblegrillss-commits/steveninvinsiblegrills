@@ -22,18 +22,23 @@ const wa = waLink(quoteMessage({ service: d.name, path: Astro.url.pathname }));
   <div class="mt-5 grid max-w-[65ch] gap-4"><slot /></div>
   <div class="mt-7"><Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button></div>
 
-  <ul class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-    {services.map((s, i) => (
-      <li class:list={['group overflow-hidden rounded-[var(--radius-card)] border border-line bg-card', i === 0 && 'md:col-span-2 lg:col-span-2']}>
-        <a href={`/${s.id}/`} class="block h-full">
-          <Picture src={s.data.hero} alt={s.data.heroAlt} widths={[400, 800, 1200]} sizes={i === 0 ? '(min-width: 1024px) 66vw, 100vw' : '(min-width: 1024px) 33vw, 100vw'} formats={['avif']} fallbackFormat="webp" class:list={['w-full object-cover transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:scale-[1.03]', i === 0 ? 'aspect-[16/8]' : 'aspect-[16/10]']} />
-          <div class="p-5">
-            <h2 class="text-xl font-semibold group-hover:text-brand">{s.data.name}</h2>
-            <p class="mt-2 text-ink-soft">{s.data.description}</p>
-          </div>
-        </a>
-      </li>
-    ))}
+  <ul class:list={['mt-12 grid gap-5 sm:grid-cols-2', services.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3']}>
+    {services.map((s, i) => {
+      // 4, 7 or 10 cards: the first card spans the full row so every later row is complete.
+      const lead = i === 0 && services.length > 3 && services.length % 3 === 1;
+      const oddTail = (services.length - (services.length % 3 === 1 ? 1 : 0)) % 2 === 1 && i === services.length - 1;
+      return (
+        <li class:list={['group overflow-hidden rounded-[var(--radius-card)] border border-line bg-card', lead && 'sm:col-span-2 lg:col-span-3', oddTail && 'sm:max-lg:col-span-2']}>
+          <a href={`/${s.id}/`} class="block h-full">
+            <Picture src={s.data.hero} alt={s.data.heroAlt} widths={[400, 800, 1200]} sizes={lead ? '100vw' : '(min-width: 1024px) 33vw, 50vw'} formats={['avif']} fallbackFormat="webp" class:list={['w-full object-cover transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:scale-[1.03]', lead ? 'aspect-[16/7]' : 'aspect-[16/10]']} />
+            <div class="p-5">
+              <h2 class="text-xl font-semibold group-hover:text-brand">{s.data.name}</h2>
+              <p class="mt-2 text-ink-soft">{s.data.description}</p>
+            </div>
+          </a>
+        </li>
+      );
+    })}
   </ul>
 
   {d.alsoAvailable.length > 0 && (

@@ -7,8 +7,8 @@ title: "Children Safety Nets in Hyderabad"
 seoTitle: "Children Safety Nets in Hyderabad, Free Installation"
 description: "Children safety nets for apartment balconies and windows in Hyderabad. Keep kids safe at height while keeping the view open. Free installation."
 answer: "Children safety nets are fixed across balconies and windows so children cannot fall or climb out, while the view and airflow stay open. Steven Invisible Grills installs them in apartments across Hyderabad with free installation. Send a photo of your balcony on WhatsApp and tell us your child age for a quote."
-hero: ../../assets/images/services/children-safety-nets-hyderabad.webp
-heroAlt: "Child-safe net fitted on an apartment balcony in Hyderabad"
+hero: ../../assets/images/projects/child-safe-balcony-net-hyderabad.webp
+heroAlt: "Child looking out through a white balcony safety net at night on an apartment balcony"
 uses:
   - "Apartment balconies"
   - "Windows"

@@ -6,7 +6,7 @@ const { crumbs } = Astro.props;
   <ol class="flex flex-wrap items-center gap-2">
     {crumbs.map((c, i) => (
       <li class="flex items-center gap-2">
-        {i < crumbs.length - 1 ? <a href={c.path} class="capitalize hover:text-brand hover:underline">{c.name}</a> : <span aria-current="page" class="capitalize font-medium text-ink">{c.name}</span>}
+        {i < crumbs.length - 1 ? <a href={c.path} class="inline-flex min-h-11 items-center capitalize hover:text-brand hover:underline">{c.name}</a> : <span aria-current="page" class="capitalize font-medium text-ink">{c.name}</span>}
         {i < crumbs.length - 1 && <span aria-hidden="true">/</span>}
       </li>
     ))}

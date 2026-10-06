@@ -53,3 +53,15 @@ Directory listings with identical name and phone, Bing Webmaster Tools and Index
 H1 is now "Invisible grills and safety nets for Hyderabad homes" with the eyebrow "Hyderabad home safety". The old brand line "Unobstructed views. Uncompromised safety." is a small italic statement under the trust row. Layout: 45/55 split on desktop (navy text column, one rounded-3xl photo, no text over the image, no float animation). On mobile the content comes first and the 4:3 image second; hero height is about 1.3 viewports. Colours unchanged (accent stays `#F59E0B`).
 Hero photo: the dusk balcony with an almost invisible grill, a plant and city lights (`services/invisible-grills-for-balconies-hyderabad`). It came from the old site and is NOT confirmed as a Steven installation. Replace it with a real project photo (modern apartment, clean daylight, grill barely visible) when available: swap the import in `src/pages/index.astro`.
 The "Safety and fall prevention" card now uses the real child-safe net project photo.
+
+## Review fixes (2026-10-06, second pass)
+- One brand identity: name, email and domain now come from `site.ts` and `PUBLIC_SITE_URL`. Email is `steveninvisiblegrillss@gmail.com`. Until a real domain is connected, canonicals and schema point at the preview host. Set `PUBLIC_SITE_URL` at launch (decision D15: which domain).
+- Service pages: unique H2 wording per service (`src/config/headings.ts`), proper "Price basis" line, real job photos as hero where we have them, no duplicate bottom quote box.
+- Header: near-opaque navy bar, page-aware nav (inner pages link to real pages), scroll-spy clears at the top, mobile menu leads with Call and Quote then grouped services.
+- Hubs: no half-empty rows. Home accordion no longer leaves a gap. Projects: uniform tiles, service filters, tiles link to detail pages.
+- Areas: an area page now needs real local notes plus a project, so `/areas/hyderabad/` is no longer published.
+- About, Contact, Areas, Projects expanded with practical content built only from confirmed facts.
+- Guides section added with two careful starter guides. Footer links to it.
+- Tap targets: all links and buttons 44px or taller on mobile (measured on 7 page types). Mobile footer lists categories only.
+- `favicon.ico` added. `_headers` adds X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security, X-Frame-Options, Permissions-Policy and one-year immutable caching for hashed assets.
+- Quote form shows a fallback WhatsApp link after submit. Not added, pending owner confirmation: a "we will call you within 30 minutes" promise, "from ₹X per sq ft" prices, 300 to 500 words per area page (needs real local jobs).

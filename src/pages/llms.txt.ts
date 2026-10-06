@@ -8,8 +8,8 @@ export async function GET() {
 > ${site.name} installs balcony safety nets, pigeon nets, invisible grills and cloth hangers for homes and buildings in ${site.city}, ${site.region}, India. ${site.yearsClaim} of experience. Free installation.
 
 - Phone / WhatsApp: ${site.phoneDisplay}
-- Email: ${site.email}
-- Areas served: ${site.areas.map((a) => a.name).join(', ')}
+${site.email ? `- Email: ${site.email}
+` : ''}- Areas served: ${site.areas.map((a) => a.name).join(', ')}
 
 ## Services
 ${services.map((s) => `- [${s.data.name}](${site.url}/${s.id}/): ${s.data.description}`).join('\n')}

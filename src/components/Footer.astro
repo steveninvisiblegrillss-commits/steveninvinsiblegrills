@@ -13,13 +13,13 @@ const hubs = services.filter((s) => s.data.kind === 'hub');
     <div class="grid content-start gap-3">
       <p class="flex items-center gap-2.5 text-lg font-bold text-white"><Image src={markLight} alt="" width={80} height={80} class="size-10" />{site.name}</p>
       <p class="max-w-xs text-sm">Safety nets, invisible grills and cloth hangers for homes and buildings across Hyderabad and Secunderabad.</p>
-      <a href={telLink()} class="font-semibold text-white">{site.phoneDisplay}</a>
-      <a href={`mailto:${site.email}`} class="text-sm underline-offset-4 hover:underline">{site.email}</a>
+      <a href={telLink()} class="inline-flex min-h-11 items-center font-semibold text-white">{site.phoneDisplay}</a>
+      {site.email && <a href={`mailto:${site.email}`} class="inline-flex min-h-11 items-center text-sm underline-offset-4 hover:underline">{site.email}</a>}
     </div>
     {hubs.map((h) => (
       <div>
-        <a href={`/${h.id}/`} class="font-semibold text-white">{h.data.name}</a>
-        <ul class="mt-3 grid gap-2 text-sm">
+        <a href={`/${h.id}/`} class="inline-flex min-h-11 items-center font-semibold text-white">{h.data.name}</a>
+        <ul class="mt-3 hidden gap-2 text-sm md:grid">
           {services.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
             <li><a href={`/${s.id}/`} class="hover:text-white hover:underline">{s.data.name}</a></li>
           ))}
@@ -30,13 +30,14 @@ const hubs = services.filter((s) => s.data.kind === 'hub');
   <div class="border-t border-white/10">
     <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-sm md:px-8">
       <p>&copy; {new Date().getFullYear()} {site.name}</p>
-      <nav class="flex flex-wrap gap-5" aria-label="Footer">
-        <a href="/projects/" class="hover:text-white">Projects</a>
-        <a href="/areas/" class="hover:text-white">Areas</a>
-        <a href="/faq/" class="hover:text-white">FAQ</a>
-        <a href="/about/" class="hover:text-white">About</a>
-        <a href="/contact/" class="hover:text-white">Contact</a>
-        <a href="/privacy-policy/" class="hover:text-white">Privacy</a>
+      <nav class="flex flex-wrap gap-x-5" aria-label="Footer">
+        <a href="/projects/" class="inline-flex min-h-11 items-center hover:text-white">Projects</a>
+        <a href="/areas/" class="inline-flex min-h-11 items-center hover:text-white">Areas</a>
+        <a href="/guides/" class="inline-flex min-h-11 items-center hover:text-white">Guides</a>
+        <a href="/faq/" class="inline-flex min-h-11 items-center hover:text-white">FAQ</a>
+        <a href="/about/" class="inline-flex min-h-11 items-center hover:text-white">About</a>
+        <a href="/contact/" class="inline-flex min-h-11 items-center hover:text-white">Contact</a>
+        <a href="/privacy-policy/" class="inline-flex min-h-11 items-center hover:text-white">Privacy</a>
       </nav>
     </div>
   </div>

@@ -11,11 +11,12 @@ export const site = {
   name: 'Steven Invisible Grills', // D1 resolved: must equal the Google Business Profile name
   alternateNames: ['MRR Safety Nets', 'MRR Invisible Grills', 'MRR Invisible Grills & Pigeon Nets'],
   tagline: 'Premium safety solutions',
-  url: 'https://www.mrrinvisiblegrillspigeonnets.in', // D15: switch when the new brand domain exists
+  // Set PUBLIC_SITE_URL to the real domain at launch. Until then canonicals and schema point at the preview host.
+  url: (import.meta.env?.PUBLIC_SITE_URL as string | undefined)?.replace(/\/$/, '') ?? 'https://steven-invisible-grills.steveninvisiblegrillss.workers.dev',
   phoneE164: '+916305721219',
   phoneDisplay: '+91 63057 21219',
   whatsapp: '916305721219',
-  email: 'mrrsafetynets@gmail.com',
+  email: 'steveninvisiblegrillss@gmail.com',
   city: 'Hyderabad',
   region: 'Telangana',
   country: 'IN',
