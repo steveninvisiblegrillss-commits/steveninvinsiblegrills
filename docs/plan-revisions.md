@@ -42,3 +42,9 @@ D5 real photos (30+, with area and service), D6 logo, premium imagery decision, 
 - Not shown until confirmed: "4.9 star rating" (renders from `site.rating` once a real Google rating is set), "Free on-site measurement", and neighbourhood tags like Gachibowli or Jubilee Hills (gallery tags say "Hyderabad" until real localities are known). No pricing calculator: the price guide page covers it.
 - H1 is now "Unobstructed views. Uncompromised safety." Keywords sit in the sub-headline, title tag and meta description. Revisit if Search Console shows the home page missing "invisible grills Hyderabad" queries.
 - Photo audit: project photos were relabelled after viewing every file. Held out of public pages until the client approves: `PG1`, `H-12`, `H-16` (identifiable faces), `H-15` (unclear subject). The monkey net image was removed because it carries another company's watermark.
+
+## Photo approvals (2026-10-06)
+The site owner approved the three photos showing faces (`PG1` installer, `H-12` child, `H-16` children on a football turf) for public use. Recommendation kept on record: confirm with the families of the children shown. `H-15` (indoor hall) stays out until its subject is known. The phone-brand watermark on `H-12` is cropped off. Project fields for area, property type, problem and solution are left blank until the client supplies real details; nothing is invented.
+
+## Order of remaining work
+Directory listings with identical name and phone, Bing Webmaster Tools and IndexNow are deliberately done last, after launch content is final.

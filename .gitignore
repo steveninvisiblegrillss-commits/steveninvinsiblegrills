@@ -4,3 +4,6 @@ dist
 .env
 public/_redirects
 .qa-*.png
+.qa/
+.qa-*
+.playwright-mcp/

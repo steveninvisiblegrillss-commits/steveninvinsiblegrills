@@ -7,7 +7,10 @@ import { dirname } from 'node:path';
 const SRC = 'research/original-assets/';
 const OUT = 'src/assets/images/';
 const map = {
-  // Held out (faces, client consent pending): about/PG1.jpg, about/H-12.jpg, about/H-16.jpg. Held out (unclear subject): about/H-15.jpg.
+  // Face photos approved by the site owner on 2026-10-06. Held out (unclear subject): about/H-15.jpg.
+  'about/PG1.jpg': 'projects/balcony-net-installer-with-fitted-net-hyderabad.webp',
+  'about/H-12.jpg': 'projects/child-safe-balcony-net-hyderabad.webp',
+  'about/H-16.jpg': 'projects/football-turf-sports-net-hyderabad.webp',
   'about/PG3.jpg': 'projects/balcony-safety-net-apartment-hyderabad.webp',
   'about/H-13.jpg': 'projects/cricket-practice-net-installation-hyderabad.webp',
   'about/H-14.jpg': 'projects/bird-spikes-installation-tiled-roof-hyderabad.webp',
@@ -42,7 +45,8 @@ for (const [from, to] of Object.entries(map)) {
   // Stock service images carry a 1px red frame baked in; trim 4px on every side to drop it.
   const src = sharp(SRC + from).rotate();
   const { width: w, height: h } = await sharp(SRC + from).metadata();
-  const trimmed = from.startsWith('services/') ? src.extract({ left: 4, top: 4, width: w - 8, height: h - 8 }) : src;
+  // H-12 carries a phone-brand watermark in the bottom-left corner: crop it off.
+  const trimmed = from.startsWith('services/') ? src.extract({ left: 4, top: 4, width: w - 8, height: h - 8 }) : from === 'about/H-12.jpg' ? src.extract({ left: 0, top: 0, width: w, height: h - 110 }) : src;
   await trimmed.resize({ width: 1600, withoutEnlargement: true }).webp({ quality: to.startsWith('projects/') ? 50 : 62 }).toFile(OUT + to);
 }
 console.log(`imported ${Object.keys(map).length} images`);
