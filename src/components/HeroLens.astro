@@ -88,7 +88,11 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
 </section>
 
 <style>
-  .lens-hero { --lens-size: 130px; --x: 62%; --y: 45%; }
+  .lens-hero {
+    --lens-size: 130px; --x: 62%; --y: 45%;
+    /* One gold accent wire every 300px, the gold wire from the logo. */
+    --gold-wire: repeating-linear-gradient(90deg, transparent 0, transparent 148px, rgb(245 184 61 / 0.95) 148px, rgb(245 184 61 / 0.95) 151px, transparent 151px, transparent 300px);
+  }
   @media (hover: none) { .lens-hero { --lens-size: 80px; } }
 
   /* Slow cinematic breathing on the photo. */
@@ -104,7 +108,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
 
   /* The grill drawn in CSS: a wire every 30px with a bright highlight and darker steel edges. */
   .cables {
-    background-image: repeating-linear-gradient(90deg,
+    background-image: var(--gold-wire), repeating-linear-gradient(90deg,
       transparent 0, transparent 12px,
       rgb(150 165 185 / 0.7) 12px, rgb(150 165 185 / 0.7) 13px,
       rgb(236 243 250 / 0.95) 13px, rgb(236 243 250 / 0.95) 15px,
@@ -115,7 +119,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   .cables-faint { opacity: 0.06; mask-image: linear-gradient(90deg, transparent 45%, #000 70%); }
   /* A soft, feathered lens instead of a hard circle. */
   .cables-lens {
-    background-image: repeating-linear-gradient(90deg,
+    background-image: var(--gold-wire), repeating-linear-gradient(90deg,
       transparent 0, transparent 11px,
       rgb(245 184 61 / 0.5) 11px, rgb(245 184 61 / 0.5) 12px,
       rgb(150 165 185 / 0.7) 12px, rgb(150 165 185 / 0.7) 13px,
@@ -161,6 +165,13 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   @keyframes lens-sweep { from { --x: 55%; --y: 30%; } to { --x: 92%; --y: 55%; } }
   [data-tracking='true'] { animation: none; }
   [data-offscreen='true'] { animation-play-state: paused !important; }
+
+  /* Reduced motion: no lens, no ring, no breathing, no instant-vs-animated surprises. Only the faint layer stays; the switch still reveals. */
+  @media (prefers-reduced-motion: reduce) {
+    .cables-lens, .lens-ring { display: none; }
+    .hero-breathe { animation: none; }
+    .cables-full { transition: none; }
+  }
 
   /* Slower, more cinematic entrance for this hero only. */
   :global(.lens-hero .rise) { animation-duration: 1.5s; animation-delay: calc(var(--i, 0) * 170ms + 250ms); }
@@ -217,7 +228,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
     };
 
     hero.addEventListener('pointermove', (e) => {
-      if (e.pointerType === 'touch') return;
+      if (calm || e.pointerType === 'touch') return;
       const r = hero.getBoundingClientRect();
       px = e.clientX; py = e.clientY;
       if (hero.dataset.reveal !== 'true') {
