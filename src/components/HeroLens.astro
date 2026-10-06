@@ -89,12 +89,11 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
 
 <style>
   .lens-hero {
-    --lens-size: 300px; --x: 62%; --y: 45%;
+    --lens-size: 90px; --x: 62%; --y: 45%;
     /* One gold accent wire every 300px, the gold wire from the logo. */
     --gold-wire: repeating-linear-gradient(90deg, transparent 0, transparent 148px, rgb(245 184 61 / 0.95) 148px, rgb(245 184 61 / 0.95) 151px, transparent 151px, transparent 300px);
   }
-  @media (hover: none) { .lens-hero { --lens-size: 170px; } }
-  @media (max-width: 767px) { .lens-hero { --lens-size: 150px; } }
+  @media (hover: none) { .lens-hero { --lens-size: 70px; } }
 
   /* Slow cinematic breathing on the photo. */
   @media (prefers-reduced-motion: no-preference) {
@@ -145,7 +144,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   .lens-ring {
     display: none;
     left: var(--x); top: var(--y);
-    width: calc(var(--lens-size) * 2.1); height: calc(var(--lens-size) * 2.1);
+    width: calc(var(--lens-size) * 2.3); height: calc(var(--lens-size) * 2.3);
     translate: -50% -50%;
     border: 1px solid rgb(245 184 61 / 0.3); border-radius: 9999px;
     opacity: 0; transition: opacity 300ms ease;
