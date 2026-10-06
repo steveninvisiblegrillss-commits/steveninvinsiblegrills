@@ -48,3 +48,8 @@ The site owner approved the three photos showing faces (`PG1` installer, `H-12` 
 
 ## Order of remaining work
 Directory listings with identical name and phone, Bing Webmaster Tools and IndexNow are deliberately done last, after launch content is final.
+
+## Hero redesign (2026-10-06)
+H1 is now "Invisible grills and safety nets for Hyderabad homes" with the eyebrow "Hyderabad home safety". The old brand line "Unobstructed views. Uncompromised safety." is a small italic statement under the trust row. Layout: 45/55 split on desktop (navy text column, one rounded-3xl photo, no text over the image, no float animation). On mobile the content comes first and the 4:3 image second; hero height is about 1.3 viewports. Colours unchanged (accent stays `#F59E0B`).
+Hero photo: the dusk balcony with an almost invisible grill, a plant and city lights (`services/invisible-grills-for-balconies-hyderabad`). It came from the old site and is NOT confirmed as a Steven installation. Replace it with a real project photo (modern apartment, clean daylight, grill barely visible) when available: swap the import in `src/pages/index.astro`.
+The "Safety and fall prevention" card now uses the real child-safe net project photo.
