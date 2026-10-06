@@ -7,8 +7,8 @@ title: "Cloth Hangers in Hyderabad"
 seoTitle: "Cloth Hangers in Hyderabad, Ceiling and Balcony"
 description: "Ceiling-mounted pull and dry cloth hangers for balconies, terraces and rooftops in Hyderabad. Space-saving and durable. Free installation. WhatsApp for a quote."
 answer: "Steven Invisible Grills installs ceiling-mounted cloth hangers, including pull and dry models, on balconies, terraces and rooftops across Hyderabad. They save floor space and dry clothes in the open air. Installation is free. Send a photo of your balcony on WhatsApp for a quote."
-hero: ../../assets/images/categories/cloth-hangers-category.webp
-heroAlt: "Ceiling mounted cloth hangers on a balcony in Hyderabad"
+hero: ../../assets/images/services/ceiling-cloth-hangers-hyderabad.webp
+heroAlt: "Ceiling-mounted cloth hanger rods fixed to the ceiling of an apartment balcony"
 uses:
   - "Balconies"
   - "Terraces"

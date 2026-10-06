@@ -7,8 +7,8 @@ title: "Invisible Grills in Hyderabad"
 seoTitle: "Invisible Grills in Hyderabad, Balcony and Window"
 description: "Invisible grills for balconies and windows in Hyderabad. Stainless steel wire safety that keeps the view clear. Free installation. WhatsApp a photo for a quote."
 answer: "Invisible grills are thin, high-strength stainless steel wires fixed across balconies and windows. They keep children, pets and intruders out while the view stays almost clear. Steven Invisible Grills installs them across Hyderabad with free installation. Send a photo on WhatsApp for a quote."
-hero: ../../assets/images/categories/invisible-grills-category.webp
-heroAlt: "Invisible grill on a high-rise balcony in Hyderabad"
+hero: ../../assets/images/services/invisible-grills-for-balconies-hyderabad.webp
+heroAlt: "Balcony at dusk with an almost invisible grill, a potted plant and city lights beyond"
 uses:
   - "Balconies"
   - "Windows"

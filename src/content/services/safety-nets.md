@@ -7,8 +7,8 @@ title: "Safety Nets in Hyderabad"
 seoTitle: "Safety Nets in Hyderabad, Balcony, Pigeon, Anti Bird"
 description: "Balcony, pigeon, anti bird, duct, staircase, monkey and construction safety nets in Hyderabad. Free installation. WhatsApp a photo for a quote."
 answer: "Steven Invisible Grills installs safety nets across Hyderabad and Secunderabad: balcony nets for falls, pigeon and anti bird nets for birds, duct area nets, staircase nets, monkey nets and construction nets. Installation is free. Send a photo of your space on WhatsApp for a quote."
-hero: ../../assets/images/categories/safety-nets-category.webp
-heroAlt: "Balcony safety net on a high-rise apartment in Hyderabad"
+hero: ../../assets/images/projects/balcony-safety-net-apartment-hyderabad.webp
+heroAlt: "White balcony safety net fitted along the railing of an apartment balcony"
 uses:
   - "Apartments and villas"
   - "Ducts and terraces"

@@ -6,6 +6,7 @@ import { dirname } from 'node:path';
 
 const SRC = 'research/original-assets/';
 const OUT = 'src/assets/images/';
+// Removed on purpose: categories/* and the old-site collage images carried Watermarkly, "Durga-safety-nets" and camera stamps.
 const map = {
   // Face photos approved by the site owner on 2026-10-06. Held out (unclear subject): about/H-15.jpg.
   'about/PG1.jpg': 'projects/balcony-net-installer-with-fitted-net-hyderabad.webp',
@@ -20,24 +21,13 @@ const map = {
   'services/duct-area-nets.jpg': 'services/duct-area-safety-nets-hyderabad.webp',
   'services/invisible-grille-for-staircase.jpg': 'services/staircase-safety-nets-hyderabad.webp',
   'services/construction-safety-nets.jpg': 'services/construction-safety-nets-hyderabad.webp',
-  'services/cricket-nets.jpg': 'services/cricket-practice-nets-hyderabad.webp',
-  'services/all-sports-nets.jpg': 'services/all-sports-nets-hyderabad.webp',
-  'services/invisible-grills.jpg': 'services/invisible-grills-hyderabad.webp',
   'services/invisible-grill-balcony.jpg': 'services/invisible-grills-for-balconies-hyderabad.webp',
   'services/invisible-grill-windows.jpg': 'services/invisible-grills-for-windows-hyderabad.webp',
   'services/stainless-grills.jpg': 'services/stainless-steel-invisible-grills-hyderabad.webp',
   'services/invisible-grill-balcony-price.jpg': 'services/invisible-grill-price-hyderabad.webp',
-  'services/invisible-grill-fix-charges.jpg': 'services/invisible-grill-fixing-hyderabad.webp',
   'services/cloth-hanger-balcony.png': 'services/balcony-cloth-hangers-hyderabad.webp',
   'services/pull-and-dry-hanger.png': 'services/pull-and-dry-cloth-hangers-hyderabad.webp',
   'services/ceiling-hangers.jpg': 'services/ceiling-cloth-hangers-hyderabad.webp',
-  'sliders/children-safety-net.jpg': 'services/children-safety-nets-hyderabad.webp',
-  'sliders/pigeon-net-installation.jpg': 'services/pigeon-net-installation-hyderabad.webp',
-  'sliders/balcony-safety-net.jpg': 'categories/safety-nets-category.webp',
-  'sliders/invisible-grill.png': 'categories/invisible-grills-category.webp',
-  'sliders/cloth-hangers.png': 'categories/cloth-hangers-category.webp',
-  'sliders/cricket-practice-net.jpg': 'categories/sports-nets-category.webp',
-  'products/birdspikes.jpg': 'services/bird-spikes-hyderabad.webp',
   'products/petsafetynet.jpg': 'services/pet-safety-nets-hyderabad.webp',
 };
 for (const [from, to] of Object.entries(map)) {
