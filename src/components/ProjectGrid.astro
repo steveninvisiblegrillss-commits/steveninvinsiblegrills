@@ -15,7 +15,7 @@ const chips = [...new Map(items.flatMap((i) => i.svc).map((s) => [s.id, s.data.n
 ---
 {items.length > 0 && (
   <section class="py-14">
-    {heading && <h2 class="text-3xl font-bold md:text-4xl">{heading}</h2>}
+    {heading && <h2 class="text-4xl md:text-5xl">{heading}</h2>}
     {filters && chips.length > 1 && (
       <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filter projects by service" data-filters>
         <button type="button" data-filter="all" aria-pressed="true" class="min-h-11 rounded-full border border-brand px-4 text-sm font-semibold aria-pressed:bg-brand aria-pressed:text-white">All</button>

@@ -7,10 +7,10 @@ interface Props { service?: string; area?: string }
 const { service, area } = Astro.props;
 const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
 ---
-<section class="bg-brand-deep text-white">
+<section class="wires bg-brand-deep text-white">
   <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-4 py-16 md:flex-row md:items-center md:px-8 md:py-20">
     <div>
-      <h2 class="max-w-xl text-3xl font-bold md:text-4xl">Send us a photo of your balcony. We reply with a quote.</h2>
+      <h2 class="max-w-xl text-4xl md:text-5xl">Send us a photo of your balcony. <em class="em-accent">We reply with a quote.</em></h2>
       <p class="mt-3 text-white/80">Free installation. Clear price before we start.</p>
     </div>
     <div class="flex flex-wrap gap-3">

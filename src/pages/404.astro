@@ -5,8 +5,8 @@ import { waLink, quoteMessage } from '../lib/whatsapp';
 ---
 <Base title="Page not found" description="This page does not exist. Browse our safety nets, invisible grills and cloth hangers, or message us on WhatsApp." path="/404/" noindex>
   <div class="mx-auto max-w-7xl px-4 py-24 md:px-8">
-    <h1 class="text-4xl font-bold md:text-5xl">This page does not exist</h1>
-    <p class="mt-4 max-w-[50ch] text-lg text-ink-soft">The link may be old. Pick a category or message us.</p>
+    <h1 class="text-5xl md:text-6xl">This page is <em class="em-brand">invisible</em>. Like our grills.</h1>
+    <p class="mt-4 max-w-[50ch] text-lg text-ink-soft">We cannot see it either. Pick a category below, or message us and we will find what you need.</p>
     <ul class="mt-8 flex flex-wrap gap-3">
       {[['Safety nets', '/safety-nets/'], ['Invisible grills', '/invisible-grills/'], ['Cloth hangers', '/cloth-hangers/'], ['Contact', '/contact/']].map(([n, h]) => (
         <li><a href={h} class="inline-block rounded-full border border-brand px-5 py-2.5 font-medium text-brand">{n}</a></li>

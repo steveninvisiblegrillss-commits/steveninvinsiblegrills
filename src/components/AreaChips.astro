@@ -8,7 +8,7 @@ const projects = await getCollection('projects');
 const live = new Set(publishableAreas(areas.map((a) => ({ id: a.id, localNotes: a.data.localNotes })), projects.map((p) => ({ area: p.data.area.id, services: [] }))));
 ---
 <section class="py-14">
-  <h2 class="text-3xl font-bold md:text-4xl">Areas we serve in Hyderabad</h2>
+  <h2 class="text-4xl md:text-5xl">Areas we serve in Hyderabad</h2>
   <ul class="mt-8 flex flex-wrap gap-3">
     {site.areas.map((a) => (
       <li>

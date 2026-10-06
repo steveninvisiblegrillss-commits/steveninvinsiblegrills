@@ -22,7 +22,7 @@ const crumbs = [{ name: 'Home', path: '/' }, { name: 'Projects', path: '/project
 <Base title={d.title} description={`${d.title} in ${area.data.name}. Real installation by Steven Invisible Grills. Free installation, WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs), ...imgs.map(({ ph, url }) => imageNode({ path, caption: ph.alt, src: url, area: area.data.name }))]} service={services[0]?.data.name} area={area.data.name}>
   <div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
     <Breadcrumbs crumbs={crumbs} />
-    <h1 class="mt-6 max-w-3xl text-4xl font-bold leading-[1.05] md:text-5xl">{d.title}</h1>
+    <h1 class="mt-6 max-w-3xl text-5xl md:text-6xl">{d.title}</h1>
     <p class="mt-4 text-ink-soft">{area.data.name}, {services.map((s) => s.data.name).join(', ')}</p>
     <dl class="mt-6 grid max-w-[65ch] gap-4">
       {[['Property', d.propertyType], ['Problem', d.problem], ['Solution', d.solution]].filter(([, v]) => v).map(([k, v]) => (

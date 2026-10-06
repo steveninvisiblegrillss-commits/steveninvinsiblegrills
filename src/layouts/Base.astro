@@ -55,6 +55,17 @@ const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
     <Footer />
     <MobileCTA service={service} area={area} />
     <script is:inline>
+      // Wire-lens cards: feed the pointer position (px) to the CSS mask.
+      document.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const el = e.target.closest && e.target.closest('.wire-hover');
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        el.style.setProperty('--mx', e.clientX - r.left + 'px');
+        el.style.setProperty('--my', e.clientY - r.top + 'px');
+      }, { passive: true });
+    </script>
+    <script is:inline>
       // One delegated listener tracks every lead link (GA4 key events: lead_whatsapp, lead_call).
       document.addEventListener('click', (e) => {
         const a = e.target.closest('a[href^="https://wa.me"],a[href^="tel:"]');

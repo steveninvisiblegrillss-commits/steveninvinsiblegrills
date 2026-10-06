@@ -33,7 +33,7 @@ const facts = [
       <div class="order-first -mx-4 mb-6 sm:mx-0 lg:order-last lg:mb-0 lg:mt-10">
         <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 1024px) 66vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="hero-zoom aspect-[4/3] w-full object-cover sm:rounded-[var(--radius-card)] lg:aspect-[16/10]" />
       </div>
-      <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">{d.title}</h1>
+      <h1 class="text-5xl md:text-6xl">{d.title}</h1>
       <p class="mt-5 max-w-[65ch] text-lg text-ink-soft md:text-xl">{d.answer}</p>
       <div class="mt-7 flex flex-wrap gap-3">
         <Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button>
@@ -49,7 +49,7 @@ const facts = [
       </dl>
 
       <section class="pt-14">
-        <h2 class="text-3xl font-bold md:text-4xl">{h.solves}</h2>
+        <h2 class="text-4xl md:text-5xl">{h.solves}</h2>
         <ul class="mt-6 grid gap-3">
           {d.problems.map((p: string) => (
             <li class="flex gap-3"><Icon name="ph:check-circle-duotone" class="mt-0.5 size-6 shrink-0 text-brand" /><span class="max-w-[65ch]">{p}</span></li>
@@ -63,7 +63,7 @@ const facts = [
 
       {d.installSteps.length > 0 && (
         <section class="py-14">
-          <h2 class="text-3xl font-bold md:text-4xl">{h.install}</h2>
+          <h2 class="text-4xl md:text-5xl">{h.install}</h2>
           <ol class="mt-8 grid gap-4 sm:grid-cols-2">
             {d.installSteps.map((s: string, i: number) => (
               <li class="flex gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5">
@@ -77,7 +77,7 @@ const facts = [
 
       {d.priceFactors.length > 0 && (
         <section class="pb-14">
-          <h2 class="text-3xl font-bold md:text-4xl">{h.price}</h2>
+          <h2 class="text-4xl md:text-5xl">{h.price}</h2>
           <ul class="mt-6 flex flex-wrap gap-3">
             {d.priceFactors.map((f: string) => <li class="rounded-full border border-line bg-card px-4 py-2">{f}</li>)}
           </ul>
@@ -89,7 +89,7 @@ const facts = [
 
       {related.length > 0 && (
         <section class="py-14">
-          <h2 class="text-3xl font-bold md:text-4xl">Related services</h2>
+          <h2 class="text-4xl md:text-5xl">Related services</h2>
           <ul class="mt-6 grid gap-3 sm:grid-cols-2">
             {related.map((r) => (
               <li><a href={`/${r.id}/`} class="flex items-center justify-between rounded-[var(--radius-card)] border border-line bg-card p-5 font-semibold hover:border-brand">{r.data.name}<Icon name="ph:arrow-right-bold" class="size-5 text-brand" /></a></li>

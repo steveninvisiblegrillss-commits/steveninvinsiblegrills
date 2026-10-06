@@ -11,11 +11,11 @@ const wa = waLink(quoteMessage({ path: '/' }));
 ---
 <section id="process" class="scroll-mt-24">
   <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
-    <h2 class="max-w-2xl text-3xl font-bold md:text-4xl">From photo to installed in three steps</h2>
+    <h2 class="max-w-2xl text-4xl md:text-5xl">From photo to installed in <em class="em-brand">three steps</em></h2>
     <ol class="mt-12 grid gap-10 md:grid-cols-3 md:gap-6">
       {steps.map((s, i) => (
         <li class="relative flex gap-5 md:block">
-          {i < steps.length - 1 && <span aria-hidden="true" class="absolute left-6 top-14 h-[calc(100%+1.5rem)] w-px bg-line md:left-[4.5rem] md:top-6 md:h-px md:w-[calc(100%-3rem)]"></span>}
+          {i < steps.length - 1 && <span aria-hidden="true" class="thread absolute left-6 top-14 h-[calc(100%+1.5rem)] w-px bg-accent md:left-[4.5rem] md:top-6 md:h-px md:w-[calc(100%-3rem)]"></span>}
           <span class="relative grid size-12 shrink-0 place-items-center rounded-full bg-brand-deep text-accent ring-8 ring-surface">
             <Icon name={s.icon} class="size-6" />
           </span>

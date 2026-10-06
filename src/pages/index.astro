@@ -38,10 +38,10 @@ const problems = [
   <Hero image={hero} imageAlt="Sunlit apartment balcony with an invisible grill of thin stainless steel wires and a clear view of the city" />
 
   <section class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
-    <h2 class="max-w-2xl text-3xl font-bold md:text-4xl">What do you need to fix?</h2>
+    <h2 class="max-w-2xl text-4xl md:text-5xl">What do you need to <em class="em-brand">fix</em>?</h2>
     <ul class="reveal mt-10 grid gap-5 lg:grid-cols-2">
       {problems.map((n) => (
-        <li class:list={['group relative isolate overflow-hidden rounded-2xl', n.big && 'lg:row-span-2']}>
+        <li class:list={['wire-hover group relative isolate overflow-hidden rounded-2xl', n.big && 'lg:row-span-2']}>
           <Picture src={n.img} alt={n.alt} widths={[600, 1000]} sizes="(min-width: 1024px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
           <a href={n.href} class:list={['flex h-full flex-col justify-end bg-gradient-to-t from-brand-deep/95 via-brand-deep/45 to-transparent p-6 text-white', n.big ? 'min-h-80 lg:min-h-[28rem]' : 'min-h-64']}>
             <h3 class="text-2xl font-bold">{n.title}</h3>

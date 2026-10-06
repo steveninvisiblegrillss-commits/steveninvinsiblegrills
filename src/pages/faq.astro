@@ -20,7 +20,7 @@ const all = groups.flatMap((g) => g.faqs);
   schema={[breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq/' }]), faqNode(all, '/faq/')]}
 >
   <div class="mx-auto max-w-7xl px-4 pt-14 md:px-8">
-    <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">Frequently asked questions</h1>
+    <h1 class="text-5xl md:text-6xl">Frequently asked questions</h1>
     {groups.map((g) => <FaqList faqs={g.faqs} heading={g.name} />)}
   </div>
   <CtaBand />

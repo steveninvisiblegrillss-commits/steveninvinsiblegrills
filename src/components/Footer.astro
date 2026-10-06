@@ -8,7 +8,7 @@ import { telLink } from '../lib/whatsapp';
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const hubs = services.filter((s) => s.data.kind === 'hub');
 ---
-<footer class="bg-brand-deep pb-24 text-white/85 md:pb-0">
+<footer class="wires bg-brand-deep pb-24 text-white/85 md:pb-0">
   <div class="mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-5 md:px-8">
     <div class="grid content-start gap-3">
       <p class="flex items-center gap-2.5 text-lg font-bold text-white"><Image src={markLight} alt="" width={80} height={80} class="size-10" />{site.name}</p>

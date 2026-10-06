@@ -71,3 +71,11 @@ Supplied by the site owner and placed: sunlit invisible-grill balcony (home hero
 These look AI-generated. They are used only as service illustrations with neutral alt text, never on project pages or in the gallery as the client's own work. Originals are kept in `research/new-images/` (git-ignored).
 Full logo lockup is now `public/logo.png` (schema logo) and the social share image `public/og-default.jpg`. The header still uses the S mark with live text for legibility at small sizes.
 Still using older stock images and worth replacing the same way: balcony cloth hangers (floor rack, wrong product), staircase nets (shows wires), stainless steel page, construction, duct, window grills, and a second distinct image for Anti Bird Nets.
+
+## Creative pass (2026-10-06): "the site is the invisible grill"
+- Palette moved to the owner's brief: navy `#0b1426`, amber `#f5b83d`. Display type is Instrument Serif for H1 and H2 (single weight, italic accent phrases via `.em-accent` and `.em-brand`), body stays Plus Jakarta Sans.
+- Header wordmark lockup: "Steven" in serif over small-caps "Invisible Grills", beside the S mark.
+- Signature motif: fine steel wires every 30px with one gold wire every 300px (the gold wire in the logo) on the hero, call-to-action band and footer. The process timeline is a gold wire that draws itself on scroll. Photo cards light up steel wires around the mouse pointer on hover (no effect on touch). The 404 page speaks in the brand voice.
+- Interactive hero "There's a grill in this photo. Can you see it?" (`HeroLens.astro`): CSS-drawn cables in three layers (faint, cursor lens, full reveal), spring-like follow, idle sweep on touch, circular "Show the grill" reveal growing out of the button, reduced-motion safe. Built without React or Framer Motion to keep the site static and light.
+- The lens hero switches on automatically when a clean photo exists at `src/assets/images/hero/skyline.(jpg|png|webp|avif)` (2000px wide or more, a balcony view with NO grill or net). Until then the improved classic hero shows. `PUBLIC_HERO_LENS=true npm run dev` previews it with a stand-in.
+- Copy used from the owner's brief: "Book a free site visit", "Free site visit and measurement". Kept as "Corrosion-resistant stainless steel" instead of "Marine-grade" until the owner confirms the steel grade.

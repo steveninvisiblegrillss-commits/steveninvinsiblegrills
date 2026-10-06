@@ -6,7 +6,7 @@ const { faqs, heading = 'Questions people ask before they call' } = Astro.props;
 ---
 <section id="faq" class="scroll-mt-24 bg-surface-2">
   <div class="mx-auto max-w-4xl px-4 py-16 md:px-8 md:py-28">
-    <h2 class="text-3xl font-bold md:text-4xl">{heading}</h2>
+    <h2 class="text-4xl md:text-5xl">{heading}</h2>
     <div class="mt-10 grid gap-3">
       {faqs.map((f) => (
         <details name="faq" class="group rounded-2xl border border-line bg-card px-5 open:shadow-[var(--shadow-soft)]">

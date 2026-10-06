@@ -7,7 +7,7 @@ const guides = (await getCollection('guides')).sort((a, b) => +b.data.published 
 ---
 <Base title="Guides: safety nets and invisible grills" description="Plain-English guides on invisible grills, balcony safety nets and pigeon nets for Hyderabad homes. Compare options and know what to check." path="/guides/">
   <div class="mx-auto max-w-7xl px-4 pb-20 pt-10 md:px-8">
-    <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">Guides</h1>
+    <h1 class="text-5xl md:text-6xl">Guides</h1>
     <p class="mt-4 max-w-[62ch] text-lg text-ink-soft">Short, practical answers to the questions people ask before they choose a net or an invisible grill.</p>
     <ul class="mt-10 grid gap-6 md:grid-cols-2">
       {guides.map((g) => (

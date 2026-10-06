@@ -4,7 +4,7 @@ const { faqs, heading = 'Questions people ask' } = Astro.props;
 ---
 {faqs.length > 0 && (
   <section class="py-14">
-    <h2 class="text-3xl font-bold md:text-4xl">{heading}</h2>
+    <h2 class="text-4xl md:text-5xl">{heading}</h2>
     <dl class="mt-8 grid gap-x-12 gap-y-8 md:grid-cols-2">
       {faqs.map((f) => (
         <div>
