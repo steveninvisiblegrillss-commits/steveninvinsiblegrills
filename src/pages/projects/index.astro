@@ -1,12 +1,140 @@
 ---
+// Projects: a logbook of real jobs. Hero with an odometer count, a Switch Board of service filters (also set by ?service=), an asymmetric Site Journal grid, and a closing "next job" CTA.
+import { Picture } from 'astro:assets';
+import { getCollection, getEntries, getEntry } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import ProjectGrid from '../../components/ProjectGrid.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { waLink, quoteMessage } from '../../lib/whatsapp';
+
+const all = (await getCollection('projects')).sort((a, b) => +a.data.date - +b.data.date);
+// Log numbers run oldest to newest, so a job keeps its number as new ones are added. The page shows newest first.
+const jobs = await Promise.all(
+  all.map(async (p, i) => ({ p, n: i + 1, area: (await getEntry(p.data.area))!.data.name, svc: await getEntries(p.data.services) })),
+);
+const items = [...jobs].reverse();
+const chips = [...new Map(jobs.flatMap((j) => j.svc).map((s) => [s.id, s.data.name])).entries()];
+const total = jobs.length;
+const pad = (n: number) => String(n).padStart(2, '0');
+const digits = pad(total).split('');
+// Columns with mixed photo shapes give the journal an uneven rhythm and never leave a half-empty row, however many jobs are shown.
+const ratios = ['aspect-[4/5]', 'aspect-[4/3]', 'aspect-square', 'aspect-[4/5]', 'aspect-[4/3]', 'aspect-[3/4]'];
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }];
+const wa = waLink(quoteMessage({ path: '/projects/' }));
 ---
-<Base title="Our projects: real installations in Hyderabad" description="Real safety net, invisible grill and sports net installations by Steven Invisible Grills. Filter by service and open any project for photos." path="/projects/">
-  <div class="mx-auto max-w-7xl px-4 pt-10 md:px-8">
-    <h1 class="text-5xl md:text-6xl">Our projects</h1>
-    <p class="mt-4 max-w-[62ch] text-lg text-ink-soft">Every photo here is a job our team completed. Pick a service to see only that kind of work, then open a project for the full photo.</p>
-    <ProjectGrid heading="" filters />
-    <p class="max-w-[62ch] pb-16 text-ink-soft">Want something like this for your home? <a href="/contact/" class="font-semibold text-brand underline-offset-4 hover:underline">Send us a photo of your space</a> and we will tell you which option fits.</p>
-  </div>
+<Base title="Our projects: real installations in Hyderabad" description="Real safety net, invisible grill and sports net installations by Steven Invisible Grills. Filter by service and open any project for photos." path="/projects/" flush darkHero>
+  {/* 1. Logbook hero */}
+  <section class="wires relative overflow-hidden bg-night text-white">
+    <div class="mx-auto grid max-w-7xl items-end gap-10 px-4 pb-14 pt-28 md:px-8 md:pb-20 md:pt-36 lg:grid-cols-[1.3fr_0.7fr]">
+      <div>
+        <Breadcrumbs crumbs={crumbs} dark />
+        <p class="sec-tag mt-6 text-dusk">Logbook</p>
+        <h1 class="mt-5 text-5xl md:text-7xl">Our projects</h1>
+        <p class="mt-6 max-w-[58ch] text-lg text-white/80 md:text-xl">Every photo here is a job our team completed. Switch a service on to see only that kind of work, then open a project for the full photos.</p>
+      </div>
+      <div class="border border-steel/40 bg-night-2/70 p-5" role="img" aria-label={`${total} jobs logged`}>
+        <p class="mono-tag text-white/55">Jobs logged</p>
+        <div class="odo mt-3 flex gap-1.5 font-display text-8xl leading-none text-dusk md:text-9xl" aria-hidden="true">
+          {digits.map((dg, i) => (
+            <span class="relative block h-[1em] w-[0.62em] overflow-hidden border border-steel/30 bg-night text-center">
+              <span class="odo-col block" style={`--to:${dg};--i:${i}`}>{Array.from({ length: 10 }, (_, k) => <span class="block h-[1em]">{k}</span>)}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* 2 and 3. Switch Board and Site Journal */}
+  <section class="bg-paper">
+    <div class="grid-paper">
+      <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-3" role="group" aria-label="Filter projects by service" data-board>
+          <span class="mono-tag mr-2 text-ink-soft">Switch board</span>
+          <button type="button" data-filter="all" aria-pressed="true" class="sw"><i></i>All</button>
+          {chips.map(([id, name]) => <button type="button" data-filter={id} aria-pressed="false" class="sw"><i></i>{name}</button>)}
+        </div>
+        <p class="mono-tag mt-4 text-ink-soft" data-count role="status">{total} of {total} jobs shown</p>
+
+        <ul class="mt-10 grid gap-y-14 md:block md:columns-2 md:gap-x-8 lg:columns-3" data-journal>
+          {items.map(({ p, n, area, svc }, i) => (
+            <li class="journal-item md:mb-14 md:break-inside-avoid" data-services={svc.map((s) => s.id).join(' ')}>
+              <a href={`/projects/${p.id}/`} class="group block">
+                <span class="crop-marks crop-marks-ink block">
+                  <span class="relative block overflow-hidden border border-ink/20 bg-night">
+                    <Picture src={p.data.photos[0].src} alt={p.data.photos[0].alt} widths={[500, 900, 1200]} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" loading={i < 2 ? 'eager' : 'lazy'} class:list={['w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]', ratios[i % ratios.length]]} />
+                    <span class="mono-tag absolute left-3 top-3 bg-night/85 px-2 py-1 text-dusk">Job #{pad(n)}</span>
+                  </span>
+                </span>
+                <span class="mt-5 flex items-start justify-between gap-4">
+                  <span class="font-display text-2xl leading-snug group-hover:text-dusk-text md:text-3xl">{p.data.title}</span>
+                  <span class="mono-tag shrink-0 pt-2 text-ink-soft">{area}</span>
+                </span>
+                <span class="mono-tag mt-2 block text-ink-soft">{svc.map((s) => s.data.name).join(' / ')}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  {/* 4. Next job */}
+  <section data-cta-band class="wires dusk-glow text-white">
+    <div class="mx-auto flex max-w-7xl flex-col items-start gap-8 px-4 py-20 md:px-8 md:py-28 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <p class="sec-tag text-dusk">Next in the log</p>
+        <h2 class="mt-5 max-w-2xl text-4xl md:text-6xl">Your home could be <em class="em-accent">job #{pad(total + 1)}</em></h2>
+        <p class="mt-5 max-w-md text-white/75">Send a photo of your space. Free installation. We will call you within 30 minutes.</p>
+      </div>
+      <Button href={wa} variant="accent">Get a free quote</Button>
+    </div>
+  </section>
 </Base>
+
+<style>
+  .sw { display: inline-flex; min-height: 2.75rem; align-items: center; gap: 0.7rem; padding: 0 1rem 0 0.6rem; border: 1px solid rgb(22 24 29 / 0.3); background: var(--color-card); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; transition: border-color 250ms, background-color 250ms, color 250ms; }
+  .sw i { position: relative; width: 2rem; height: 1.1rem; border-radius: 99px; background: rgb(22 24 29 / 0.25); transition: background-color 250ms; }
+  .sw i::after { content: ""; position: absolute; left: 2px; top: 2px; width: calc(1.1rem - 4px); height: calc(1.1rem - 4px); border-radius: 50%; background: #fff; transition: transform 300ms var(--ease-out-quint); }
+  .sw[aria-pressed="true"] { background: var(--color-night); border-color: var(--color-night); color: #fff; }
+  .sw[aria-pressed="true"] i { background: var(--color-dusk); }
+  .sw[aria-pressed="true"] i::after { transform: translateX(0.9rem); }
+  @media (prefers-reduced-motion: no-preference) {
+    .odo-col { transform: translateY(0); animation: odo 1.6s var(--ease-out-quint) both; animation-delay: calc(var(--i) * 140ms + 200ms); }
+    @keyframes odo { from { transform: translateY(0); } to { transform: translateY(calc(var(--to) * -1em)); } }
+  }
+  @media (prefers-reduced-motion: reduce) { .odo-col { transform: translateY(calc(var(--to) * -1em)); } }
+</style>
+
+<script>
+  // Switch Board: filters the journal with a FLIP move so the remaining jobs slide into place. ?service= in the URL pre-selects a switch.
+  const board = document.querySelector<HTMLElement>('[data-board]');
+  const list = document.querySelector<HTMLElement>('[data-journal]');
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  if (board && list && count) {
+    const items = [...list.querySelectorAll<HTMLElement>('.journal-item')];
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const apply = (f: string, animate: boolean) => {
+      const first = new Map(items.map((li) => [li, li.getBoundingClientRect()]));
+      let shown = 0;
+      items.forEach((li) => { const on = f === 'all' || li.dataset.services!.split(' ').includes(f); li.hidden = !on; if (on) shown++; });
+      board.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === f)));
+      count.textContent = `${shown} of ${items.length} jobs shown`;
+      if (animate && !calm) items.forEach((li) => {
+        if (li.hidden) return;
+        const a = first.get(li)!, b = li.getBoundingClientRect();
+        if (!a.width) return;
+        li.animate([{ transform: `translate(${a.left - b.left}px, ${a.top - b.top}px)` }, { transform: 'none' }], { duration: 500, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' });
+      });
+    };
+    board.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+      if (!btn) return;
+      const f = btn.dataset.filter!;
+      apply(f, true);
+      history.replaceState(null, '', f === 'all' ? location.pathname : `?service=${f}`);
+    });
+    const want = new URLSearchParams(location.search).get('service');
+    if (want && board.querySelector(`[data-filter="${CSS.escape(want)}"]`)) apply(want, false);
+  }
+</script>

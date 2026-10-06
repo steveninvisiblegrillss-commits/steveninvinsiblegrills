@@ -1,16 +1,17 @@
 ---
-import { Picture } from 'astro:assets';
+// One job from the logbook: a dark title block, the photos as contact-sheet frames, a job card (property, problem, solution), and the next jobs.
+import { Picture, getImage } from 'astro:assets';
 import { getCollection, getEntries, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import CtaBand from '../../components/CtaBand.astro';
-import { getImage } from 'astro:assets';
 import { breadcrumbNode, imageNode } from '../../lib/schema';
 
 export async function getStaticPaths() {
-  return (await getCollection('projects')).map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+  const all = (await getCollection('projects')).sort((a, b) => +a.data.date - +b.data.date);
+  return all.map((p, i) => ({ params: { slug: p.id }, props: { project: p, n: i + 1, others: all.filter((o) => o.id !== p.id).reverse().slice(0, 3) } }));
 }
-const { project } = Astro.props;
+const { project, n, others } = Astro.props;
 const d = project.data;
 const path = Astro.url.pathname;
 const [area] = await getEntries([d.area]);
@@ -18,26 +19,73 @@ const services = await getEntries(d.services);
 const { Content } = await render(project);
 const imgs = await Promise.all(d.photos.map(async (ph) => ({ ph, url: (await getImage({ src: ph.src, width: 1200, format: 'webp' })).src })));
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }, { name: d.title, path }];
+const pad = (x: number) => String(x).padStart(2, '0');
+const card = [['Property', d.propertyType], ['Problem', d.problem], ['Solution', d.solution]].filter(([, v]) => v) as string[][];
 ---
-<Base title={d.title} description={`${d.title} in ${area.data.name}. Real installation by Steven Invisible Grills. Free installation, WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs), ...imgs.map(({ ph, url }) => imageNode({ path, caption: ph.alt, src: url, area: area.data.name }))]} service={services[0]?.data.name} area={area.data.name}>
-  <div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
-    <Breadcrumbs crumbs={crumbs} />
-    <h1 class="mt-6 max-w-3xl text-5xl md:text-6xl">{d.title}</h1>
-    <p class="mt-4 text-ink-soft">{area.data.name}, {services.map((s) => s.data.name).join(', ')}</p>
-    <dl class="mt-6 grid max-w-[65ch] gap-4">
-      {[['Property', d.propertyType], ['Problem', d.problem], ['Solution', d.solution]].filter(([, v]) => v).map(([k, v]) => (
-        <div><dt class="text-sm font-semibold text-brand">{k}</dt><dd class="mt-1 text-lg">{v}</dd></div>
-      ))}
-    </dl>
-    <div class="mt-6 max-w-[65ch] text-lg"><Content /></div>
-    <div class="mt-10 grid gap-5 md:grid-cols-2">
-      {d.photos.map((ph, i) => (
-        <Picture src={ph.src} alt={ph.alt} widths={[600, 1000]} sizes="(min-width: 768px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" loading={i === 0 ? 'eager' : 'lazy'} class="w-full rounded-[var(--radius-card)] object-cover" />
-      ))}
+<Base title={d.title} description={`${d.title} in ${area.data.name}. Real installation by Steven Invisible Grills. Free installation, WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs), ...imgs.map(({ ph, url }) => imageNode({ path, caption: ph.alt, src: url, area: area.data.name }))]} service={services[0]?.data.name} area={area.data.name} flush darkHero>
+  <section class="wires bg-night text-white">
+    <div class="mx-auto max-w-7xl px-4 pb-12 pt-28 md:px-8 md:pb-16 md:pt-36">
+      <Breadcrumbs crumbs={crumbs} dark />
+      <p class="sec-tag mt-6 text-dusk">Job #{pad(n)}</p>
+      <h1 class="mt-5 max-w-4xl text-5xl md:text-7xl">{d.title}</h1>
+      <p class="mono-tag mt-6 text-white/65">{area.data.name} / {services.map((s) => s.data.name).join(' / ')}</p>
     </div>
-    <ul class="mt-8 flex flex-wrap gap-3">
-      {services.map((s) => <li><a href={`/${s.id}/`} class="inline-block rounded-full border border-brand px-4 py-2 text-sm font-medium text-brand">{s.data.name}</a></li>)}
-    </ul>
-  </div>
-  <div class="mt-14"><CtaBand service={services[0]?.data.name} area={area.data.name} /></div>
+  </section>
+
+  <section class="bg-night text-white">
+    <div class="mx-auto max-w-7xl px-4 pb-20 md:px-8 md:pb-28">
+      <ul class:list={['grid gap-8', d.photos.length > 1 && 'md:grid-cols-2']}>
+        {d.photos.map((ph, i) => (
+          <li class="crop-marks">
+            <Picture src={ph.src} alt={ph.alt} widths={[600, 1000, 1400]} sizes={d.photos.length > 1 ? '(min-width: 768px) 50vw, 100vw' : '(min-width: 1280px) 1200px, 100vw'} formats={['avif']} fallbackFormat="webp" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} class="w-full border border-steel/40 object-cover" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="bg-paper">
+    <div class="grid-paper">
+      <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-2">
+        <div>
+          <p class="sec-tag text-ink-soft">Job card</p>
+          {card.length > 0 && (
+            <dl class="mt-8 border-t border-ink/25">
+              {card.map(([k, v]) => (
+                <div class="grid gap-1 border-b border-ink/25 py-5 sm:grid-cols-[8rem_1fr]"><dt class="mono-tag pt-1.5 text-dusk-text">{k}</dt><dd class="max-w-[52ch] text-lg">{v}</dd></div>
+              ))}
+            </dl>
+          )}
+          <div class="mt-8 grid max-w-[60ch] gap-4 text-lg text-ink-soft"><Content /></div>
+        </div>
+        <div>
+          <p class="sec-tag text-ink-soft">Services used</p>
+          <ul class="mt-8 flex flex-wrap gap-3">
+            {services.map((s) => <li><a href={`/${s.id}/`} class="mono-tag inline-flex min-h-11 items-center border border-night bg-night px-4 text-white transition-colors hover:bg-dusk hover:text-night">{s.data.name}</a></li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {others.length > 0 && (
+    <section class="bg-night-2 text-white">
+      <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+        <p class="sec-tag text-dusk">More from the log</p>
+        <ul class="mt-10 grid gap-6 sm:grid-cols-3">
+          {others.map((o) => (
+            <li>
+              <a href={`/projects/${o.id}/`} class="group block">
+                <span class="crop-marks block"><Picture src={o.data.photos[0].src} alt={o.data.photos[0].alt} widths={[400, 700]} sizes="(min-width: 640px) 33vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full border border-steel/40 object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.03]" /></span>
+                <span class="mt-4 block font-display text-xl leading-snug group-hover:text-dusk">{o.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href="/projects/" class="mt-10 inline-flex min-h-11 items-center font-semibold text-dusk underline decoration-dusk/50 underline-offset-8">See all projects</a>
+      </div>
+    </section>
+  )}
+
+  <CtaBand service={services[0]?.data.name} area={area.data.name} />
 </Base>
