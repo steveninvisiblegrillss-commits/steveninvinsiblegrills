@@ -24,6 +24,25 @@ priceFactors: []
 priceRange: null
 material: null
 alsoAvailable: []
+finder:
+  - label: "No floor space for a drying stand"
+    services:
+      - "ceiling-cloth-hangers"
+      - "pull-and-dry-cloth-hangers"
+      - "balcony-cloth-hangers"
+  - label: "Clothes dry slowly indoors"
+    services:
+      - "ceiling-cloth-hangers"
+      - "pull-and-dry-cloth-hangers"
+      - "balcony-cloth-hangers"
+  - label: "A cluttered balcony"
+    services:
+      - "balcony-cloth-hangers"
+      - "ceiling-cloth-hangers"
+      - "pull-and-dry-cloth-hangers"
+  - label: "Hangers that do not last outdoors"
+    services:
+      - "ceiling-cloth-hangers"
 faqs:
   - q: "Which cloth hanger is best for a small balcony?"
     a: "A ceiling-mounted pull and dry hanger saves the most space. Send a photo of your balcony and we will suggest a model."

@@ -25,6 +25,22 @@ priceRange: null
 material: null
 alsoAvailable:
   - "Sports Practice Nets"
+finder:
+  - label: "Balls leaving the play area"
+    services:
+      - "all-sports-nets"
+      - "cricket-practice-nets"
+  - label: "Accidents near courts and pools"
+    services:
+      - "all-sports-nets"
+  - label: "An odd-shaped space"
+    services:
+      - "all-sports-nets"
+      - "cricket-practice-nets"
+  - label: "Wear from sun and rain"
+    services:
+      - "all-sports-nets"
+      - "cricket-practice-nets"
 faqs:
   - q: "Do you install sports nets for schools?"
     a: "Yes. We install cricket practice nets and other sports nets for schools, clubs and sports complexes in Hyderabad."

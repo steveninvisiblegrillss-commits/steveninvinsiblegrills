@@ -1,12 +1,12 @@
 ---
+// Category page. Six parts: Index Cover (hero), Problem Finder (index list with dimming chips), Hanging Tags (also available),
+// Film Strip (recent work), Blueprint Note (FAQ), and the closing CTA.
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
-import { site } from '../config/site';
+import { Icon } from 'astro-icon/components';
 import { waLink, quoteMessage } from '../lib/whatsapp';
 import Breadcrumbs from './Breadcrumbs.astro';
 import Button from './Button.astro';
-import ProjectGrid from './ProjectGrid.astro';
-import FaqList from './FaqList.astro';
 import CtaBand from './CtaBand.astro';
 
 interface Props { entry: any; crumbs: { name: string; path: string }[] }
@@ -14,46 +14,168 @@ const { entry, crumbs } = Astro.props;
 const d = entry.data;
 const services = (await getCollection('services', (s) => s.data.kind === 'service' && s.data.category === d.category)).sort((a, b) => a.data.order - b.data.order);
 const wa = waLink(quoteMessage({ service: d.name, path: Astro.url.pathname }));
+const finder = d.finder.map((f: any) => ({ label: f.label, ids: f.services.map((s: any) => s.id) }));
+
+const mine = new Set(services.map((s) => s.id));
+const projects = (await getCollection('projects')).sort((a, b) => +b.data.date - +a.data.date);
+const related = projects.filter((p) => p.data.services.some((s) => mine.has(s.id)));
+const strip = (related.length >= 3 ? related : projects).slice(0, 8);
+const pad = (n: number) => String(n).padStart(2, '0');
+const tagTilt = [-3, 2, -1.5, 3, -2.5, 1.5, -2, 2.5];
 ---
-<div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
-  <Breadcrumbs crumbs={crumbs} />
-  <h1 class="mt-6 max-w-3xl text-5xl md:text-6xl">{d.title}</h1>
-  <p class="mt-5 max-w-[65ch] text-lg text-ink-soft md:text-xl">{d.answer}</p>
-  <div class="mt-5 grid max-w-[65ch] gap-4"><slot /></div>
-  <div class="mt-7"><Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button></div>
+{/* 1. Index Cover */}
+<section class="wires relative overflow-hidden bg-night text-white">
+  <div class="mx-auto grid max-w-7xl items-end gap-10 px-4 pb-14 pt-28 md:px-8 md:pb-20 md:pt-36 lg:grid-cols-[1.25fr_0.75fr]">
+    <div class="relative">
+      <span class="count-ghost pointer-events-none absolute -left-2 -top-10 select-none font-display text-[11rem] leading-none md:-top-16 md:text-[20rem]" aria-hidden="true">{pad(services.length)}</span>
+      <div class="relative">
+        <Breadcrumbs crumbs={crumbs} dark />
+        <p class="sec-tag mt-6 text-dusk">{services.length} services / Hyderabad</p>
+        <h1 class="mt-5 max-w-3xl text-5xl md:text-7xl">{d.title}</h1>
+        <p class="mt-6 max-w-[60ch] text-lg text-white/80 md:text-xl">{d.answer}</p>
+        <div class="mt-5 grid max-w-[60ch] gap-4 text-white/70"><slot /></div>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button>
+          <Button href="#index" variant="light" icon="ph:arrow-down-bold">See all {services.length}</Button>
+        </div>
+      </div>
+    </div>
+    <div class="crop-marks hidden lg:block">
+      <Picture src={d.hero} alt={d.heroAlt} widths={[480, 800]} sizes="30vw" formats={['avif']} fallbackFormat="webp" loading="eager" class="aspect-[4/5] w-full border border-steel/40 object-cover" />
+    </div>
+  </div>
+</section>
 
-  <ul class:list={['mt-12 grid gap-5 sm:grid-cols-2', services.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-3']}>
-    {services.map((s, i) => {
-      // 4, 7 or 10 cards: the first card spans the full row so every later row is complete.
-      const lead = i === 0 && services.length > 3 && services.length % 3 === 1;
-      const oddTail = (services.length - (services.length % 3 === 1 ? 1 : 0)) % 2 === 1 && i === services.length - 1;
-      return (
-        <li class:list={['wire-hover group overflow-hidden rounded-[var(--radius-card)] border border-line bg-card', lead && 'sm:col-span-2 lg:col-span-3', oddTail && 'sm:max-lg:col-span-2']}>
-          <a href={`/${s.id}/`} class="block h-full">
-            <Picture src={s.data.hero} alt={s.data.heroAlt} widths={[400, 800, 1200]} sizes={lead ? '100vw' : '(min-width: 1024px) 33vw, 50vw'} formats={['avif']} fallbackFormat="webp" class:list={['w-full object-cover transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:scale-[1.03]', lead ? 'aspect-[16/7]' : 'aspect-[16/10]']} />
-            <div class="p-5">
-              <h2 class="text-xl font-semibold group-hover:text-brand">{s.data.name}</h2>
-              <p class="mt-2 text-ink-soft">{s.data.description}</p>
-            </div>
-          </a>
-        </li>
-      );
-    })}
-  </ul>
+{/* 2. Problem Finder */}
+<section id="index" class="scroll-mt-24 bg-paper">
+  <div class="grid-paper">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-ink-soft">Problem finder</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">What are you trying to <em class="em-brand">solve</em>?</h2>
+      {finder.length > 0 && (
+        <div class="mt-8 flex flex-wrap gap-2.5" role="group" aria-label="Highlight services by problem" data-finder>
+          {finder.map((f: any) => (
+            <button type="button" aria-pressed="false" data-ids={f.ids.join(' ')} class="mono-tag min-h-11 border border-ink/30 bg-card px-4 text-ink transition-colors hover:border-night aria-pressed:border-night aria-pressed:bg-night aria-pressed:text-white">{f.label}</button>
+          ))}
+        </div>
+      )}
+      <ol class="mt-10 border-t border-ink/25" data-index>
+        {services.map((s, i) => (
+          <li data-id={s.id} class="index-row border-b border-ink/25 transition-opacity duration-500">
+            <a href={`/${s.id}/`} class="group grid min-h-24 items-center gap-x-6 gap-y-2 py-6 md:grid-cols-[4rem_1.1fr_1.4fr_7rem_2.5rem]">
+              <span class="mono-tag text-dusk-text">{pad(i + 1)}</span>
+              <span class="font-display text-3xl transition-colors group-hover:text-dusk-text md:text-4xl">{s.data.name}</span>
+              <span class="max-w-[52ch] text-ink-soft">{s.data.description}</span>
+              <Picture src={s.data.hero} alt="" widths={[200, 400]} sizes="112px" formats={['avif']} fallbackFormat="webp" class="hidden aspect-[4/3] w-28 border border-ink/20 object-cover grayscale transition-[filter] duration-500 group-hover:grayscale-0 md:block" />
+              <Icon name="ph:arrow-up-right-light" class="hidden size-7 text-ink transition-transform duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-dusk-text md:block" />
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
 
-  {d.alsoAvailable.length > 0 && (
-    <section class="py-14">
-      <h2 class="text-4xl md:text-5xl">Also available</h2>
-      <p class="mt-3 max-w-[65ch] text-ink-soft">Not listed above? Message us on WhatsApp and we will tell you if we can do it.</p>
-      <ul class="mt-6 flex flex-wrap gap-3">
-        {d.alsoAvailable.map((a: string) => (
-          <li><a href={waLink(quoteMessage({ service: a, path: Astro.url.pathname }))} class="inline-block rounded-full border border-line bg-card px-4 py-2 hover:border-brand">{a}</a></li>
+{/* 3. Hanging Tags */}
+{d.alsoAvailable.length > 0 && (
+  <section class="bg-night text-white">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-dusk">Also available</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Not listed above? <em class="em-accent">Ask us.</em></h2>
+      <p class="mt-5 max-w-[60ch] text-white/70">Message us on WhatsApp and we will tell you if we can do it.</p>
+      <div class="relative mt-16">
+        <span class="absolute inset-x-0 top-0 h-px bg-steel/60" aria-hidden="true"></span>
+        <ul class="flex flex-wrap gap-x-5 gap-y-10">
+          {d.alsoAvailable.map((a: string, i: number) => (
+            <li class="tag relative pt-8" style={`--r:${tagTilt[i % tagTilt.length]}deg`}>
+              <span class="absolute left-1/2 top-0 h-8 w-px bg-steel/60" aria-hidden="true"></span>
+              <a href={waLink(quoteMessage({ service: a, path: Astro.url.pathname }))} class="relative flex min-h-12 items-center border border-steel/50 bg-night-2 py-3 pl-9 pr-5 text-sm font-medium text-white transition-colors [clip-path:polygon(14px_0,100%_0,100%_100%,14px_100%,0_50%)] hover:bg-dusk hover:text-night">
+                <span class="absolute left-3.5 top-1/2 size-2 -translate-y-1/2 rounded-full border border-steel/70 bg-night" aria-hidden="true"></span>
+                {a}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+)}
+
+{/* 4. Film Strip */}
+{strip.length > 0 && (
+  <section class="bg-night-2 text-white">
+    <div class="mx-auto max-w-7xl px-4 pt-20 md:px-8 md:pt-28">
+      <p class="sec-tag text-dusk">Recent work</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Real installations by <em class="em-accent">our team</em></h2>
+    </div>
+    <div class="no-scrollbar mt-12 overflow-x-auto pb-12" tabindex="0" aria-label="Recent projects, scroll sideways">
+      <ul class="flex w-max snap-x snap-mandatory gap-3 px-4 md:px-8">
+        {strip.map((p, i) => (
+          <li class="w-[72vw] shrink-0 snap-start sm:w-72">
+            <a href={`/projects/${p.id}/`} class="group block bg-night px-3 py-5">
+              <span class="sprockets block" aria-hidden="true"></span>
+              <span class="relative my-3 block overflow-hidden">
+                <Picture src={p.data.photos[0].src} alt={p.data.photos[0].alt} widths={[400, 700]} sizes="(min-width: 640px) 288px, 72vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.05]" />
+                <span class="mono-tag absolute left-2 top-2 bg-night/80 px-2 py-1 text-dusk">{pad(i + 1)}</span>
+              </span>
+              <span class="sprockets block" aria-hidden="true"></span>
+              <span class="mt-3 block font-display text-lg leading-snug group-hover:text-dusk">{p.data.title}</span>
+            </a>
+          </li>
         ))}
       </ul>
-    </section>
-  )}
+    </div>
+    <div class="mx-auto max-w-7xl px-4 pb-20 md:px-8 md:pb-28">
+      <a href="/projects/" class="inline-flex min-h-11 items-center gap-2 font-semibold text-dusk underline decoration-dusk/50 underline-offset-8">See all projects <Icon name="ph:arrow-right-light" class="size-5" /></a>
+    </div>
+  </section>
+)}
 
-  <ProjectGrid heading="Recent work" limit={6} />
-  <FaqList faqs={d.faqs} />
-</div>
+{/* 5. Blueprint Note */}
+{d.faqs.length > 0 && (
+  <section class="blueprint text-white">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-dusk">Notes</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Questions people ask</h2>
+      <dl class="mt-12 grid gap-6 md:grid-cols-2">
+        {d.faqs.map((f: { q: string; a: string }, i: number) => (
+          <div class="relative border border-dashed border-steel/60 p-6 pt-8">
+            <span class="mono-tag absolute -top-2.5 left-5 bg-[#10224a] px-2 text-dusk">Note {pad(i + 1)}</span>
+            <dt class="font-display text-2xl">{f.q}</dt>
+            <dd class="mt-3 max-w-[60ch] text-white/80">{f.a}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+)}
+
 <CtaBand service={d.name} />
+
+<style>
+  .count-ghost { color: transparent; -webkit-text-stroke: 1px rgb(201 209 220 / 0.28); font-variation-settings: "opsz" 144; }
+  .blueprint {
+    background-color: #10224a;
+    background-image: linear-gradient(rgb(201 209 220 / 0.09) 1px, transparent 1px), linear-gradient(90deg, rgb(201 209 220 / 0.09) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .sprockets { height: 10px; background: repeating-linear-gradient(90deg, rgb(201 209 220 / 0.55) 0 10px, transparent 10px 22px); }
+  .index-row.dim { opacity: 0.22; }
+  @media (min-width: 640px) { .tag { transform: rotate(var(--r)); transform-origin: top center; transition: transform 500ms var(--ease-out-quint); } .tag:hover { transform: rotate(0deg); } }
+  @media (prefers-reduced-motion: reduce) { .tag { transform: none !important; } }
+</style>
+
+<script>
+  // Problem Finder: choosing a problem dims the services that do not fit. Nothing is hidden, and without JavaScript every row stays fully visible.
+  document.querySelectorAll<HTMLElement>('[data-finder]').forEach((bar) => {
+    const rows = document.querySelectorAll<HTMLElement>('[data-index] .index-row');
+    bar.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (!btn) return;
+      const on = btn.getAttribute('aria-pressed') !== 'true';
+      bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn && on)));
+      const ids = on ? btn.dataset.ids!.split(' ') : null;
+      rows.forEach((r) => r.classList.toggle('dim', !!ids && !ids.includes(r.dataset.id!)));
+    });
+  });
+</script>

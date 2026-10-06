@@ -32,6 +32,32 @@ alsoAvailable:
   - "Bird Protection Nets"
   - "Agro Shade Nets"
   - "Garden Plant Support Nets"
+finder:
+  - label: "Falls from height"
+    services:
+      - "balcony-safety-nets"
+      - "staircase-safety-nets"
+      - "children-safety-nets"
+      - "pet-safety-nets"
+      - "construction-safety-nets"
+  - label: "Pigeons and other birds"
+    services:
+      - "pigeon-safety-nets"
+      - "anti-bird-nets"
+      - "duct-area-safety-nets"
+      - "bird-spikes"
+  - label: "Monkeys on terraces"
+    services:
+      - "monkey-safety-nets"
+  - label: "Debris at construction sites"
+    services:
+      - "construction-safety-nets"
+      - "duct-area-safety-nets"
+  - label: "Children and pets at the railing"
+    services:
+      - "balcony-safety-nets"
+      - "children-safety-nets"
+      - "pet-safety-nets"
 faqs:
   - q: "Which safety net do I need?"
     a: "It depends on the problem. Falls need balcony or staircase nets, birds need pigeon or anti bird nets. Send a photo on WhatsApp and we will advise."

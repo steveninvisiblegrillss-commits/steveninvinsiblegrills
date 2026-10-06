@@ -24,6 +24,7 @@ const services = defineCollection({
       priceRange: z.string().nullable().default(null), // D4: null hides
       material: z.string().nullable().default(null), // D11: null hides
       alsoAvailable: z.array(z.string()).default([]), // hubs only
+      finder: z.array(z.object({ label: z.string(), services: z.array(reference('services')).min(1) })).default([]), // hubs only: problem chips
       faqs: z.array(faq).default([]),
       related: z.array(reference('services')).default([]),
       legacyUrls: z.array(z.string().regex(/^\/.*\.php$/)).default([]),
