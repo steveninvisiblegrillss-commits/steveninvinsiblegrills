@@ -1,4 +1,4 @@
-// Renames originals to SEO filenames, strips metadata, caps at 2000px WebP. Astro makes AVIF/WebP variants at build.
+// Renames originals to SEO filenames, strips metadata, caps at 1600px WebP. Astro makes AVIF/WebP variants at build.
 // No logo files are imported: the brand has no logo yet.
 import sharp from 'sharp';
 import { mkdirSync } from 'node:fs';
@@ -43,6 +43,6 @@ const map = {
 };
 for (const [from, to] of Object.entries(map)) {
   mkdirSync(dirname(OUT + to), { recursive: true });
-  await sharp(SRC + from).rotate().resize({ width: 2000, withoutEnlargement: true }).webp({ quality: 86 }).toFile(OUT + to);
+  await sharp(SRC + from).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 62 }).toFile(OUT + to);
 }
 console.log(`imported ${Object.keys(map).length} images`);

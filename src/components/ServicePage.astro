@@ -1,0 +1,105 @@
+---
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { site } from '../config/site';
+import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
+import Breadcrumbs from './Breadcrumbs.astro';
+import Button from './Button.astro';
+import ProjectGrid from './ProjectGrid.astro';
+import FaqList from './FaqList.astro';
+import AreaChips from './AreaChips.astro';
+import CtaBand from './CtaBand.astro';
+import QuoteForm from './QuoteForm.astro';
+
+interface Props { entry: any; related: any[]; crumbs: { name: string; path: string }[] }
+const { entry, related, crumbs } = Astro.props;
+const d = entry.data;
+const path = Astro.url.pathname;
+const wa = waLink(quoteMessage({ service: d.name, path }));
+const facts = [
+  ['Used for', d.uses.join(', ')],
+  ['Where', `Homes, apartments and buildings across ${site.city}`],
+  d.material ? ['Material', d.material] : null,
+  site.freeInstallation ? ['Installation', 'Free'] : null,
+  d.priceRange ? ['Price', d.priceRange] : ['Price basis', d.priceFactors.slice(0, 2).join(' and ').toLowerCase()],
+].filter(Boolean) as string[][];
+---
+<div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+  <Breadcrumbs crumbs={crumbs} />
+  <div class="mt-6 grid gap-12 lg:grid-cols-12">
+    <article class="lg:col-span-8">
+      <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">{d.title}</h1>
+      <p class="mt-5 max-w-[65ch] text-lg text-ink-soft md:text-xl">{d.answer}</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button>
+        <Button href={telLink()} variant="ghost" icon="ph:phone-duotone" data-service={d.name}>Call {site.phoneDisplay}</Button>
+      </div>
+      <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 1024px) 66vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="mt-10 aspect-[16/10] w-full rounded-[var(--radius-card)] object-cover" />
+
+      <dl class="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-line sm:grid-cols-2">
+        {facts.map(([k, v]) => (
+          <div class="bg-card p-5"><dt class="text-sm text-ink-soft">{k}</dt><dd class="mt-1 font-semibold">{v}</dd></div>
+        ))}
+      </dl>
+
+      <section class="pt-14">
+        <h2 class="text-3xl font-bold md:text-4xl">What it solves</h2>
+        <ul class="mt-6 grid gap-3">
+          {d.problems.map((p: string) => (
+            <li class="flex gap-3"><Icon name="ph:check-circle-duotone" class="mt-0.5 size-6 shrink-0 text-brand" /><span class="max-w-[65ch]">{p}</span></li>
+          ))}
+        </ul>
+      </section>
+
+      <div class="prose-body mt-10 grid max-w-[65ch] gap-4 text-lg"><slot /></div>
+
+      <ProjectGrid service={entry.id} heading={`${d.name} we have installed`} />
+
+      {d.installSteps.length > 0 && (
+        <section class="py-14">
+          <h2 class="text-3xl font-bold md:text-4xl">How we install</h2>
+          <ol class="mt-8 grid gap-4 sm:grid-cols-2">
+            {d.installSteps.map((s: string, i: number) => (
+              <li class="flex gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5">
+                <span class="grid size-9 shrink-0 place-items-center rounded-full bg-brand text-sm font-bold text-white dark:text-brand-deep">{i + 1}</span>
+                <span>{s}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {d.priceFactors.length > 0 && (
+        <section class="pb-14">
+          <h2 class="text-3xl font-bold md:text-4xl">What decides the price</h2>
+          <ul class="mt-6 flex flex-wrap gap-3">
+            {d.priceFactors.map((f: string) => <li class="rounded-full border border-line bg-card px-4 py-2">{f}</li>)}
+          </ul>
+        </section>
+      )}
+
+      <FaqList faqs={d.faqs} />
+      <AreaChips />
+
+      {related.length > 0 && (
+        <section class="py-14">
+          <h2 class="text-3xl font-bold md:text-4xl">Related services</h2>
+          <ul class="mt-6 grid gap-3 sm:grid-cols-2">
+            {related.map((r) => (
+              <li><a href={`/${r.id}/`} class="flex items-center justify-between rounded-[var(--radius-card)] border border-line bg-card p-5 font-semibold hover:border-brand">{r.data.name}<Icon name="ph:arrow-right-bold" class="size-5 text-brand" /></a></li>
+            ))}
+          </ul>
+        </section>
+      )}
+    </article>
+
+    <aside class="lg:col-span-4">
+      <div class="top-24 rounded-[var(--radius-card)] border border-line bg-card p-6 shadow-[var(--shadow-soft)] lg:sticky">
+        <h2 class="text-xl font-bold">Get a free quote</h2>
+        <p class="mb-5 mt-1 text-sm text-ink-soft">Tell us the area and service. We reply on WhatsApp.</p>
+        <QuoteForm />
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="mt-8"><CtaBand service={d.name} /></div>

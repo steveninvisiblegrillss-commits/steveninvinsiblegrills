@@ -1,0 +1,17 @@
+---
+interface Props { faqs: { q: string; a: string }[]; heading?: string }
+const { faqs, heading = 'Questions people ask' } = Astro.props;
+---
+{faqs.length > 0 && (
+  <section class="py-14">
+    <h2 class="text-3xl font-bold md:text-4xl">{heading}</h2>
+    <dl class="mt-8 grid gap-x-12 gap-y-8 md:grid-cols-2">
+      {faqs.map((f) => (
+        <div>
+          <dt class="text-lg font-semibold">{f.q}</dt>
+          <dd class="mt-2 max-w-[65ch] text-ink-soft">{f.a}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+)}

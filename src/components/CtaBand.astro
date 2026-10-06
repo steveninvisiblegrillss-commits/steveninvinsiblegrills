@@ -1,0 +1,21 @@
+---
+import { site } from '../config/site';
+import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
+import Button from './Button.astro';
+
+interface Props { service?: string; area?: string }
+const { service, area } = Astro.props;
+const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
+---
+<section class="bg-brand-deep text-white">
+  <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-4 py-16 md:flex-row md:items-center md:px-8 md:py-20">
+    <div>
+      <h2 class="max-w-xl text-3xl font-bold md:text-4xl">Send us a photo of your balcony. We reply with a quote.</h2>
+      <p class="mt-3 text-white/80">Free installation. Clear price before we start.</p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <Button href={wa} variant="accent" data-service={service} data-area={area}>Get a free quote</Button>
+      <Button href={telLink()} variant="light" icon="ph:phone-duotone" data-service={service}>{site.phoneDisplay}</Button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+---
+import '../styles/global.css';
+import fontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileActionBar from '../components/MobileActionBar.astro';
+import { graph, businessNode, websiteNode } from '../lib/schema';
+
+interface Props { title: string; description: string; path: string; image?: string; schema?: object[]; noindex?: boolean; service?: string; area?: string }
+const { schema = [], service, area, ...seo } = Astro.props;
+const GA = import.meta.env.PUBLIC_GA_ID;
+const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
+---
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+    <meta name="theme-color" content="#13285e" />
+    <Seo {...seo} />
+    <script type="application/ld+json" set:html={graph(businessNode(), websiteNode(), ...schema)} />
+    {(GA || CLARITY) && (
+      <script is:inline define:vars={{ GA, CLARITY }}>
+        // Third-party analytics load after the page is idle so they never delay LCP.
+        addEventListener('load', () => {
+          const go = () => {
+            if (GA) {
+              window.dataLayer = window.dataLayer || [];
+              window.gtag = function () { dataLayer.push(arguments); };
+              gtag('js', new Date()); gtag('config', GA);
+              const s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA; document.head.append(s);
+            }
+            if (CLARITY) {
+              (function (c, l, a, r, i, t, y) {
+                c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+                t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+                y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+              })(window, document, 'clarity', 'script', CLARITY);
+            }
+          };
+          'requestIdleCallback' in window ? requestIdleCallback(go) : setTimeout(go, 2000);
+        });
+      </script>
+    )}
+  </head>
+  <body class="min-h-[100dvh] antialiased">
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-full focus:bg-card focus:px-4 focus:py-2">Skip to content</a>
+    <Header service={service} area={area} />
+    <main id="main"><slot /></main>
+    <Footer />
+    <MobileActionBar service={service} area={area} />
+    <script is:inline>
+      // One delegated listener tracks every lead link (GA4 key events: lead_whatsapp, lead_call).
+      document.addEventListener('click', (e) => {
+        const a = e.target.closest('a[href^="https://wa.me"],a[href^="tel:"]');
+        if (!a || !window.gtag) return;
+        gtag('event', a.href.startsWith('tel:') ? 'lead_call' : 'lead_whatsapp', { page: location.pathname, service: a.dataset.service || '', area: a.dataset.area || '' });
+      });
+    </script>
+  </body>
+</html>

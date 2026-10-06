@@ -1,0 +1,35 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import QuoteForm from '../components/QuoteForm.astro';
+import { site } from '../config/site';
+import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
+
+const wa = waLink(quoteMessage({ path: '/contact/' }));
+const rows = [
+  { icon: 'ph:phone-duotone', label: 'Call', value: site.phoneDisplay, href: telLink() },
+  { icon: 'ph:whatsapp-logo-duotone', label: 'WhatsApp', value: site.phoneDisplay, href: wa },
+  { icon: 'ph:envelope-simple-duotone', label: 'Email', value: site.email, href: `mailto:${site.email}` },
+];
+---
+<Base title="Contact Steven Invisible Grills, Hyderabad" description="Call, WhatsApp or email Steven Invisible Grills for safety nets, pigeon nets, invisible grills and cloth hangers in Hyderabad. Free installation." path="/contact/" service="" area="">
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 py-14 md:px-8 lg:grid-cols-2">
+    <div>
+      <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">Contact Steven Invisible Grills</h1>
+      <p class="mt-5 max-w-[50ch] text-lg text-ink-soft">The fastest way to a quote is a photo of your balcony or window on WhatsApp.</p>
+      <ul class="mt-8 grid gap-4">
+        {rows.map((r) => (
+          <li><a href={r.href} class="flex items-center gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5 hover:border-brand">
+            <Icon name={r.icon} class="size-8 text-brand" />
+            <span><span class="block text-sm text-ink-soft">{r.label}</span><span class="font-semibold">{r.value}</span></span>
+          </a></li>
+        ))}
+      </ul>
+      <p class="mt-6 text-ink-soft">We work across Hyderabad and Secunderabad. See the <a href="/areas/" class="font-semibold text-brand underline-offset-4 hover:underline">areas we serve</a>.</p>
+    </div>
+    <div class="rounded-[var(--radius-card)] border border-line bg-card p-6 shadow-[var(--shadow-soft)] md:p-8">
+      <h2 class="mb-5 text-2xl font-bold">Request a quote</h2>
+      <QuoteForm />
+    </div>
+  </div>
+</Base>

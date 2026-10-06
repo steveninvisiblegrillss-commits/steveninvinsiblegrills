@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import { site } from '../config/site';
+import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
+import Button from './Button.astro';
+
+interface Props { service?: string; area?: string }
+const { service, area } = Astro.props;
+const here = Astro.url.pathname;
+const all = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const hubs = all.filter((s) => s.data.kind === 'hub');
+const wa = waLink(quoteMessage({ service, area, path: here }));
+---
+<header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur">
+  <div class="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
+    <a href="/" class="text-lg font-bold tracking-tight text-brand-deep dark:text-ink" aria-label={`${site.name} home`}>{site.name}</a>
+
+    <nav class="hidden items-center gap-6 lg:flex" aria-label="Main">
+      {site.nav.map((n) => (
+        <a href={n.href} aria-current={here.startsWith(n.href) ? 'page' : undefined} class="text-sm font-medium text-ink-soft hover:text-brand aria-[current=page]:text-brand">{n.label}</a>
+      ))}
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href={telLink()} data-service={service} class="hidden items-center gap-2 text-sm font-semibold text-ink xl:flex">
+        <Icon name="ph:phone-duotone" class="size-5 text-brand" />{site.phoneDisplay}
+      </a>
+      <Button href={wa} variant="wa" icon="ph:whatsapp-logo-duotone" class="hidden sm:inline-flex" data-service={service} data-area={area}>WhatsApp us</Button>
+      <details class="group lg:hidden">
+        <summary class="grid size-11 cursor-pointer list-none place-items-center rounded-full border border-line" aria-label="Menu">
+          <Icon name="ph:list-bold" class="size-5 group-open:hidden" />
+          <Icon name="ph:x-bold" class="hidden size-5 group-open:block" />
+        </summary>
+        <div class="fixed inset-x-0 top-[68px] bottom-0 overflow-y-auto bg-surface p-6 pb-28">
+          <ul class="grid gap-6">
+            {hubs.map((h) => (
+              <li>
+                <a href={`/${h.id}/`} class="text-lg font-bold text-brand-deep dark:text-ink">{h.data.name}</a>
+                <ul class="mt-2 grid gap-1">
+                  {all.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
+                    <li><a href={`/${s.id}/`} class="block py-1.5 text-ink-soft">{s.data.name}</a></li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+            <li class="grid gap-2 border-t border-line pt-4">
+              {site.nav.filter((n) => ['Projects', 'Areas', 'Contact'].includes(n.label)).map((n) => (
+                <a href={n.href} class="py-1.5 font-semibold">{n.label}</a>
+              ))}
+            </li>
+          </ul>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import { site } from '../config/site';
+
+const services = (await getCollection('services')).filter((s) => s.data.kind === 'service').sort((a, b) => a.data.order - b.data.order);
+const field = 'rounded-[var(--radius-input)] border border-ink-soft/50 bg-card px-4 py-3 text-ink';
+---
+<form data-quote class="grid gap-4">
+  <div class="grid gap-2"><label for="q-name" class="font-medium">Your name</label>
+    <input id="q-name" name="name" required autocomplete="name" class={field} /></div>
+  <div class="grid gap-2"><label for="q-area" class="font-medium">Area</label>
+    <select id="q-area" name="area" required class={field}>
+      <option value="">Choose your area</option>
+      {site.areas.map((a) => <option>{a.name}</option>)}
+      <option>Other</option>
+    </select></div>
+  <div class="grid gap-2"><label for="q-service" class="font-medium">Service</label>
+    <select id="q-service" name="service" required class={field}>
+      <option value="">Choose a service</option>
+      {services.map((s) => <option>{s.data.name}</option>)}
+    </select></div>
+  <div class="grid gap-2"><label for="q-msg" class="font-medium">Details (optional)</label>
+    <textarea id="q-msg" name="msg" rows="3" class={field}></textarea>
+    <p class="text-sm text-ink-soft">Opens WhatsApp with your message. Nothing is stored on this website.</p></div>
+  <button class="min-h-12 rounded-full bg-wa px-6 py-3 font-semibold text-white transition-transform active:scale-[0.98]">Send on WhatsApp</button>
+</form>
+<script>
+  import { waLink, quoteMessage } from '../lib/whatsapp';
+  document.querySelectorAll<HTMLFormElement>('[data-quote]').forEach((f) =>
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!f.reportValidity()) return;
+      const d = new FormData(f);
+      let m = `${quoteMessage({ service: String(d.get('service')), area: String(d.get('area')), path: location.pathname })} Name: ${d.get('name')}.`;
+      if (d.get('msg')) m += ` ${d.get('msg')}`;
+      (window as any).gtag?.('event', 'lead_form', { service: d.get('service'), area: d.get('area'), page: location.pathname });
+      window.location.href = waLink(m);
+    }),
+  );
+</script>

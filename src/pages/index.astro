@@ -1,0 +1,123 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import AreaChips from '../components/AreaChips.astro';
+import FaqList from '../components/FaqList.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { site } from '../config/site';
+import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
+import hero from '../assets/images/services/pigeon-safety-nets-balcony-hyderabad.webp';
+import grillImg from '../assets/images/services/invisible-grills-for-balconies-hyderabad.webp';
+import hangerImg from '../assets/images/services/pull-and-dry-cloth-hangers-hyderabad.webp';
+
+const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
+const hubs = services.filter((s) => s.data.kind === 'hub');
+const wa = waLink(quoteMessage({ path: '/' }));
+const homeFaqs = [
+  { q: 'Which is better for my balcony, a net or an invisible grill?', a: 'Nets cost less and also stop birds. Invisible grills give a cleaner look and keep intruders out too. Send a photo on WhatsApp and we will suggest the right option.' },
+  { q: 'Is installation really free?', a: 'Yes. Installation is free on our services. You pay for the material, and the quote you receive shows the full price before we start.' },
+  { q: 'Which areas of Hyderabad do you cover?', a: 'We work across Hyderabad and Secunderabad, including Gachibowli, Kondapur, Madhapur, Hitech City, Kukatpally, Miyapur, Banjara Hills and Jubilee Hills.' },
+  { q: 'How do I get a quote?', a: 'Send a photo of your balcony or window on WhatsApp with a rough size. We reply with a clear quote, and fix a site visit if you want to go ahead.' },
+  { q: 'Do pigeon nets and invisible grills block air or light?', a: 'No. Both are made to keep the view, air and sunlight open while doing their job.' },
+  { q: 'Do you work for apartment societies and offices?', a: 'Yes. We install for homes, apartment societies, offices, malls and construction sites. Share the details on WhatsApp for a combined quote.' },
+];
+const need = [
+  { title: 'Keep kids and pets safe', text: 'Balcony nets and invisible grills for high-rise apartments.', href: '/balcony-safety-nets/', img: grillImg, alt: 'Invisible grill on a balcony at night in Hyderabad', cls: 'lg:row-span-2 lg:min-h-[28rem]' },
+  { title: 'Stop pigeons and birds', text: 'Pigeon nets, anti bird nets, duct nets and bird spikes.', href: '/pigeon-safety-nets/', img: hero, alt: 'Pigeon safety net across an apartment balcony in Hyderabad', cls: 'min-h-60' },
+  { title: 'Dry clothes in less space', text: 'Ceiling-mounted pull and dry cloth hangers.', href: '/cloth-hangers/', img: hangerImg, alt: 'Pull and dry ceiling cloth hanger on a balcony in Hyderabad', cls: 'min-h-60' },
+];
+const trust = [
+  { icon: 'ph:calendar-check-duotone', text: `${site.yearsClaim} in Hyderabad` },
+  { icon: 'ph:wrench-duotone', text: 'Free installation' },
+  { icon: 'ph:ruler-duotone', text: 'Measured on site' },
+  { icon: 'ph:chat-circle-text-duotone', text: 'Quote on WhatsApp' },
+];
+const steps = [
+  { icon: 'ph:camera-duotone', title: 'Send photos on WhatsApp', text: 'A photo and rough size of your balcony or window is enough.' },
+  { icon: 'ph:receipt-duotone', title: 'Get a clear quote', text: 'The full price, shared before we start.' },
+  { icon: 'ph:hammer-duotone', title: 'We install, you inspect', text: 'Our team fits it neatly and checks it with you.' },
+];
+---
+<Base
+  title="Steven Invisible Grills: Pigeon Nets & Grills, Hyderabad"
+  description="Balcony safety nets, pigeon nets, invisible grills and cloth hangers installed across Hyderabad. 10+ years, free installation. WhatsApp for a quote."
+  path="/"
+>
+  <section class="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-14 pt-10 md:px-8 lg:min-h-[calc(100dvh-68px)] lg:grid-cols-12 lg:pt-12">
+    <div class="lg:col-span-7">
+      <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl lg:text-6xl">Pigeon nets and invisible grills for Hyderabad homes</h1>
+      <p class="mt-6 max-w-[48ch] text-lg text-ink-soft md:text-xl">Balcony safety nets, invisible grills and cloth hangers, installed by our own team across Hyderabad. Free installation.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={wa} variant="accent">Get a free quote</Button>
+        <Button href={telLink()} variant="ghost" icon="ph:phone-duotone">Call {site.phoneDisplay}</Button>
+      </div>
+    </div>
+    <div class="lg:col-span-5">
+      <Picture src={hero} alt="Pigeon safety net fitted across an apartment balcony overlooking a hillside in Hyderabad" widths={[480, 800, 1100]} sizes="(min-width: 1024px) 40vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="aspect-[4/5] w-full rounded-[var(--radius-card)] object-cover shadow-[var(--shadow-soft)]" />
+    </div>
+  </section>
+
+  <section class="border-y border-line bg-surface-2">
+    <ul class="mx-auto grid max-w-7xl grid-cols-2 gap-6 px-4 py-8 md:grid-cols-4 md:px-8">
+      {trust.map((t) => (
+        <li class="flex items-center gap-3"><Icon name={t.icon} class="size-8 shrink-0 text-brand" /><span class="font-semibold">{t.text}</span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <h2 class="max-w-2xl text-3xl font-bold md:text-4xl">What do you need to fix?</h2>
+    <ul class="reveal mt-10 grid gap-5 lg:grid-cols-2">
+      {need.map((n) => (
+        <li class:list={['group relative isolate overflow-hidden rounded-[var(--radius-card)]', n.cls]}>
+          <Picture src={n.img} alt={n.alt} widths={[600, 1000]} sizes="(min-width: 1024px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
+          <a href={n.href} class="flex h-full min-h-60 flex-col justify-end bg-gradient-to-t from-brand-deep/90 via-brand-deep/40 to-transparent p-6 text-white">
+            <h3 class="text-2xl font-bold">{n.title}</h3>
+            <p class="mt-1 max-w-sm text-white/85">{n.text}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="bg-surface-2">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <h2 class="text-3xl font-bold md:text-4xl">Everything we install</h2>
+      <div class="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        {hubs.map((h) => (
+          <div>
+            <a href={`/${h.id}/`} class="text-lg font-bold text-brand hover:underline">{h.data.name}</a>
+            <ul class="mt-4 grid gap-2">
+              {services.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
+                <li><a href={`/${s.id}/`} class="text-ink-soft hover:text-ink hover:underline">{s.data.name}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-7xl px-4 md:px-8"><ProjectGrid limit={6} /></div>
+
+  <section class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <h2 class="text-3xl font-bold md:text-4xl">From photo to installed</h2>
+    <ul class="mt-10 grid gap-6 md:grid-cols-3">
+      {steps.map((s) => (
+        <li class="rounded-[var(--radius-card)] border border-line bg-card p-6">
+          <Icon name={s.icon} class="size-10 text-brand" />
+          <h3 class="mt-4 text-xl font-semibold">{s.title}</h3>
+          <p class="mt-2 text-ink-soft">{s.text}</p>
+        </li>
+      ))}
+    </ul>
+    <div class="mt-10"><Button href={wa} variant="accent">Get a free quote</Button></div>
+  </section>
+
+  <div class="mx-auto max-w-7xl px-4 md:px-8"><AreaChips /><FaqList faqs={homeFaqs} heading="Common questions" /></div>
+  <CtaBand />
+</Base>

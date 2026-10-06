@@ -1,0 +1,27 @@
+---
+import { site } from '../config/site';
+import { pageTitle } from '../lib/seo';
+
+interface Props { title: string; description: string; path: string; image?: string; noindex?: boolean }
+const { title, description, path, image = '/og-default.jpg', noindex = false } = Astro.props;
+const canonical = new URL(path, site.url).href;
+const ogImage = new URL(image, site.url).href;
+// Staging stays noindex until PUBLIC_INDEXABLE=true is set in production.
+const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true' && !noindex;
+const full = pageTitle(title);
+---
+<title>{full}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={indexable ? 'index, follow, max-image-preview:large, max-snippet:-1' : 'noindex, nofollow'} />
+<meta name="google-site-verification" content="3PBf3hmNn64TV5vTmNb2a--RYWcUaWkQ7G7bhD1iiok" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content="en_IN" />
+<meta property="og:title" content={full} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="geo.region" content="IN-TG" />
+<meta name="geo.placename" content="Hyderabad" />

@@ -1,0 +1,36 @@
+---
+import { Picture } from 'astro:assets';
+import { getCollection, getEntries, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { breadcrumbNode } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  return (await getCollection('projects')).map((p) => ({ params: { slug: p.id }, props: { project: p } }));
+}
+const { project } = Astro.props;
+const d = project.data;
+const path = Astro.url.pathname;
+const [area] = await getEntries([d.area]);
+const services = await getEntries(d.services);
+const { Content } = await render(project);
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }, { name: d.title, path }];
+---
+<Base title={d.title} description={`${d.title} in ${area.data.name}. Real installation by Steven Invisible Grills. Free installation, WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs)]} service={services[0]?.data.name} area={area.data.name}>
+  <div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="mt-6 max-w-3xl text-4xl font-bold leading-[1.05] md:text-5xl">{d.title}</h1>
+    <p class="mt-4 text-ink-soft">{area.data.name} · {services.map((s) => s.data.name).join(', ')}</p>
+    <div class="mt-6 max-w-[65ch] text-lg"><Content /></div>
+    <div class="mt-10 grid gap-5 md:grid-cols-2">
+      {d.photos.map((ph, i) => (
+        <Picture src={ph.src} alt={ph.alt} widths={[600, 1000]} sizes="(min-width: 768px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" loading={i === 0 ? 'eager' : 'lazy'} class="w-full rounded-[var(--radius-card)] object-cover" />
+      ))}
+    </div>
+    <ul class="mt-8 flex flex-wrap gap-3">
+      {services.map((s) => <li><a href={`/${s.id}/`} class="inline-block rounded-full border border-brand px-4 py-2 text-sm font-medium text-brand">{s.data.name}</a></li>)}
+    </ul>
+  </div>
+  <div class="mt-14"><CtaBand service={services[0]?.data.name} area={area.data.name} /></div>
+</Base>

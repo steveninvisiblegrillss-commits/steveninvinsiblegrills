@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { publishableAreas } from '../../lib/publish';
+import { breadcrumbNode } from '../../lib/schema';
+
+export async function getStaticPaths() {
+  const areas = await getCollection('areas');
+  const projects = await getCollection('projects');
+  const ok = new Set(publishableAreas(areas.map((a) => ({ id: a.id, localNotes: a.data.localNotes })), projects.map((p) => ({ area: p.data.area.id, services: [] }))));
+  return areas.filter((a) => ok.has(a.id)).map((a) => ({ params: { area: a.id }, props: { area: a } }));
+}
+const { area } = Astro.props;
+const path = Astro.url.pathname;
+const crumbs = [{ name: 'Home', path: '/' }, { name: 'Areas', path: '/areas/' }, { name: area.data.name, path }];
+---
+<Base title={`Safety nets and invisible grills in ${area.data.name}`} description={`Safety nets, pigeon nets, invisible grills and cloth hangers installed in ${area.data.name}, Hyderabad. See our work there and WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs)]} area={area.data.name}>
+  <div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
+    <Breadcrumbs crumbs={crumbs} />
+    <h1 class="mt-6 max-w-3xl text-4xl font-bold leading-[1.05] md:text-5xl">Safety nets and invisible grills in {area.data.name}</h1>
+    {area.data.localNotes && <p class="mt-5 max-w-[65ch] text-lg text-ink-soft">{area.data.localNotes}</p>}
+    <ProjectGrid area={area.id} heading={`Our work in ${area.data.name}`} />
+  </div>
+  <CtaBand area={area.data.name} />
+</Base>

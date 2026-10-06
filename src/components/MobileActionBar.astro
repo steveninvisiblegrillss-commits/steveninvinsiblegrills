@@ -1,0 +1,16 @@
+---
+import { Icon } from 'astro-icon/components';
+import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
+
+interface Props { service?: string; area?: string }
+const { service, area } = Astro.props;
+const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
+---
+<div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-line bg-card/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+  <a href={telLink()} data-service={service} class="flex min-h-12 items-center justify-center gap-2 rounded-full border border-brand font-semibold text-brand">
+    <Icon name="ph:phone-duotone" class="size-5" />Call now
+  </a>
+  <a href={wa} data-service={service} data-area={area} class="flex min-h-12 items-center justify-center gap-2 rounded-full bg-wa font-semibold text-white">
+    <Icon name="ph:whatsapp-logo-duotone" class="size-5" />WhatsApp
+  </a>
+</div>

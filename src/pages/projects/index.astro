@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import CtaBand from '../../components/CtaBand.astro';
+---
+<Base title="Our projects: real installations in Hyderabad" description="Real safety net, pigeon net and invisible grill installations by Steven Invisible Grills across Hyderabad apartments and homes." path="/projects/">
+  <div class="mx-auto max-w-7xl px-4 pt-14 md:px-8">
+    <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">Our projects</h1>
+    <p class="mt-4 max-w-[60ch] text-lg text-ink-soft">Real installations by our team in Hyderabad.</p>
+    <ProjectGrid heading="All installations" />
+  </div>
+  <CtaBand />
+</Base>
