@@ -43,6 +43,6 @@ const map = {
 };
 for (const [from, to] of Object.entries(map)) {
   mkdirSync(dirname(OUT + to), { recursive: true });
-  await sharp(SRC + from).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: 62 }).toFile(OUT + to);
+  await sharp(SRC + from).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: to.startsWith('projects/') ? 50 : 62 }).toFile(OUT + to);
 }
 console.log(`imported ${Object.keys(map).length} images`);
