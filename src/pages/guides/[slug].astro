@@ -2,9 +2,8 @@
 import { Picture, getImage } from 'astro:assets';
 import { getCollection, getEntries, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import PageHero from '../../components/PageHero.astro';
 import Button from '../../components/Button.astro';
-import CtaBand from '../../components/CtaBand.astro';
 import { articleNode, breadcrumbNode } from '../../lib/schema';
 import { waLink, quoteMessage } from '../../lib/whatsapp';
 
@@ -20,21 +19,25 @@ const img = await getImage({ src: d.hero, width: 1200, format: 'webp' });
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Guides', path: '/guides/' }, { name: d.title, path }];
 const wa = waLink(quoteMessage({ path }));
 ---
-<Base title={d.seoTitle} description={d.description} path={path} schema={[breadcrumbNode(crumbs), articleNode({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, image: img.src })]}>
-  <div class="mx-auto max-w-3xl px-4 pt-8 md:px-8">
-    <Breadcrumbs crumbs={crumbs} />
-    <h1 class="mt-6 text-5xl md:text-6xl">{d.title}</h1>
-    <p class="mt-5 text-lg text-ink-soft md:text-xl">{d.answer}</p>
-    <p class="mt-4 text-sm text-ink-soft">By Steven Invisible Grills. Published {d.published.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}.</p>
-    <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 768px) 48rem, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="mt-8 aspect-[16/9] w-full rounded-[var(--radius-card)] object-cover" />
-    <div class="guide mt-10 grid gap-5 text-lg [&_a]:font-semibold [&_a]:text-brand [&_a]:underline [&_h2]:mt-6 [&_h2]:text-3xl [&_h2]:font-bold [&_ul]:grid [&_ul]:gap-2"><Content /></div>
-    <div class="mt-12 rounded-[var(--radius-card)] border border-line bg-card p-6">
-      <h2 class="text-2xl font-bold">Need a recommendation for your balcony?</h2>
-      <p class="mt-2 text-ink-soft">Send a photo and we will suggest the right option.</p>
-      <div class="mt-5"><Button href={wa} variant="accent">Get a free quote</Button></div>
+<Base title={d.seoTitle} description={d.description} path={path} schema={[breadcrumbNode(crumbs), articleNode({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, image: img.src })]} flush darkHero>
+  <PageHero tag="Guide" title={d.title} lead={d.answer} crumbs={crumbs} narrow>
+    <p class="mono-tag mt-6 text-white/55">By Steven Invisible Grills / Published {d.published.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+  </PageHero>
+  <section class="bg-paper">
+    <div class="grid-paper">
+      <div class="mx-auto max-w-3xl px-4 py-16 md:px-8 md:py-24">
+        <span class="crop-marks crop-marks-ink block"><Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 768px) 48rem, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" class="aspect-[16/9] w-full border border-ink/20 object-cover" /></span>
+        <div class="guide mt-12 grid gap-5 text-lg [&_a]:font-semibold [&_a]:text-night [&_a]:underline [&_a]:decoration-dusk-text [&_a]:underline-offset-4 [&_h2]:mt-8 [&_h2]:text-3xl [&_h2]:md:text-4xl [&_ul]:grid [&_ul]:gap-2"><Content /></div>
+        <div class="mt-14 border border-ink/25 bg-card p-6 md:p-8">
+          <p class="mono-tag text-dusk-text">Next step</p>
+          <h2 class="mt-3 text-3xl md:text-4xl">Need a recommendation for your balcony?</h2>
+          <p class="mt-3 text-ink-soft">Send a photo and we will suggest the right option.</p>
+          <div class="mt-6"><Button href={wa} variant="accent">Get a free quote</Button></div>
+        </div>
+        <ul class="mt-8 flex flex-wrap gap-3">
+          {services.map((s) => <li><a href={`/${s.id}/`} class="mono-tag inline-flex min-h-11 items-center border border-night bg-night px-4 text-white transition-colors hover:bg-dusk hover:text-night">{s.data.name}</a></li>)}
+        </ul>
+      </div>
     </div>
-    <ul class="mt-8 flex flex-wrap gap-2 pb-16">
-      {services.map((s) => <li><a href={`/${s.id}/`} class="inline-flex min-h-11 items-center rounded-full border border-brand px-4 text-sm font-medium text-brand">{s.data.name}</a></li>)}
-    </ul>
-  </div>
+  </section>
 </Base>

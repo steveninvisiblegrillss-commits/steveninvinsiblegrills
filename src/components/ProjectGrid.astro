@@ -1,56 +1,30 @@
 ---
+// Recent jobs as crop-mark frames on paper. Filtered by service and/or area, newest first.
 import { Picture } from 'astro:assets';
-import { getCollection, getEntries } from 'astro:content';
-import { Icon } from 'astro-icon/components';
+import { getCollection } from 'astro:content';
 
-interface Props { service?: string; area?: string; limit?: number; heading?: string; filters?: boolean }
-const { service, area, limit, heading = 'Recent work', filters = false } = Astro.props;
+interface Props { service?: string; area?: string; limit?: number; heading?: string }
+const { service, area, limit, heading = 'Recent work' } = Astro.props;
 let projects = (await getCollection('projects')).sort((a, b) => +b.data.date - +a.data.date);
 if (service) projects = projects.filter((p) => p.data.services.some((s) => s.id === service));
 if (area) projects = projects.filter((p) => p.data.area.id === area);
 if (limit) projects = projects.slice(0, limit);
-const items = await Promise.all(projects.map(async (p) => ({ p, svc: await getEntries(p.data.services) })));
-// Filter chips: one per service that actually has a project.
-const chips = [...new Map(items.flatMap((i) => i.svc).map((s) => [s.id, s.data.name])).entries()];
 ---
-{items.length > 0 && (
-  <section class="py-14">
-    {heading && <h2 class="text-4xl md:text-5xl">{heading}</h2>}
-    {filters && chips.length > 1 && (
-      <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filter projects by service" data-filters>
-        <button type="button" data-filter="all" aria-pressed="true" class="min-h-11 rounded-full border border-brand px-4 text-sm font-semibold aria-pressed:bg-brand aria-pressed:text-white">All</button>
-        {chips.map(([id, name]) => (
-          <button type="button" data-filter={id} aria-pressed="false" class="min-h-11 rounded-full border border-line bg-card px-4 text-sm font-medium aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-white">{name}</button>
+{projects.length > 0 && (
+  <section class="bg-paper-2">
+    <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+      <p class="sec-tag text-ink-soft">Recent work</p>
+      {heading && <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{heading}</h2>}
+      <ul class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {projects.map((p) => (
+          <li>
+            <a href={`/projects/${p.id}/`} class="group block">
+              <span class="crop-marks crop-marks-ink block"><Picture src={p.data.photos[0].src} alt={p.data.photos[0].alt} widths={[400, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full border border-ink/20 object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.03]" /></span>
+              <span class="mt-4 block font-display text-xl leading-snug group-hover:text-dusk-text">{p.data.title}</span>
+            </a>
+          </li>
         ))}
-      </div>
-    )}
-    <ul class="no-scrollbar -mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3" data-project-list>
-      {items.map(({ p, svc }) => (
-        <li class="w-[82%] shrink-0 snap-center sm:w-auto" data-services={svc.map((s) => s.id).join(' ')}>
-          <a href={`/projects/${p.id}/`} class="group block">
-            <div class="overflow-hidden rounded-[var(--radius-card)]">
-              <Picture src={p.data.photos[0].src} alt={p.data.photos[0].alt} widths={[400, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 82vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
-            </div>
-            <p class="mt-3 flex items-start justify-between gap-3 font-medium group-hover:text-brand">
-              <span>{p.data.title}</span>
-              <Icon name="ph:arrow-up-right-bold" class="mt-1 size-4 shrink-0 text-brand" />
-            </p>
-          </a>
-        </li>
-      ))}
-    </ul>
+      </ul>
+    </div>
   </section>
 )}
-<script>
-  // Project filter chips: show or hide tiles by service. Without JavaScript every project simply stays visible.
-  document.querySelectorAll<HTMLElement>('[data-filters]').forEach((bar) => {
-    const list = bar.parentElement!.querySelector<HTMLElement>('[data-project-list]')!;
-    bar.addEventListener('click', (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
-      if (!btn) return;
-      bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      const f = btn.dataset.filter!;
-      list.querySelectorAll<HTMLElement>('li').forEach((li) => { li.hidden = f !== 'all' && !li.dataset.services!.split(' ').includes(f); });
-    });
-  });
-</script>

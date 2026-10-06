@@ -1,13 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
 import { site } from '../config/site';
 ---
-<Base title="Privacy policy" description={`How ${site.name} handles data on this website: analytics, the WhatsApp quote form and contact details.`} path="/privacy-policy/" noindex>
-  <div class="mx-auto grid max-w-[65ch] gap-4 px-4 py-14 md:px-8">
-    <h1 class="text-5xl">Privacy policy</h1>
-    <p>This website does not store the details you type into the quote form. When you press Send on WhatsApp, your message opens in WhatsApp on your device and is sent only if you send it.</p>
-    <p>We use Google Analytics 4 and Microsoft Clarity to understand how the site is used, for example which pages are visited and where visitors tap. These tools set cookies and may record anonymised interactions. Form field contents are masked.</p>
-    <p>Calls and WhatsApp chats are handled by the telephone and WhatsApp services you use. We use your number only to reply to your enquiry.</p>
-    <p>To ask about your data, call or message us on WhatsApp at <a class="font-semibold text-brand underline" href={`tel:${site.phoneE164}`}>{site.phoneDisplay}</a>.</p>
-  </div>
+<Base title="Privacy policy" description={`How ${site.name} handles data on this website: analytics, the WhatsApp quote form and contact details.`} path="/privacy-policy/" noindex flush darkHero>
+  <PageHero tag="Legal" title="Privacy policy" narrow />
+  <section class="bg-paper">
+    <div class="mx-auto grid max-w-3xl gap-5 px-4 py-16 text-lg md:px-8 md:py-24">
+      <p>This website does not store the details you type into the quote form. When you press Send on WhatsApp, your message opens in WhatsApp on your device and is sent only if you send it.</p>
+      <p>We use Google Analytics 4 and Microsoft Clarity to understand how the site is used, for example which pages are visited and where visitors tap. These tools set cookies and may record anonymised interactions. Form field contents are masked.</p>
+      <p>Calls and WhatsApp chats are handled by the telephone and WhatsApp services you use. We use your number only to reply to your enquiry.</p>
+      <p>To ask about your data, call or message us on WhatsApp at <a class="font-semibold text-night underline decoration-dusk-text underline-offset-4" href={`tel:${site.phoneE164}`}>{site.phoneDisplay}</a>.</p>
+    </div>
+  </section>
 </Base>

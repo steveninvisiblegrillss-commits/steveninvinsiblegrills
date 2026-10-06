@@ -3,15 +3,30 @@ import Base from '../layouts/Base.astro';
 import Button from '../components/Button.astro';
 import { waLink, quoteMessage } from '../lib/whatsapp';
 ---
-<Base title="Page not found" description="This page does not exist. Browse our safety nets, invisible grills and cloth hangers, or message us on WhatsApp." path="/404/" noindex>
-  <div class="mx-auto max-w-7xl px-4 py-24 md:px-8">
-    <h1 class="text-5xl md:text-6xl">This page is <em class="em-brand">invisible</em>. Like our grills.</h1>
-    <p class="mt-4 max-w-[50ch] text-lg text-ink-soft">We cannot see it either. Pick a category below, or message us and we will find what you need.</p>
-    <ul class="mt-8 flex flex-wrap gap-3">
-      {[['Safety nets', '/safety-nets/'], ['Invisible grills', '/invisible-grills/'], ['Cloth hangers', '/cloth-hangers/'], ['Contact', '/contact/']].map(([n, h]) => (
-        <li><a href={h} class="inline-block rounded-full border border-brand px-5 py-2.5 font-medium text-brand">{n}</a></li>
-      ))}
-    </ul>
-    <div class="mt-8"><Button href={waLink(quoteMessage({}))} variant="wa" icon="ph:whatsapp-logo-duotone">WhatsApp us</Button></div>
-  </div>
+<Base title="Page not found" description="This page does not exist. Browse our safety nets, invisible grills and cloth hangers, or message us on WhatsApp." path="/404/" noindex flush darkHero>
+  <section class="wires relative overflow-hidden bg-night text-white">
+    {/* A net with one torn mesh: the page that got through */}
+    <svg viewBox="0 0 600 400" class="pointer-events-none absolute -right-24 top-24 hidden w-[42rem] opacity-60 md:block" aria-hidden="true">
+      <g stroke="#C9D1DC" stroke-width="1" fill="none" opacity="0.5">
+        {Array.from({ length: 14 }, (_, i) => <line x1={i * 46} y1="0" x2={i * 46} y2="400" />)}
+        {Array.from({ length: 10 }, (_, i) => <line x1="0" y1={i * 44} x2="600" y2={i * 44} />)}
+      </g>
+      <rect x="276" y="176" width="92" height="88" fill="#0b132b" />
+      <circle cx="322" cy="220" r="7" fill="#F2A541" />
+    </svg>
+    <div class="relative mx-auto max-w-7xl px-4 pb-24 pt-32 md:px-8 md:pb-32 md:pt-44">
+      <p class="sec-tag text-dusk">Error 404</p>
+      <h1 class="mt-5 max-w-3xl text-5xl md:text-7xl">This page <em class="em-accent">slipped through the net.</em></h1>
+      <p class="mt-6 max-w-[50ch] text-lg text-white/80">We cannot find it either. Pick a category below, or message us and we will find what you need.</p>
+      <ul class="mt-8 flex flex-wrap gap-3">
+        {[['Safety nets', '/safety-nets/'], ['Invisible grills', '/invisible-grills/'], ['Cloth hangers', '/cloth-hangers/'], ['Contact', '/contact/']].map(([n, h]) => (
+          <li><a href={h} class="mono-tag inline-flex min-h-11 items-center border border-steel/50 px-4 transition-colors hover:border-dusk hover:text-dusk">{n}</a></li>
+        ))}
+      </ul>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button href="/" variant="accent" icon="ph:house-line-duotone">Back home</Button>
+        <Button href={waLink(quoteMessage({}))} variant="light" icon="ph:whatsapp-logo-duotone">WhatsApp us</Button>
+      </div>
+    </div>
+  </section>
 </Base>

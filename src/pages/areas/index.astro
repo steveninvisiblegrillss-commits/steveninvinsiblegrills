@@ -1,39 +1,53 @@
 ---
 import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
 import WireMap from '../../components/WireMap.astro';
+import Button from '../../components/Button.astro';
 import { site } from '../../config/site';
 import { waLink, quoteMessage } from '../../lib/whatsapp';
 
 const wa = waLink(quoteMessage({ path: '/areas/' }));
+const pad = (n: number) => String(n).padStart(2, '0');
+const steps = [
+  ['Send a photo and your locality.', 'A balcony or window photo with a rough size is enough.'],
+  ['We confirm the service and price.', 'You get a quote before anything is fixed.'],
+  ['We visit, measure and install.', 'Installation is free, and you inspect the work with us.'],
+];
+const include = [
+  'Your area or apartment community',
+  'The service you want, such as pigeon nets or invisible grills',
+  'A photo of the balcony, window or duct',
+  'Rough width and height, if you know them',
+  'Whether children or pets use the space',
+];
 ---
-<Base title="Areas we serve in Hyderabad and Secunderabad" description="Steven Invisible Grills installs safety nets, invisible grills and cloth hangers across Hyderabad and Secunderabad. See the areas we cover and how to book." path="/areas/">
-  <div class="mx-auto max-w-7xl px-4 pt-10 md:px-8">
-    <h1 class="text-5xl md:text-6xl">Areas we serve</h1>
-    <div class="mt-5 grid max-w-[65ch] gap-4 text-lg text-ink-soft">
+<Base title="Areas we serve in Hyderabad and Secunderabad" description="Steven Invisible Grills installs safety nets, invisible grills and cloth hangers across Hyderabad and Secunderabad. See the areas we cover and how to book." path="/areas/" flush darkHero>
+  <PageHero tag="Coverage" title="Areas we serve">
+    <div class="mt-6 grid max-w-[60ch] gap-4 text-lg text-white/80">
       <p>We install safety nets, invisible grills, cloth hangers and sports nets for homes, apartment communities and offices across Hyderabad and Secunderabad. Our team travels to you, so you do not need to visit a shop.</p>
       <p>The list below covers the {site.areas.length} areas we work in most. If your locality is not listed, send us the location on WhatsApp and we will confirm whether we can take the job.</p>
     </div>
-  </div>
+  </PageHero>
   <WireMap />
-  <div class="mx-auto grid max-w-7xl gap-10 px-4 pb-20 md:grid-cols-2 md:px-8">
-    <div>
-      <h2 class="text-2xl font-bold">How booking works in your area</h2>
-      <ol class="mt-5 grid gap-4">
-        <li><strong>Send a photo and your locality.</strong> A balcony or window photo with a rough size is enough.</li>
-        <li><strong>We confirm the service and price.</strong> You get a quote before anything is fixed.</li>
-        <li><strong>We visit, measure and install.</strong> Installation is free, and you inspect the work with us.</li>
-      </ol>
+  <section class="bg-night text-white">
+    <div class="mx-auto grid max-w-7xl gap-14 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-2">
+      <div>
+        <p class="sec-tag text-dusk">Booking</p>
+        <h2 class="mt-5 text-4xl md:text-5xl">How booking works in your area</h2>
+        <ol class="mt-8 border-t border-steel/30">
+          {steps.map(([t, d], i) => (
+            <li class="grid grid-cols-[3rem_1fr] gap-3 border-b border-steel/30 py-5"><span class="mono-tag pt-1.5 text-dusk">{pad(i + 1)}</span><span><strong class="font-display text-xl font-normal">{t}</strong><span class="mt-1 block text-white/70">{d}</span></span></li>
+          ))}
+        </ol>
+      </div>
+      <div>
+        <p class="sec-tag text-dusk">Your message</p>
+        <h2 class="mt-5 text-4xl md:text-5xl">What to include</h2>
+        <ul class="mt-8 border-t border-steel/30">
+          {include.map((t) => <li class="border-b border-steel/30 py-4 text-white/80">{t}</li>)}
+        </ul>
+        <div class="mt-8"><Button href={wa} variant="wa" icon="ph:whatsapp-logo-duotone">Send details on WhatsApp</Button></div>
+      </div>
     </div>
-    <div>
-      <h2 class="text-2xl font-bold">What to include in your message</h2>
-      <ul class="mt-5 grid list-disc gap-2 pl-5 text-ink-soft">
-        <li>Your area or apartment community</li>
-        <li>The service you want, such as pigeon nets or invisible grills</li>
-        <li>A photo of the balcony, window or duct</li>
-        <li>Rough width and height, if you know them</li>
-        <li>Whether children or pets use the space</li>
-      </ul>
-      <a href={wa} class="mt-6 inline-flex min-h-12 items-center rounded-full bg-accent px-6 font-semibold text-accent-ink">Send details on WhatsApp</a>
-    </div>
-  </div>
+  </section>
 </Base>

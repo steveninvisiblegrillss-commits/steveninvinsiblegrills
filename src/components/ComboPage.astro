@@ -1,5 +1,5 @@
 ---
-import Breadcrumbs from './Breadcrumbs.astro';
+import PageHero from './PageHero.astro';
 import ProjectGrid from './ProjectGrid.astro';
 import FaqList from './FaqList.astro';
 import CtaBand from './CtaBand.astro';
@@ -8,13 +8,10 @@ interface Props { entry: any; area: any; crumbs: { name: string; path: string }[
 const { entry, area, crumbs } = Astro.props;
 const d = entry.data;
 ---
-<div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
-  <Breadcrumbs crumbs={crumbs} />
-  <h1 class="mt-6 max-w-3xl text-5xl md:text-6xl">{d.name} in {area.data.name}</h1>
-  <p class="mt-5 max-w-[65ch] text-lg text-ink-soft md:text-xl">{area.data.localNotes}</p>
-  <p class="mt-4 max-w-[65ch]">{d.answer}</p>
-  <p class="mt-4"><a href={`/${entry.id}/`} class="font-semibold text-brand underline-offset-4 hover:underline">All about {d.name.toLowerCase()}</a></p>
-  <ProjectGrid service={entry.id} area={area.id} heading={`${d.name} in ${area.data.name}`} />
-  <FaqList faqs={d.faqs} />
-</div>
+<PageHero tag={`${area.data.name} / ${d.name}`} title={`${d.name} in ${area.data.name}`} lead={area.data.localNotes} crumbs={crumbs}>
+  <p class="mt-5 max-w-[58ch] text-white/70">{d.answer}</p>
+  <p class="mt-5"><a href={`/${entry.id}/`} class="inline-flex min-h-11 items-center font-semibold text-dusk underline decoration-dusk/50 underline-offset-8">All about {d.name.toLowerCase()}</a></p>
+</PageHero>
+<ProjectGrid service={entry.id} area={area.id} heading={`${d.name} in ${area.data.name}`} />
+<FaqList faqs={d.faqs} />
 <CtaBand service={d.name} area={area.data.name} />

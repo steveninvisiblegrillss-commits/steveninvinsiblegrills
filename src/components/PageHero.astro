@@ -1,0 +1,16 @@
+---
+// Dark title block shared by the supporting pages: tag, H1, lead and an optional slot for extras (buttons, meta).
+import Breadcrumbs from './Breadcrumbs.astro';
+
+interface Props { tag?: string; title: string; accent?: string; lead?: string; crumbs?: { name: string; path: string }[]; narrow?: boolean }
+const { tag, title, accent, lead, crumbs, narrow = false } = Astro.props;
+---
+<section class="wires bg-night text-white">
+  <div class:list={['mx-auto px-4 pb-14 pt-28 md:px-8 md:pb-20 md:pt-36', narrow ? 'max-w-3xl' : 'max-w-7xl']}>
+    {crumbs && <Breadcrumbs crumbs={crumbs} dark />}
+    {tag && <p class:list={['sec-tag text-dusk', crumbs && 'mt-6']}>{tag}</p>}
+    <h1 class:list={['mt-5 text-5xl md:text-7xl', narrow ? 'max-w-3xl' : 'max-w-4xl']}>{title}{accent && <> <em class="em-accent">{accent}</em></>}</h1>
+    {lead && <p class="mt-6 max-w-[58ch] text-lg text-white/80 md:text-xl">{lead}</p>}
+    <slot />
+  </div>
+</section>

@@ -46,7 +46,7 @@ const description = area
   ? `${d.name} in ${area.data.name}. Real installations by Steven Invisible Grills, free installation. WhatsApp for a quote.`
   : d.description;
 ---
-<Base title={title} description={description} path={path} schema={schema} service={d.name} area={area?.data.name} flush={type === 'hub' || type === 'service'} darkHero={type === 'hub' || type === 'service'}>
+<Base title={title} description={description} path={path} schema={schema} service={d.name} area={area?.data.name} flush darkHero>
   {type === 'hub' && <HubPage entry={service} crumbs={crumbs}><Content /></HubPage>}
   {type === 'service' && <ServicePage entry={service} related={related} crumbs={crumbs}><Content /></ServicePage>}
   {type === 'combo' && <ComboPage entry={service} area={area} crumbs={crumbs} />}

@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
 import FaqList from '../components/FaqList.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { faqNode, breadcrumbNode } from '../lib/schema';
@@ -18,10 +19,9 @@ const all = groups.flatMap((g) => g.faqs);
   description="Answers on pigeon nets, balcony safety nets, invisible grills and cloth hangers in Hyderabad: price, safety, installation and areas covered."
   path="/faq/"
   schema={[breadcrumbNode([{ name: 'Home', path: '/' }, { name: 'FAQ', path: '/faq/' }]), faqNode(all, '/faq/')]}
+  flush darkHero
 >
-  <div class="mx-auto max-w-7xl px-4 pt-14 md:px-8">
-    <h1 class="text-5xl md:text-6xl">Frequently asked questions</h1>
-    {groups.map((g) => <FaqList faqs={g.faqs} heading={g.name} />)}
-  </div>
+  <PageHero tag="FAQ" title="Frequently asked questions" />
+  {groups.map((g, i) => <FaqList faqs={g.faqs} heading={g.name} tone={i % 2 ? 'night' : 'paper'} />)}
   <CtaBand />
 </Base>

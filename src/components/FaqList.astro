@@ -1,17 +1,25 @@
 ---
-interface Props { faqs: { q: string; a: string }[]; heading?: string }
-const { faqs, heading = 'Questions people ask' } = Astro.props;
+// Plain question and answer rows on paper (or night). Used on the FAQ page and area-service pages.
+interface Props { faqs: { q: string; a: string }[]; heading?: string; tone?: 'paper' | 'night' }
+const { faqs, heading = 'Questions people ask', tone = 'paper' } = Astro.props;
+const night = tone === 'night';
 ---
 {faqs.length > 0 && (
-  <section class="py-14">
-    <h2 class="text-4xl md:text-5xl">{heading}</h2>
-    <dl class="mt-8 grid gap-x-12 gap-y-8 md:grid-cols-2">
-      {faqs.map((f) => (
-        <div>
-          <dt class="text-lg font-semibold">{f.q}</dt>
-          <dd class="mt-2 max-w-[65ch] text-ink-soft">{f.a}</dd>
-        </div>
-      ))}
-    </dl>
+  <section class:list={[night ? 'bg-night-2 text-white' : 'bg-paper']}>
+    <div class:list={[!night && 'grid-paper']}>
+      <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+        <p class:list={['sec-tag', night ? 'text-dusk' : 'text-ink-soft']}>Questions</p>
+        <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{heading}</h2>
+        <dl class:list={['mt-10 border-t', night ? 'border-steel/30' : 'border-ink/25']}>
+          {faqs.map((f, i) => (
+            <div class:list={['grid gap-x-8 gap-y-2 border-b py-6 md:grid-cols-[4rem_1fr_1.4fr]', night ? 'border-steel/30' : 'border-ink/25']}>
+              <span class:list={['mono-tag pt-1.5', night ? 'text-dusk' : 'text-dusk-text']}>Q{String(i + 1).padStart(2, '0')}</span>
+              <dt class="font-display text-2xl leading-snug">{f.q}</dt>
+              <dd class:list={['max-w-[60ch]', night ? 'text-white/75' : 'text-ink-soft']}>{f.a}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
   </section>
 )}
