@@ -15,7 +15,13 @@ const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
   <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1.1fr_0.9fr]">
     <div>
       <p class="sec-tag text-dusk">Free quote</p>
-      <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Send us a photo of your balcony. <em class="em-accent">We reply with a quote.</em></h2>
+      {area ? (
+        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">In {area}? <em class="em-accent">Send us a photo.</em></h2>
+      ) : service ? (
+        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Want {service.toLowerCase()}? <em class="em-accent">Send a photo of the space.</em></h2>
+      ) : (
+        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Send us a photo of your balcony. <em class="em-accent">We reply with a quote.</em></h2>
+      )}
       <p class="mt-5 max-w-md text-white/75">Free installation. Clear price before we start.</p>
       <div class="mt-8 flex flex-wrap gap-4">
         <Button href={wa} variant="accent" data-service={service} data-area={area}>Get a free quote</Button>

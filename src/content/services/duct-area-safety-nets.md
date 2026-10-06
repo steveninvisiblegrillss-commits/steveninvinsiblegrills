@@ -5,7 +5,7 @@ order: 4
 name: "Duct Area Safety Nets"
 title: "Duct Area Safety Nets in Hyderabad"
 seoTitle: "Duct Area Safety Nets in Hyderabad, Free Installation"
-description: "Duct area safety nets for ventilation shafts and gaps between apartment blocks in Hyderabad. Stops birds and debris, keeps airflow. Free installation."
+description: "Nets that close ventilation shafts and gaps between Hyderabad apartment blocks to stop birds and debris and keep the airflow."
 answer: "Duct area safety nets close the open shafts and gaps between building blocks so birds and debris cannot get in, while air keeps flowing. Steven Invisible Grills installs them for apartments and commercial buildings across Hyderabad with free installation. Send a photo of your duct area on WhatsApp for a quote."
 hero: ../../assets/images/services/duct-area-safety-nets-hyderabad.webp
 heroAlt: "Safety net closing a ventilation duct area between apartment blocks in Hyderabad"

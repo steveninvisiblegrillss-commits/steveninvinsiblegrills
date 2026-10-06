@@ -5,7 +5,7 @@ order: 6
 name: "Construction Safety Nets"
 title: "Construction Safety Nets in Hyderabad"
 seoTitle: "Construction Safety Nets in Hyderabad"
-description: "Construction safety nets for scaffolding and building exteriors in Hyderabad. Protect workers and passersby from falls and falling debris. WhatsApp for a quote."
+description: "Safety nets for scaffolding and building exteriors in Hyderabad, protecting workers and passersby from falls and debris."
 answer: "Construction safety nets are fixed around scaffolding and building exteriors to protect workers and passersby from accidental falls and falling debris, while letting air and light through. Steven Invisible Grills installs them at construction sites across Hyderabad. Send your site details on WhatsApp for a quote."
 hero: ../../assets/images/services/construction-safety-nets-hyderabad.webp
 heroAlt: "Safety net fixed to scaffolding on a building under construction in Hyderabad"

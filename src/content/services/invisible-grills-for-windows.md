@@ -5,7 +5,7 @@ order: 14
 name: "Invisible Grills for Windows"
 title: "Invisible Grills for Windows in Hyderabad"
 seoTitle: "Invisible Grills for Windows in Hyderabad"
-description: "Invisible window grills in stainless steel wire for homes and offices in Hyderabad. Safety and security with a clear, open view. Free installation."
+description: "Invisible window grills in stainless steel wire for Hyderabad homes and offices. Safety and security with an open view."
 answer: "Invisible window grills use thin stainless steel wires that guard against falls and intrusion while keeping the window view clear. Steven Invisible Grills installs them in windows of all sizes for homes and offices across Hyderabad with free installation. Send a photo of your window on WhatsApp for a quote."
 hero: ../../assets/images/services/invisible-grills-for-windows-hyderabad.webp
 heroAlt: "Invisible grill fitted to a window in a Hyderabad apartment"

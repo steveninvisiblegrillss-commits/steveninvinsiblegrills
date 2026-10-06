@@ -5,7 +5,7 @@ order: 1
 name: "Balcony Safety Nets"
 title: "Balcony Safety Nets in Hyderabad"
 seoTitle: "Balcony Safety Nets in Hyderabad, Free Installation"
-description: "Balcony safety nets for apartments and high-rises in Hyderabad. Prevent falls and keep the view open. Free installation. WhatsApp a photo for a quote."
+description: "Safety nets that stop falls from high-rise balconies in Hyderabad while keeping the view open. We measure on a free site visit."
 answer: "Balcony safety nets are high-tensile nets fixed across a balcony opening to prevent accidental falls, especially for children and pets in high-rise apartments. They keep the view and airflow open. Steven Invisible Grills measures, quotes and installs them across Hyderabad with free installation. Send a photo of your balcony on WhatsApp to start."
 hero: ../../assets/images/projects/balcony-safety-net-apartment-hyderabad.webp
 heroAlt: "White balcony safety net fitted along the railing of an apartment balcony"

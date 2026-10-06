@@ -5,7 +5,7 @@ order: 16
 name: "Invisible Grill Price"
 title: "Invisible Grill Price in Hyderabad"
 seoTitle: "Invisible Grill Price and Fixing Charges, Hyderabad"
-description: "What decides the invisible grill price and fixing charges in Hyderabad: area, wire spacing, height and access. Send a photo on WhatsApp for a clear quote."
+description: "What decides invisible grill price and fixing charges in Hyderabad: area, wire spacing, height and access. Get a clear quote."
 answer: "Invisible grill price depends on the area in square feet, the wire spacing, the floor height and how easy the space is to reach. Fixing is not billed separately by us: installation is free. Steven Invisible Grills gives a clear quote after you send a photo of your balcony or window on WhatsApp."
 hero: ../../assets/images/services/invisible-grill-measurement.webp
 heroAlt: "Hands measuring the gap between stainless steel wires of an invisible grill with a tape measure"

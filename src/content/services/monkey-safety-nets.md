@@ -5,7 +5,7 @@ order: 7
 name: "Monkey Safety Nets"
 title: "Monkey Safety Nets in Hyderabad"
 seoTitle: "Monkey Safety Nets in Hyderabad, Free Installation"
-description: "Monkey safety nets for balconies, terraces, rooftops and gardens in Hyderabad. A strong, humane barrier that keeps monkeys out. Free installation."
+description: "A strong, humane barrier for Hyderabad balconies, terraces, rooftops and gardens that keeps monkeys out. Fitted free."
 answer: "Monkey safety nets are strong nets fixed across balconies, terraces, rooftops and gardens to stop monkeys from entering, without harming the animals. Steven Invisible Grills installs them across Hyderabad with free installation. Send a photo of your balcony or terrace on WhatsApp for a quote."
 hero: ../../assets/images/services/balcony-safety-nets-hyderabad.webp
 heroAlt: "Safety net fitted across balcony openings on an apartment building"

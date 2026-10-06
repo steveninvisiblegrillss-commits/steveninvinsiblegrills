@@ -5,7 +5,7 @@ order: 3
 name: "Sports Nets"
 title: "Sports Nets in Hyderabad"
 seoTitle: "Sports Nets in Hyderabad, Cricket and More"
-description: "Cricket practice nets and sports nets for homes, schools, clubs and complexes in Hyderabad. Custom sizes, professional installation. WhatsApp for a quote."
+description: "Cricket practice nets and sports nets for Hyderabad homes, schools, clubs and complexes in custom sizes. Ask for a quote."
 answer: "Steven Invisible Grills designs and installs cricket practice nets and sports nets for homes, schools, clubs and sports complexes across Hyderabad, in custom sizes for indoor and outdoor use. Send your play area size on WhatsApp for a quote."
 hero: ../../assets/images/projects/cricket-practice-net-installation-hyderabad.webp
 heroAlt: "Green cricket practice net corridor with a pole frame installed on a ground"

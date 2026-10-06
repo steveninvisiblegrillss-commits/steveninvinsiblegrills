@@ -5,7 +5,7 @@ order: 5
 name: "Staircase Safety Nets"
 title: "Staircase Safety Nets in Hyderabad"
 seoTitle: "Staircase Safety Nets in Hyderabad, Free Installation"
-description: "Staircase safety nets for homes and buildings in Hyderabad. Protect children and elderly family members from falls. Free installation. WhatsApp for a quote."
+description: "Staircase safety nets for Hyderabad homes and buildings that protect children and elderly family members from falls."
 answer: "Staircase safety nets are fixed along stair railings and open sides to stop accidental falls, especially for children and elderly family members, while allowing free movement. Steven Invisible Grills installs them in homes and commercial buildings across Hyderabad with free installation. WhatsApp a photo of your staircase to get a quote."
 hero: ../../assets/images/services/staircase-safety-nets-hyderabad.webp
 heroAlt: "Safety netting fitted along a staircase railing in a Hyderabad home"

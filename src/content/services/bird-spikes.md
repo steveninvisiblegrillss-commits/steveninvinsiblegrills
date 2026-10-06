@@ -5,7 +5,7 @@ order: 10
 name: "Bird Spikes"
 title: "Bird Spikes in Hyderabad"
 seoTitle: "Bird Spikes in Hyderabad, Free Installation"
-description: "Bird spikes for ledges, AC units, parapets and sunshades in Hyderabad. Stop pigeons sitting and nesting. Free installation. WhatsApp for a quote."
+description: "Bird spikes for ledges, AC units, parapets and sunshades in Hyderabad, where a full net is not practical. Free installation."
 answer: "Bird spikes are strips fixed along ledges, AC units, parapets and sunshades so pigeons cannot land and nest there. Steven Invisible Grills installs bird spikes across Hyderabad, often together with pigeon nets for full cover. Send a photo of the ledge on WhatsApp for a quote."
 hero: ../../assets/images/projects/bird-spikes-installation-tiled-roof-hyderabad.webp
 heroAlt: "Rows of bird spikes fixed along red roof tiles to stop pigeons landing"

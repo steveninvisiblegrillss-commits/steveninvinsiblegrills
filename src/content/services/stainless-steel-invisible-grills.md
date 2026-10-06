@@ -5,7 +5,7 @@ order: 15
 name: "Stainless Steel Invisible Grills"
 title: "Stainless Steel Invisible Grills in Hyderabad"
 seoTitle: "Stainless Steel Invisible Grills in Hyderabad"
-description: "Stainless steel invisible grills for balconies and windows in Hyderabad. Corrosion-resistant, low maintenance and weather-resistant. Free installation."
+description: "Corrosion-resistant stainless steel invisible grills for Hyderabad balconies and windows. Low maintenance and weather-resistant."
 answer: "Stainless steel invisible grills use high-strength stainless steel wires that resist corrosion and weather, so they need little maintenance. Steven Invisible Grills installs them on balconies, windows and open spaces across Hyderabad with free installation. Send a photo on WhatsApp for a quote."
 hero: ../../assets/images/services/stainless-steel-invisible-grills-hyderabad.webp
 heroAlt: "Stainless steel invisible grill wires fixed on a Hyderabad balcony"
