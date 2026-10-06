@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ServiceAreas from '../../components/ServiceAreas.astro';
+import WireMap from '../../components/WireMap.astro';
 import { site } from '../../config/site';
 import { waLink, quoteMessage } from '../../lib/whatsapp';
 
@@ -14,7 +14,7 @@ const wa = waLink(quoteMessage({ path: '/areas/' }));
       <p>The list below covers the {site.areas.length} areas we work in most. If your locality is not listed, send us the location on WhatsApp and we will confirm whether we can take the job.</p>
     </div>
   </div>
-  <ServiceAreas />
+  <WireMap />
   <div class="mx-auto grid max-w-7xl gap-10 px-4 pb-20 md:grid-cols-2 md:px-8">
     <div>
       <h2 class="text-2xl font-bold">How booking works in your area</h2>

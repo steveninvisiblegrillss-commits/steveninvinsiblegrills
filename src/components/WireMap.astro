@@ -1,0 +1,93 @@
+---
+// "Wire Map": an abstract line map. Areas sit roughly where they are in the city and are joined to a central HYDERABAD node by steel lines.
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import { site } from '../config/site';
+import { publishableAreas } from '../lib/publish';
+
+// Rough positions on a 800 x 460 canvas (north is up, west is left). Decorative, not to scale.
+const pos: Record<string, [number, number]> = {
+  miyapur: [175, 90], kukatpally: [255, 135], kompally: [440, 55],
+  nallagandla: [150, 265], kondapur: [205, 200], 'hitech-city': [250, 238], madhapur: [305, 190],
+  gachibowli: [175, 310], manikonda: [225, 355], attapur: [315, 395],
+  'jubilee-hills': [335, 255], 'banjara-hills': [350, 315], ameerpet: [400, 185], begumpet: [455, 190],
+  secunderabad: [515, 150], tarnaka: [560, 225],
+  uppal: [665, 240], dilsukhnagar: [570, 340], 'lb-nagar': [655, 385],
+};
+const C: [number, number] = [405, 262];
+const areas = await getCollection('areas');
+const projects = await getCollection('projects');
+const live = new Set(publishableAreas(areas.map((a) => ({ id: a.id, localNotes: a.data.localNotes })), projects.map((p) => ({ area: p.data.area.id, services: [] }))));
+const nodes = site.areas.filter((a) => pos[a.slug]);
+---
+<section id="areas" class="scroll-mt-24 bg-paper">
+  <div class="grid-paper">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-ink-soft">05 / Coverage</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Serving <em class="em-brand">Hyderabad</em> and Secunderabad</h2>
+      <p class="mt-5 max-w-[60ch] text-ink-soft">Send a photo from any of these areas, or nearby, and we will quote the same day.</p>
+
+      {/* The map is decorative. The chip list underneath carries the same information as real text and links. */}
+      <div class="relative mt-12 border border-ink/20 bg-paper/70 p-2 md:p-6">
+        <span class="mono-tag absolute left-3 top-3 text-ink-soft">Wire map / not to scale</span>
+        <span class="mono-tag absolute right-3 top-3 text-ink-soft">N ↑</span>
+        <svg viewBox="0 0 800 460" class="wire-map draw-scope block h-auto w-full" role="img" aria-label="Map of the areas we serve in Hyderabad and Secunderabad" xmlns="http://www.w3.org/2000/svg">
+          <g class="lines">
+            {nodes.map((a) => (
+              <line x1={C[0]} y1={C[1]} x2={pos[a.slug][0]} y2={pos[a.slug][1]} class="cable-draw" pathLength="1" />
+            ))}
+          </g>
+          {nodes.map((a) => {
+            const [x, y] = pos[a.slug];
+            const west = x < C[0];
+            return (
+              <g class="node" tabindex="0" aria-label={`${a.name}: same-day quote`}>
+                <circle cx={x} cy={y} r="11" class="pulse" />
+                <circle cx={x} cy={y} r="4.5" class="dot" />
+                <text x={x + (west ? -12 : 12)} y={y + 4} text-anchor={west ? 'end' : 'start'} class="label">{a.name}</text>
+                <text x={x + (west ? -12 : 12)} y={y + 17} text-anchor={west ? 'end' : 'start'} class="tip">Same-day quote</text>
+              </g>
+            );
+          })}
+          <g>
+            <circle cx={C[0]} cy={C[1]} r="22" class="hub-ring" />
+            <circle cx={C[0]} cy={C[1]} r="9" class="hub" />
+            <text x={C[0]} y={C[1] + 42} text-anchor="middle" class="hub-label">HYDERABAD</text>
+          </g>
+        </svg>
+      </div>
+
+      <ul class="mt-10 flex flex-wrap gap-2.5">
+        {site.areas.map((a) => (
+          <li>
+            {live.has(a.slug) ? (
+              <a href={`/areas/${a.slug}/`} class="mono-tag inline-flex min-h-11 items-center gap-2 border border-night bg-night px-4 text-white">{a.name}</a>
+            ) : (
+              <span class="mono-tag inline-flex min-h-11 items-center gap-2 border border-ink/25 bg-card px-4 text-ink"><Icon name="ph:map-pin-light" class="size-4 text-dusk-text" />{a.name}</span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wire-map :global(.cable-draw) { stroke: rgb(22 24 29 / 0.4); }
+  .wire-map .dot { fill: #16181d; transition: fill 250ms ease, r 250ms ease; }
+  .wire-map .pulse { fill: #f2a541; opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .wire-map .label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; fill: #16181d; stroke: #f6f1e8; stroke-width: 5px; paint-order: stroke; stroke-linejoin: round; }
+  .wire-map .tip { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; fill: #b8561a; stroke: #f6f1e8; stroke-width: 4px; paint-order: stroke; opacity: 0; transition: opacity 250ms ease; }
+  .wire-map .hub { fill: #f2a541; stroke: #16181d; stroke-width: 1; }
+  .wire-map .hub-ring { fill: none; stroke: #16181d; stroke-width: 1; stroke-dasharray: 3 4; }
+  .wire-map .hub-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; fill: #16181d; font-weight: 500; }
+  .wire-map .node { cursor: default; outline: none; }
+  .wire-map .node:hover .dot, .wire-map .node:focus-visible .dot { fill: #e07a2e; }
+  .wire-map .node:hover .tip, .wire-map .node:focus-visible .tip { opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .wire-map .node:hover .pulse, .wire-map .node:focus-visible .pulse { animation: map-pulse 1.4s ease-out infinite; }
+  }
+  @keyframes map-pulse { from { opacity: 0.55; transform: scale(0.4); } to { opacity: 0; transform: scale(1.8); } }
+  /* On a phone the labels would be too small to read, so only the dots remain; the chips below carry the names. */
+  @media (max-width: 640px) { .wire-map .label, .wire-map .tip, .wire-map .hub-label { display: none; } }
+</style>

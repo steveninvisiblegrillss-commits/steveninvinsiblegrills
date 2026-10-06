@@ -1,0 +1,54 @@
+---
+// "Three Doors": three arched balcony-opening frames. On hover (or keyboard focus) a net slides across the opening.
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import grillImg from '../assets/images/projects/child-safe-balcony-net-hyderabad.webp';
+import birdImg from '../assets/images/services/pigeon-bird-net-balcony.webp';
+import hangerImg from '../assets/images/services/pull-and-dry-cloth-hangers-hyderabad.webp';
+
+const doors = [
+  { tag: 'For kids and pets', title: 'Safety and fall prevention', text: 'Invisible grills and balcony nets for high-rise apartments.', href: '/invisible-grills-for-balconies/', img: grillImg, alt: 'Child looking out through a white balcony safety net at night on an apartment balcony' },
+  { tag: 'For pigeons', title: 'Bird and pigeon control', text: 'Pigeon nets, anti bird nets, duct nets and bird spikes.', href: '/pigeon-safety-nets/', img: birdImg, alt: 'Green safety net fitted on a sunlit balcony with a pigeon on the outside ledge' },
+  { tag: 'For laundry', title: 'Space optimisation', text: 'Ceiling-mounted pull and dry cloth hangers.', href: '/cloth-hangers/', img: hangerImg, alt: 'Pull and dry ceiling cloth hanger on a balcony in Hyderabad' },
+];
+---
+<section class="grid-paper relative">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <p class="sec-tag text-ink-soft">01 / What you need</p>
+    <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">What do you need to <em class="em-brand">fix</em>?</h2>
+    <ul class="mt-14 grid gap-14 md:grid-cols-3 md:gap-8">
+      {doors.map((d, i) => (
+        <li class:list={['group', i === 1 && 'md:translate-y-10']}>
+          {/* Blueprint dimension arrow above the opening */}
+          <div class="mono-tag mb-3 flex items-center gap-2 text-ink-soft" aria-hidden="true">
+            <svg viewBox="0 0 12 8" class="h-2 w-3 shrink-0"><path d="M11 4H1M4 1L1 4l3 3" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+            <span class="h-px flex-1 bg-ink/25"></span>{d.tag}<span class="h-px flex-1 bg-ink/25"></span>
+            <svg viewBox="0 0 12 8" class="h-2 w-3 shrink-0"><path d="M1 4h10M8 1l3 3-3 3" fill="none" stroke="currentColor" stroke-width="1" /></svg>
+          </div>
+          <a href={d.href} class="block focus-visible:outline-dusk">
+            <div class="door relative aspect-[3/4] overflow-hidden rounded-t-[999px] border border-ink/30 bg-night">
+              <Picture src={d.img} alt={d.alt} widths={[400, 700]} sizes="(min-width: 768px) 33vw, 90vw" formats={['avif']} fallbackFormat="webp" class="size-full object-cover transition-transform duration-[900ms] ease-[var(--ease-out-quint)] group-hover:scale-105" />
+              <span class="net pointer-events-none absolute inset-0" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-6 font-display text-3xl font-normal">{d.title}</h3>
+            <p class="mt-2 max-w-[34ch] text-ink-soft">{d.text}</p>
+            <span class="mt-4 inline-flex min-h-11 items-center gap-2 font-semibold text-night underline decoration-dusk decoration-2 underline-offset-8">See options <Icon name="ph:arrow-right-light" class="size-5 transition-transform duration-300 group-hover:translate-x-1" /></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* A diamond net that is pulled across the opening, left to right, when the door is hovered or focused. */
+  .net {
+    background-image:
+      repeating-linear-gradient(45deg, rgb(236 243 250 / 0.55) 0 1px, transparent 1px 16px),
+      repeating-linear-gradient(-45deg, rgb(236 243 250 / 0.55) 0 1px, transparent 1px 16px);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 900ms var(--ease-out-quint);
+  }
+  :global(.group:hover .net), :global(.group:focus-within .net) { clip-path: inset(0 0 0 0); }
+  @media (prefers-reduced-motion: reduce) { .net { transition: none; } }
+</style>

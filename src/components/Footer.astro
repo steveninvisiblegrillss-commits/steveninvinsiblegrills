@@ -1,44 +1,95 @@
 ---
+// "The Skyline Footer": night, with a steel line drawing of a Hyderabad high-rise skyline along the top.
+// Each balcony carries a tiny net grid, and one window glows amber.
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import markLight from '../assets/brand/logo-mark-light.png';
 import { site } from '../config/site';
-import { telLink } from '../lib/whatsapp';
+import { telLink, waLink, quoteMessage } from '../lib/whatsapp';
 
 const services = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const hubs = services.filter((s) => s.data.kind === 'hub');
+const wa = waLink(quoteMessage({ path: Astro.url.pathname }));
+
+// [x, width, height, floors with balconies]. Drawn deterministically so the skyline never changes between builds.
+const towers: [number, number, number, number][] = [
+  [20, 46, 70, 4], [78, 38, 104, 6], [128, 54, 84, 5], [196, 34, 120, 7], [242, 50, 92, 5], [304, 40, 112, 6],
+  [356, 60, 78, 4], [428, 36, 126, 8], [476, 48, 96, 5], [536, 42, 108, 6], [590, 56, 74, 4], [660, 38, 118, 7],
+  [708, 50, 90, 5], [770, 44, 104, 6], [826, 58, 80, 4], [896, 36, 124, 8], [944, 48, 94, 5], [1004, 40, 110, 6],
+  [1058, 54, 82, 4], [1124, 38, 116, 7], [1172, 50, 92, 5],
+];
+const H = 150;
+const glow = { tower: 7, floor: 3 }; // the one window that is lit
 ---
-<footer class="wires bg-brand-deep pb-24 text-white/85 md:pb-0">
-  <div class="mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-5 md:px-8">
-    <div class="grid content-start gap-3">
-      <p class="flex items-center gap-2.5 text-lg font-bold text-white"><Image src={markLight} alt="" width={80} height={80} class="size-10" />{site.name}</p>
-      <p class="max-w-xs text-sm">Safety nets, invisible grills and cloth hangers for homes and buildings across Hyderabad and Secunderabad.</p>
-      <a href={telLink()} class="inline-flex min-h-11 items-center font-semibold text-white">{site.phoneDisplay}</a>
-      {site.email && <a href={`mailto:${site.email}`} class="inline-flex min-h-11 items-center text-sm underline-offset-4 hover:underline">{site.email}</a>}
-    </div>
-    {hubs.map((h) => (
-      <div>
-        <a href={`/${h.id}/`} class="inline-flex min-h-11 items-center font-semibold text-white">{h.data.name}</a>
-        <ul class="mt-3 hidden gap-2 text-sm md:grid">
-          {services.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
-            <li><a href={`/${s.id}/`} class="hover:text-white hover:underline">{s.data.name}</a></li>
-          ))}
-        </ul>
-      </div>
-    ))}
+<footer class="wires relative bg-night pb-24 text-white/80 md:pb-0">
+  {/* The skyline: steel line art along the top edge */}
+  <div class="pointer-events-none overflow-hidden pt-10" aria-hidden="true">
+    <svg viewBox={`0 0 1240 ${H}`} preserveAspectRatio="xMidYMax slice" class="draw-scope mx-auto h-24 w-full max-w-[1500px] md:h-36">
+      <defs>
+        <pattern id="fnet" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 0 L4 4 M4 0 L0 4" stroke="#C9D1DC" stroke-width="0.4" opacity="0.7" fill="none" /></pattern>
+      </defs>
+      <line x1="0" y1={H - 0.5} x2="1240" y2={H - 0.5} class="cable-draw" pathLength="1" />
+      {towers.map(([x, w, h, floors], ti) => (
+        <g>
+          <path d={`M${x} ${H} V${H - h} H${x + w} V${H}`} class="cable-draw" pathLength="1" />
+          {Array.from({ length: floors }).map((_, fi) => {
+            const by = H - h + 10 + fi * ((h - 22) / floors);
+            const lit = ti === glow.tower && fi === glow.floor;
+            return <rect x={x + 5} y={by} width={w - 10} height={6} fill={lit ? '#F2A541' : 'url(#fnet)'} stroke={lit ? '#F2A541' : '#C9D1DC'} stroke-width="0.5" opacity={lit ? 1 : 0.65} />;
+          })}
+          {ti % 5 === 0 && <line x1={x + w / 2} y1={H - h} x2={x + w / 2} y2={H - h - 14} stroke="#C9D1DC" stroke-width="0.6" opacity="0.7" />}
+        </g>
+      ))}
+    </svg>
   </div>
+
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 pb-14 pt-10 md:grid-cols-[1fr_1.6fr_0.7fr_1.15fr] md:px-8">
+    <div class="grid content-start gap-4">
+      <p class="flex items-center gap-2.5"><Image src={markLight} alt="" width={80} height={80} class="size-10" /><span class="font-display text-2xl text-white">{site.name}</span></p>
+      <p class="max-w-xs text-[0.95rem]">Safety nets, invisible grills, cloth hangers and sports nets for homes and buildings across Hyderabad and Secunderabad.</p>
+      <p class="mono-tag text-white/45">Free installation · Free site visit</p>
+    </div>
+
+    <div>
+      <p class="mono-tag mb-4 text-dusk">Services</p>
+      <div class="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+        {hubs.map((h) => (
+          <div>
+            <a href={`/${h.id}/`} class="inline-flex min-h-11 items-center font-display text-xl text-white hover:text-dusk">{h.data.name}</a>
+            <ul class="hidden gap-1 text-[0.9rem] md:grid">
+              {services.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
+                <li><a href={`/${s.id}/`} class="text-white/65 hover:text-white hover:underline">{s.data.name}</a></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div>
+      <p class="mono-tag mb-4 text-dusk">Company</p>
+      <ul class="grid">
+        {[['Projects', '/projects/'], ['Areas', '/areas/'], ['Guides', '/guides/'], ['FAQ', '/faq/'], ['About', '/about/'], ['Contact', '/contact/'], ['Privacy', '/privacy-policy/']].map(([n, h]) => (
+          <li><a href={h} class="inline-flex min-h-11 items-center hover:text-white hover:underline">{n}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <p class="mono-tag mb-4 text-dusk">Contact</p>
+      <ul class="grid">
+        <li><a href={telLink()} class="inline-flex min-h-11 items-center gap-2 text-white hover:text-dusk"><Icon name="ph:phone-duotone" class="size-5 text-dusk" />{site.phoneDisplay}</a></li>
+        <li><a href={wa} class="inline-flex min-h-11 items-center gap-2 hover:text-white"><Icon name="ph:whatsapp-logo-duotone" class="size-5 text-whatsapp" />WhatsApp us</a></li>
+        {site.email && <li><a href={`mailto:${site.email}`} class="inline-flex min-h-11 items-center gap-2 text-[0.9rem] hover:text-white"><Icon name="ph:envelope-simple-duotone" class="size-5 shrink-0 text-dusk" /><span>{site.email.split('@')[0]}<wbr />@{site.email.split('@')[1]}</span></a></li>}
+      </ul>
+    </div>
+  </div>
+
   <div class="border-t border-white/10">
-    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-sm md:px-8">
-      <p>&copy; {new Date().getFullYear()} {site.name}</p>
-      <nav class="flex flex-wrap gap-x-5" aria-label="Footer">
-        <a href="/projects/" class="inline-flex min-h-11 items-center hover:text-white">Projects</a>
-        <a href="/areas/" class="inline-flex min-h-11 items-center hover:text-white">Areas</a>
-        <a href="/guides/" class="inline-flex min-h-11 items-center hover:text-white">Guides</a>
-        <a href="/faq/" class="inline-flex min-h-11 items-center hover:text-white">FAQ</a>
-        <a href="/about/" class="inline-flex min-h-11 items-center hover:text-white">About</a>
-        <a href="/contact/" class="inline-flex min-h-11 items-center hover:text-white">Contact</a>
-        <a href="/privacy-policy/" class="inline-flex min-h-11 items-center hover:text-white">Privacy</a>
-      </nav>
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-6 md:px-8">
+      <p class="mono-tag text-white/50">&copy; {new Date().getFullYear()} {site.name}</p>
+      <p class="mono-tag text-white/35">Hyderabad, Telangana</p>
     </div>
   </div>
 </footer>

@@ -1,14 +1,15 @@
 ---
 import '../styles/global.css';
-import fontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-sans-latin-wght-normal.woff2?url';
+import displayFont from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url';
+import bodyFont from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import MobileCTA from '../components/MobileCTA.astro';
 import { graph, businessNode, websiteNode } from '../lib/schema';
 
-interface Props { title: string; description: string; path: string; image?: string; schema?: object[]; noindex?: boolean; service?: string; area?: string; flush?: boolean }
-const { schema = [], service, area, flush = false, ...seo } = Astro.props;
+interface Props { title: string; description: string; path: string; image?: string; schema?: object[]; noindex?: boolean; service?: string; area?: string; flush?: boolean; darkHero?: boolean }
+const { schema = [], service, area, flush = false, darkHero = false, ...seo } = Astro.props;
 const GA = import.meta.env.PUBLIC_GA_ID;
 const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
 ---
@@ -17,7 +18,8 @@ const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={displayFont} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -50,7 +52,8 @@ const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
   </head>
   <body class="min-h-[100dvh] antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-full focus:bg-card focus:px-4 focus:py-2">Skip to content</a>
-    <Header service={service} area={area} />
+    <div data-header-sentinel class="pointer-events-none absolute left-0 top-[80px] h-px w-px" aria-hidden="true"></div>
+    <Header service={service} area={area} darkHero={darkHero} />
     <main id="main" class={flush ? '' : 'pt-20'}><slot /></main>
     <Footer />
     <MobileCTA service={service} area={area} />

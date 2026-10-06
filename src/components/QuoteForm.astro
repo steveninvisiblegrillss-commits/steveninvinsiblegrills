@@ -1,30 +1,41 @@
 ---
 import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
 
 const services = (await getCollection('services')).filter((s) => s.data.kind === 'service').sort((a, b) => a.data.order - b.data.order);
-const field = 'rounded-[var(--radius-input)] border border-ink-soft/50 bg-card px-4 py-3 text-ink';
+// Underline-only fields, like filling in a printed work order.
+const field = 'w-full border-0 border-b border-ink/40 bg-transparent px-0 py-2.5 text-lg text-ink placeholder:text-ink-soft/60 focus:border-night focus:outline-none focus:ring-0';
+const lab = 'mono-tag text-ink-soft';
 ---
-<form data-quote class="grid gap-4">
-  <div class="grid gap-2"><label for="q-name" class="font-medium">Your name</label>
+{/* The Work Order: mono labels, underline fields, a faint drawing grid and a stamp. */}
+<div class="grid-paper relative border border-ink/15 bg-card p-5 md:p-7">
+  <span class="mono-tag pointer-events-none absolute -right-2 -top-4 rotate-[-6deg] border-2 border-dusk-text px-3 py-1.5 text-dusk-text" aria-hidden="true">Free installation</span>
+  <p class="mono-tag mb-5 text-ink-soft">Work order / quote request</p>
+<form data-quote class="grid gap-5">
+  <div class="grid gap-1"><label for="q-name" class={lab}>01 Name</label>
     <input id="q-name" name="name" required autocomplete="name" class={field} /></div>
-  <div class="grid gap-2"><label for="q-area" class="font-medium">Area</label>
+  <div class="grid gap-1"><label for="q-area" class={lab}>02 Area</label>
     <select id="q-area" name="area" required class={field}>
       <option value="">Choose your area</option>
       {site.areas.map((a) => <option>{a.name}</option>)}
       <option>Other</option>
     </select></div>
-  <div class="grid gap-2"><label for="q-service" class="font-medium">Service</label>
+  <div class="grid gap-1"><label for="q-service" class={lab}>03 Service</label>
     <select id="q-service" name="service" required class={field}>
       <option value="">Choose a service</option>
       {services.map((s) => <option>{s.data.name}</option>)}
     </select></div>
-  <div class="grid gap-2"><label for="q-msg" class="font-medium">Details (optional)</label>
-    <textarea id="q-msg" name="msg" rows="3" class={field}></textarea>
-    <p class="text-sm text-ink-soft">Opens WhatsApp with your message. We'll call you within 30 minutes. Nothing is stored on this website.</p></div>
-  <button class="min-h-12 rounded-full bg-wa px-6 py-3 font-semibold text-white transition-transform active:scale-[0.98]">Send on WhatsApp</button>
+  <div class="grid gap-1"><label for="q-msg" class={lab}>04 Details (optional)</label>
+    <textarea id="q-msg" name="msg" rows="2" class={field}></textarea>
+    <p class="mt-1 text-sm text-ink-soft">Opens WhatsApp with your message. We'll call you within 30 minutes. Nothing is stored on this website.</p></div>
+  <button class="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-wa px-6 py-3 font-semibold text-white transition-transform active:scale-[0.98]">
+    Send on WhatsApp
+    <Icon name="ph:paper-plane-tilt-duotone" class="size-5 transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-1.5" />
+  </button>
   <p data-quote-status role="status" class="text-sm text-ink-soft" hidden></p>
 </form>
+</div>
 <script>
   import { waLink, quoteMessage } from '../lib/whatsapp';
   document.querySelectorAll<HTMLFormElement>('[data-quote]').forEach((f) =>

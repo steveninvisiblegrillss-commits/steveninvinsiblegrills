@@ -1,18 +1,15 @@
 ---
-import { Picture } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
-import ServicesGrid from '../components/ServicesGrid.astro';
+import ThreeDoors from '../components/ThreeDoors.astro';
+import NetBoard from '../components/NetBoard.astro';
 import Process from '../components/Process.astro';
 import Gallery from '../components/Gallery.astro';
-import ServiceAreas from '../components/ServiceAreas.astro';
+import WireMap from '../components/WireMap.astro';
 import FAQ from '../components/FAQ.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { faqNode } from '../lib/schema';
 import hero from '../assets/images/hero/modern-balcony-grill-city-view.webp';
-import grillImg from '../assets/images/projects/child-safe-balcony-net-hyderabad.webp';
-import birdImg from '../assets/images/services/pigeon-bird-net-balcony.webp';
-import hangerImg from '../assets/images/services/pull-and-dry-cloth-hangers-hyderabad.webp';
 
 const faqs = [
   { q: 'Which is better for my balcony, a net or an invisible grill?', a: 'Nets cost less and also stop birds. Invisible grills give a cleaner look and keep intruders out too. Send a photo on WhatsApp and we will suggest the right option.' },
@@ -22,40 +19,24 @@ const faqs = [
   { q: 'How long does installation take?', a: 'We confirm the time after measuring your space, because it depends on the size and number of openings. Most balconies are planned in a single visit.' },
   { q: 'Which areas of Hyderabad do you cover?', a: 'We work across Hyderabad and Secunderabad, including Gachibowli, Kondapur, Madhapur, Hitech City, Kukatpally, Miyapur, Banjara Hills and Jubilee Hills.' },
 ];
-const problems = [
-  { title: 'Safety and fall prevention', text: 'Invisible grills and balcony nets for high-rise apartments.', href: '/invisible-grills-for-balconies/', img: grillImg, alt: 'Child looking out through a white balcony safety net at night on an apartment balcony', big: true },
-  { title: 'Bird and pigeon control', text: 'Pigeon nets, anti bird nets, duct nets and bird spikes.', href: '/pigeon-safety-nets/', img: birdImg, alt: 'Green safety net fitted on a sunlit balcony with a pigeon on the outside ledge', big: false },
-  { title: 'Space optimisation', text: 'Ceiling-mounted pull and dry cloth hangers.', href: '/cloth-hangers/', img: hangerImg, alt: 'Pull and dry ceiling cloth hanger on a balcony in Hyderabad', big: false },
-];
 ---
 <Base
   flush
+  darkHero
   title="Steven Invisible Grills: Pigeon Nets & Grills, Hyderabad"
   description="Balcony safety nets, pigeon nets, invisible grills and cloth hangers installed across Hyderabad. 10+ years, free installation. WhatsApp for a quote."
   path="/"
   schema={[faqNode(faqs, '/')]}
 >
-  <Hero image={hero} imageAlt="Sunlit apartment balcony with an invisible grill of thin stainless steel wires and a clear view of the city" />
-
-  <section class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
-    <h2 class="max-w-2xl text-4xl md:text-5xl">What do you need to <em class="em-brand">fix</em>?</h2>
-    <ul class="reveal mt-10 grid gap-5 lg:grid-cols-2">
-      {problems.map((n) => (
-        <li class:list={['wire-hover group relative isolate overflow-hidden rounded-2xl', n.big && 'lg:row-span-2']}>
-          <Picture src={n.img} alt={n.alt} widths={[600, 1000]} sizes="(min-width: 1024px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="absolute inset-0 -z-10 size-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
-          <a href={n.href} class:list={['flex h-full flex-col justify-end bg-gradient-to-t from-brand-deep/95 via-brand-deep/45 to-transparent p-6 text-white', n.big ? 'min-h-80 lg:min-h-[28rem]' : 'min-h-64']}>
-            <h3 class="text-2xl font-bold">{n.title}</h3>
-            <p class="mt-1 max-w-sm text-white/85">{n.text}</p>
-          </a>
-        </li>
-      ))}
-    </ul>
-  </section>
-
-  <ServicesGrid />
-  <Process />
-  <Gallery />
-  <ServiceAreas />
-  <FAQ faqs={faqs} />
-  <CtaBand />
+  {/* One steel cable runs the full height of the page, from the hero to the footer. */}
+  <div class="cable-page">
+    <Hero image={hero} imageAlt="Sunlit apartment balcony with an invisible grill of thin stainless steel wires and a clear view of the city" />
+    <ThreeDoors />
+    <NetBoard />
+    <Process />
+    <Gallery />
+    <WireMap />
+    <FAQ faqs={faqs} />
+    <CtaBand />
+  </div>
 </Base>

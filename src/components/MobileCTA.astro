@@ -6,13 +6,28 @@ interface Props { service?: string; area?: string }
 const { service, area } = Astro.props;
 const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
 ---
-<div class="pointer-events-none fixed inset-x-0 bottom-0 z-40 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden">
-  <div class="pointer-events-auto mx-auto grid max-w-md grid-cols-2 gap-1.5 rounded-full border border-line bg-card/95 p-1.5 shadow-[0_8px_24px_-6px_rgb(19_40_94/0.35)] backdrop-blur">
-    <a href={telLink()} data-service={service} class="flex min-h-12 items-center justify-center gap-2 rounded-full font-semibold text-brand-deep transition-transform active:scale-[0.97]">
-      <Icon name="ph:phone-duotone" class="size-5 text-brand" />Call now
+{/* Two halves: night call, amber WhatsApp, with a steel line on top. Slides away while the page's own CTA or the footer is on screen. */}
+<div data-mobile-cta class="pointer-events-none fixed inset-x-0 bottom-0 z-40 translate-y-0 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-500 ease-[var(--ease-out-quint)] data-[hidden=true]:translate-y-[140%] md:hidden">
+  <div class="pointer-events-auto relative mx-auto grid max-w-md grid-cols-2 gap-1.5 rounded-full border border-steel/40 bg-night p-1.5 shadow-[0_10px_28px_-8px_rgb(11_19_43/0.6)]">
+    <span class="absolute inset-x-6 -top-px h-px bg-gradient-to-r from-transparent via-steel to-transparent" aria-hidden="true"></span>
+    <a href={telLink()} data-service={service} class="flex min-h-12 items-center justify-center gap-2 rounded-full font-semibold text-white transition-transform active:scale-[0.97]">
+      <Icon name="ph:phone-duotone" class="size-5 text-dusk" />Call now
     </a>
-    <a href={wa} data-service={service} data-area={area} class="flex min-h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-wa px-2 text-[0.95rem] font-semibold text-white transition-transform active:scale-[0.97]">
+    <a href={wa} data-service={service} data-area={area} class="flex min-h-12 items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-dusk px-2 text-[0.95rem] font-semibold text-night transition-transform active:scale-[0.97]">
       <Icon name="ph:whatsapp-logo-duotone" class="size-5" />WhatsApp quote
     </a>
   </div>
 </div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-mobile-cta]');
+  const targets = document.querySelectorAll('[data-cta-band], footer');
+  if (bar && targets.length) {
+    const seen = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? seen.add(e.target) : seen.delete(e.target);
+      bar.dataset.hidden = String(seen.size > 0);
+    }, { threshold: 0.15 });
+    targets.forEach((t) => io.observe(t));
+  }
+</script>

@@ -3,18 +3,19 @@ import { Icon } from 'astro-icon/components';
 
 interface Props { href: string; variant?: 'accent' | 'wa' | 'ghost' | 'light'; icon?: string; class?: string; [k: string]: unknown }
 const { href, variant = 'accent', icon = 'ph:arrow-up-right-bold', class: cls = '', ...rest } = Astro.props;
+// accent = amber pill with the wire tail. wa = WhatsApp. ghost = outline. light = paper pill for dark backgrounds.
 const styles = {
-  accent: 'bg-accent text-accent-ink',
+  accent: 'btn-tail bg-dusk text-night',
   wa: 'bg-wa text-white',
-  ghost: 'border border-brand text-brand',
-  light: 'bg-white text-brand-deep',
+  ghost: 'border border-night text-night hover:bg-night hover:text-white',
+  light: 'bg-paper text-night',
 };
 ---
 <a
   href={href}
   class:list={[
     'group inline-flex min-h-12 items-center gap-3 rounded-full py-2 pl-6 pr-2 font-semibold whitespace-nowrap',
-    'transition-transform duration-300 ease-[var(--ease-out-quint)] active:scale-[0.98]',
+    'transition-[transform,background-color,color] duration-300 ease-[var(--ease-out-quint)] active:scale-[0.98]',
     styles[variant], cls,
   ]}
   {...rest}

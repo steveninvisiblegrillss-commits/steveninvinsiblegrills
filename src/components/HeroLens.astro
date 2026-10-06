@@ -71,7 +71,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
       <ul class="flex items-center gap-4">
         {dock.map((d, i) => (
           <li class="flex items-center gap-4">
-            {i > 0 && <span class="size-1 rounded-full bg-accent shadow-[0_0_8px_#f5b83d]" aria-hidden="true"></span>}
+            {i > 0 && <span class="size-1 rounded-full bg-accent shadow-[0_0_8px_#F2A541]" aria-hidden="true"></span>}
             <span>{d}</span>
           </li>
         ))}
@@ -91,7 +91,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   .lens-hero {
     --lens-size: 90px; --x: 62%; --y: 45%;
     /* One gold accent wire every 300px, the gold wire from the logo. */
-    --gold-wire: repeating-linear-gradient(90deg, transparent 0, transparent 148px, rgb(245 184 61 / 0.95) 148px, rgb(245 184 61 / 0.95) 151px, transparent 151px, transparent 300px);
+    --gold-wire: repeating-linear-gradient(90deg, transparent 0, transparent 148px, rgb(242 165 65 / 0.95) 148px, rgb(242 165 65 / 0.95) 151px, transparent 151px, transparent 300px);
   }
   @media (hover: none) { .lens-hero { --lens-size: 70px; } }
 
@@ -102,9 +102,9 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.05); } }
 
   /* Readability: navy from the left, and a fade at the bottom. */
-  .ov-x { background: linear-gradient(90deg, #0b1426 0%, rgb(11 20 38 / 0.75) 45%, transparent 100%); }
-  @media (min-width: 768px) { .ov-x { background: linear-gradient(90deg, #0b1426 0%, rgb(11 20 38 / 0.55) 45%, transparent 100%); } }
-  .ov-y { background: linear-gradient(to top, #0b1426, transparent); }
+  .ov-x { background: linear-gradient(90deg, #0b132b 0%, rgb(11 19 43 / 0.75) 45%, transparent 100%); }
+  @media (min-width: 768px) { .ov-x { background: linear-gradient(90deg, #0b132b 0%, rgb(11 19 43 / 0.55) 45%, transparent 100%); } }
+  .ov-y { background: linear-gradient(to top, #0b132b, transparent); }
 
   /* The grill drawn in CSS: a wire every 30px with a bright highlight and darker steel edges. */
   .cables {
@@ -121,11 +121,11 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   .cables-lens {
     background-image: var(--gold-wire), repeating-linear-gradient(90deg,
       transparent 0, transparent 11px,
-      rgb(245 184 61 / 0.5) 11px, rgb(245 184 61 / 0.5) 12px,
+      rgb(242 165 65 / 0.5) 11px, rgb(242 165 65 / 0.5) 12px,
       rgb(150 165 185 / 0.7) 12px, rgb(150 165 185 / 0.7) 13px,
       rgb(236 243 250 / 0.95) 13px, rgb(236 243 250 / 0.95) 15px,
       rgb(150 165 185 / 0.7) 15px, rgb(150 165 185 / 0.7) 16px,
-      rgb(245 184 61 / 0.5) 16px, rgb(245 184 61 / 0.5) 17px,
+      rgb(242 165 65 / 0.5) 16px, rgb(242 165 65 / 0.5) 17px,
       transparent 17px, transparent 30px);
     mask-image: radial-gradient(circle var(--lens-size) at var(--x) var(--y), #000 0%, rgb(0 0 0 / 0.8) 30%, rgb(0 0 0 / 0.3) 65%, transparent 100%);
   }
@@ -146,7 +146,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
     left: var(--x); top: var(--y);
     width: calc(var(--lens-size) * 2.3); height: calc(var(--lens-size) * 2.3);
     translate: -50% -50%;
-    border: 1px solid rgb(245 184 61 / 0.3); border-radius: 9999px;
+    border: 1px solid rgb(242 165 65 / 0.3); border-radius: 9999px;
     opacity: 0; transition: opacity 300ms ease;
   }
   @media (hover: hover) and (pointer: fine) { .lens-ring { display: block; } }
@@ -154,8 +154,8 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
   .lens-label {
     position: absolute; left: 100%; top: 50%; translate: 10px -50%;
     white-space: nowrap; border-radius: 9999px; padding: 4px 10px;
-    font-size: 12px; color: #f5b83d;
-    background: rgb(11 20 38 / 0.75); backdrop-filter: blur(8px);
+    font-size: 12px; color: #F2A541;
+    background: rgb(11 19 43 / 0.75); backdrop-filter: blur(8px);
   }
 
   /* Idle sweep until the visitor moves a mouse; always on for touch. Off for reduced motion. */
@@ -175,7 +175,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
 
   /* Slower, more cinematic entrance for this hero only. */
   :global(.lens-hero .rise) { animation-duration: 1.5s; animation-delay: calc(var(--i, 0) * 170ms + 250ms); }
-  .glow { text-shadow: 0 0 32px rgb(245 184 61 / 0.4); }
+  .glow { text-shadow: 0 0 32px rgb(242 165 65 / 0.4); }
 
   /* Custom cursor: a white dot that grows into an inverted circle over buttons and the headline. Mouse only. */
   .cursor-dot { display: none; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 9999px; background: #fff; mix-blend-mode: difference; opacity: 0; transition: width 250ms ease, height 250ms ease, margin 250ms ease, opacity 200ms ease; }
@@ -187,7 +187,7 @@ const dock = ['Stainless steel cables', 'Free measurement', 'Balconies and windo
     .cursor-dot[data-grow='true'] { width: 64px; height: 64px; margin: -32px 0 0 -32px; }
   }
 
-  :global(.lens-hero button:focus-visible), :global(.lens-hero a:focus-visible) { outline: 3px solid #f5b83d; outline-offset: 3px; }
+  :global(.lens-hero button:focus-visible), :global(.lens-hero a:focus-visible) { outline: 3px solid #F2A541; outline-offset: 3px; }
 </style>
 
 <script>

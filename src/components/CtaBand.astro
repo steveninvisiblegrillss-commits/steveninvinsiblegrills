@@ -1,21 +1,63 @@
 ---
+// "Send us your balcony": a night band with an animated EXAMPLE WhatsApp chat inside a phone frame.
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
 import Button from './Button.astro';
+import example from '../assets/images/projects/balcony-safety-net-apartment-hyderabad.webp';
 
 interface Props { service?: string; area?: string }
 const { service, area } = Astro.props;
 const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
 ---
-<section class="wires bg-brand-deep text-white">
-  <div class="mx-auto flex max-w-7xl flex-col items-start justify-between gap-8 px-4 py-16 md:flex-row md:items-center md:px-8 md:py-20">
+<section data-cta-band class="wires dusk-glow relative overflow-hidden text-white">
+  <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1.1fr_0.9fr]">
     <div>
-      <h2 class="max-w-xl text-4xl md:text-5xl">Send us a photo of your balcony. <em class="em-accent">We reply with a quote.</em></h2>
-      <p class="mt-3 text-white/80">Free installation. Clear price before we start.</p>
+      <p class="sec-tag text-dusk">Free quote</p>
+      <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Send us a photo of your balcony. <em class="em-accent">We reply with a quote.</em></h2>
+      <p class="mt-5 max-w-md text-white/75">Free installation. Clear price before we start.</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <Button href={wa} variant="accent" data-service={service} data-area={area}>Get a free quote</Button>
+        <Button href={telLink()} variant="light" icon="ph:phone-duotone" data-service={service}>{site.phoneDisplay}</Button>
+      </div>
     </div>
-    <div class="flex flex-wrap gap-3">
-      <Button href={wa} variant="accent" data-service={service} data-area={area}>Get a free quote</Button>
-      <Button href={telLink()} variant="light" icon="ph:phone-duotone" data-service={service}>{site.phoneDisplay}</Button>
+
+    {/* The phone. A chat plays once when it scrolls into view. Labelled as an example so nothing here reads as a real customer. */}
+    <div class="mx-auto w-full max-w-[19rem]" data-chat>
+      <div class="relative rounded-[2.2rem] border border-steel/50 bg-night-2 p-3 shadow-2xl shadow-black/50">
+        <span class="absolute left-1/2 top-3 h-1.5 w-16 -translate-x-1/2 rounded-full bg-night" aria-hidden="true"></span>
+        <div class="overflow-hidden rounded-[1.6rem] bg-[#0e1a2c]">
+          <div class="flex items-center gap-2 border-b border-white/10 px-4 pb-3 pt-7">
+            <span class="grid size-8 place-items-center rounded-full bg-dusk text-night"><Icon name="ph:whatsapp-logo-duotone" class="size-5" /></span>
+            <span class="leading-tight"><span class="block text-sm font-semibold">{site.name}</span><span class="mono-tag block !text-[0.6rem] text-white/45">Example chat</span></span>
+          </div>
+          <div class="flex min-h-[19rem] flex-col gap-3 px-3 py-4">
+            <div class="bubble ml-auto max-w-[80%] rounded-2xl rounded-br-sm bg-white/10 p-2" style="--d:0.3s">
+              <Picture src={example} alt="Example photo of a balcony sent for a quote" widths={[320]} sizes="220px" formats={['avif']} fallbackFormat="webp" class="aspect-[4/3] w-full rounded-lg object-cover" />
+              <p class="px-1 pb-1 pt-2 text-sm">Hi, need a quote for my balcony</p>
+            </div>
+            <div class="bubble max-w-[78%] rounded-2xl rounded-bl-sm bg-dusk p-3 text-sm font-medium text-night" style="--d:1.6s">Quote ready. Free installation.</div>
+            <div class="bubble max-w-[78%] rounded-2xl rounded-bl-sm bg-dusk/90 p-3 text-sm text-night" style="--d:2.9s">We will call you within 30 minutes to confirm a visit.</div>
+          </div>
+        </div>
+      </div>
+      <p class="mono-tag mt-4 text-center text-white/40">Example conversation</p>
     </div>
   </div>
 </section>
+
+<style>
+  .bubble { opacity: 0; transform: translateY(10px) scale(0.97); }
+  [data-chat].play .bubble { animation: bubble-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards; animation-delay: var(--d, 0s); }
+  @keyframes bubble-in { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .bubble { opacity: 1; transform: none; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-chat]').forEach((chat) => {
+    new IntersectionObserver((entries, io) => {
+      if (entries[0].isIntersecting) { chat.classList.add('play'); io.disconnect(); }
+    }, { threshold: 0.35 }).observe(chat);
+  });
+</script>

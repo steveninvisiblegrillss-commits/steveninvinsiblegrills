@@ -1,32 +1,39 @@
 ---
+// "The Cable Run": one steel cable runs through the steps and draws itself as you scroll. Each step hangs from it like a tagged clamp.
 import { Icon } from 'astro-icon/components';
 import { waLink, quoteMessage } from '../lib/whatsapp';
 
 const steps = [
-  { icon: 'ph:camera-duotone', title: 'Snap and send a photo', text: 'Send a photo of your balcony or window on WhatsApp, with a rough size.' },
-  { icon: 'ph:receipt-duotone', title: 'Get an upfront quote', text: 'You get the full price before we start. No surprises.' },
-  { icon: 'ph:hammer-duotone', title: 'We install for free', text: 'Our team measures, fits it neatly and checks it with you. Installation is free.' },
+  { icon: 'ph:camera-light', title: 'Snap and send a photo', text: 'Send a photo of your balcony or window on WhatsApp, with a rough size.' },
+  { icon: 'ph:receipt-light', title: 'Get an upfront quote', text: 'You get the full price before we start. No surprises.' },
+  { icon: 'ph:ruler-light', title: 'We install for free', text: 'Our team measures, fits it neatly and checks it with you. Installation is free.' },
 ];
 const wa = waLink(quoteMessage({ path: '/' }));
 ---
-<section id="process" class="scroll-mt-24">
-  <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
-    <h2 class="max-w-2xl text-4xl md:text-5xl">From photo to installed in <em class="em-brand">three steps</em></h2>
-    <ol class="mt-12 grid gap-10 md:grid-cols-3 md:gap-6">
+<section id="process" class="scroll-mt-24 bg-paper">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <p class="sec-tag text-ink-soft">03 / Process</p>
+    <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">From photo to installed in <em class="em-brand">three steps</em></h2>
+
+    <ol class="relative mt-16 grid gap-14 md:grid-cols-3 md:gap-8">
+      {/* the cable: vertical on mobile, horizontal from md */}
+      <span aria-hidden="true" class="thread absolute left-[0.45rem] top-2 h-[calc(100%-1rem)] w-px bg-ink/45 md:left-0 md:top-[0.45rem] md:h-px md:w-full"></span>
       {steps.map((s, i) => (
-        <li class="relative flex gap-5 md:block">
-          {i < steps.length - 1 && <span aria-hidden="true" class="thread absolute left-6 top-14 h-[calc(100%+1.5rem)] w-px bg-accent md:left-[4.5rem] md:top-6 md:h-px md:w-[calc(100%-3rem)]"></span>}
-          <span class="relative grid size-12 shrink-0 place-items-center rounded-full bg-brand-deep text-accent ring-8 ring-surface">
-            <Icon name={s.icon} class="size-6" />
-          </span>
-          <div class="md:mt-6">
-            <p class="text-sm font-semibold text-brand">Step {i + 1}</p>
-            <h3 class="mt-1 text-xl font-semibold">{s.title}</h3>
-            <p class="mt-2 max-w-[34ch] text-ink-soft">{s.text}</p>
-          </div>
+        <li class="relative pl-10 md:pl-0 md:pt-12">
+          {/* the clamp where the step hangs from the cable */}
+          <span aria-hidden="true" class="absolute left-0 top-1 size-[0.95rem] border border-ink bg-dusk md:top-0"></span>
+          <p class="font-display text-7xl leading-none text-ink/15 md:text-8xl">0{i + 1}</p>
+          <Icon name={s.icon} class="mt-3 size-10 text-night" />
+          <h3 class="mt-4 font-display text-3xl font-normal">{s.title}</h3>
+          <p class="mt-2 max-w-[32ch] text-ink-soft">{s.text}</p>
         </li>
       ))}
     </ol>
-    <a href={wa} class="mt-12 inline-flex min-h-12 items-center rounded-full bg-accent px-6 font-semibold text-accent-ink transition-transform active:scale-[0.98]">Send a photo on WhatsApp</a>
+
+    {/* The cable ends by plugging into the button. */}
+    <div class="mt-14 flex items-center gap-0">
+      <span aria-hidden="true" class="hidden h-px w-16 bg-ink/45 md:block"></span>
+      <a href={wa} class="btn-tail inline-flex min-h-12 items-center rounded-full bg-dusk px-7 font-semibold text-night transition-transform active:scale-[0.98]">Send a photo on WhatsApp</a>
+    </div>
   </div>
 </section>
