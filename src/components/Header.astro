@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
-import Button from './Button.astro';
 
 interface Props { service?: string; area?: string }
 const { service, area } = Astro.props;
@@ -12,46 +11,78 @@ const all = (await getCollection('services')).sort((a, b) => a.data.order - b.da
 const hubs = all.filter((s) => s.data.kind === 'hub');
 const wa = waLink(quoteMessage({ service, area, path: here }));
 ---
-<header class="sticky top-0 z-30 border-b border-line bg-surface">
-  <div class="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
-    <a href="/" class="whitespace-nowrap text-base font-bold tracking-tight text-brand-deep sm:text-lg dark:text-ink" aria-label={`${site.name} home`}>{site.name}</a>
+{/* Zero-height sticky wrapper: the glass bar floats over the page without taking layout space. */}
+<header class="sticky top-0 z-30 h-0">
+  <div class="mx-auto max-w-7xl px-3 pt-3 md:px-6">
+    <div class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/80 px-4 text-white shadow-lg shadow-black/20 backdrop-blur-md">
+      <a href="/" class="whitespace-nowrap text-base font-bold tracking-tight sm:text-lg" aria-label={`${site.name} home`}>{site.name}</a>
 
-    <nav class="hidden items-center gap-6 lg:flex" aria-label="Main">
-      {site.nav.map((n) => (
-        <a href={n.href} aria-current={here.startsWith(n.href) ? 'page' : undefined} class="text-sm font-medium text-ink-soft hover:text-brand aria-[current=page]:text-brand">{n.label}</a>
-      ))}
-    </nav>
+      <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+        {site.sections.map((n) => (
+          <a href={n.href} data-spy={n.id} class="rounded-full px-3 py-1.5 text-sm font-medium text-white/75 transition-colors hover:text-white aria-[current=true]:bg-white/10 aria-[current=true]:text-white">{n.label}</a>
+        ))}
+      </nav>
 
-    <div class="flex items-center gap-3">
-      <a href={telLink()} data-service={service} class="hidden items-center gap-2 text-sm font-semibold text-ink xl:flex">
-        <Icon name="ph:phone-duotone" class="size-5 text-brand" />{site.phoneDisplay}
-      </a>
-      <div class="hidden sm:block"><Button href={wa} variant="wa" icon="ph:whatsapp-logo-duotone" data-service={service} data-area={area}>WhatsApp us</Button></div>
-      <details class="group lg:hidden">
-        <summary class="grid size-11 cursor-pointer list-none place-items-center rounded-full border border-line" aria-label="Menu">
-          <Icon name="ph:list-bold" class="size-5 group-open:hidden" />
-          <Icon name="ph:x-bold" class="hidden size-5 group-open:block" />
-        </summary>
-        <div class="fixed inset-x-0 top-[68px] bottom-0 overflow-y-auto bg-surface p-6 pb-28">
-          <ul class="grid gap-6">
-            {hubs.map((h) => (
-              <li>
-                <a href={`/${h.id}/`} class="text-lg font-bold text-brand-deep dark:text-ink">{h.data.name}</a>
-                <ul class="mt-2 grid gap-1">
-                  {all.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
-                    <li><a href={`/${s.id}/`} class="block py-1.5 text-ink-soft">{s.data.name}</a></li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-            <li class="grid gap-2 border-t border-line pt-4">
-              {site.nav.filter((n) => ['Projects', 'Areas', 'Contact'].includes(n.label)).map((n) => (
-                <a href={n.href} class="py-1.5 font-semibold">{n.label}</a>
-              ))}
-            </li>
-          </ul>
-        </div>
-      </details>
+      <div class="flex items-center gap-2">
+        <a href={telLink()} data-service={service} class="hidden items-center gap-2 rounded-full border border-white/15 px-3 py-1.5 text-sm font-semibold xl:flex">
+          <Icon name="ph:phone-duotone" class="size-4 text-accent" />{site.phoneDisplay}
+        </a>
+        <a href={wa} data-service={service} data-area={area} class="hidden items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-ink transition-transform active:scale-[0.97] sm:inline-flex">
+          <Icon name="ph:whatsapp-logo-duotone" class="size-5" />WhatsApp
+        </a>
+        <button popovertarget="menu" class="grid size-10 place-items-center rounded-full border border-white/15 lg:hidden" aria-label="Open menu">
+          <Icon name="ph:list-bold" class="size-5" />
+        </button>
+      </div>
     </div>
   </div>
 </header>
+
+{/* Native popover: renders in the top layer, so the glass bar above cannot clip it. */}
+<div id="menu" popover class="m-0 size-full max-h-none max-w-none overflow-y-auto border-0 bg-brand-deep p-6 text-white">
+  <div class="flex items-center justify-between">
+    <span class="text-lg font-bold">{site.name}</span>
+    <button popovertarget="menu" popovertargetaction="hide" class="grid size-10 place-items-center rounded-full border border-white/20" aria-label="Close menu">
+      <Icon name="ph:x-bold" class="size-5" />
+    </button>
+  </div>
+  <ul class="mt-8 grid gap-7 pb-24">
+    {hubs.map((h) => (
+      <li>
+        <a href={`/${h.id}/`} class="text-xl font-bold">{h.data.name}</a>
+        <ul class="mt-2 grid gap-0.5">
+          {all.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
+            <li><a href={`/${s.id}/`} class="block py-2 text-white/70">{s.data.name}</a></li>
+          ))}
+        </ul>
+      </li>
+    ))}
+    <li class="grid gap-1 border-t border-white/10 pt-5">
+      {site.nav.filter((n) => ['Projects', 'Areas', 'Contact'].includes(n.label)).map((n) => (
+        <a href={n.href} class="py-2 text-lg font-semibold">{n.label}</a>
+      ))}
+    </li>
+  </ul>
+</div>
+
+<script>
+  // Scroll-spy: marks the nav link of the section in view. No-op on pages without these sections.
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-spy]')];
+  const targets = links.map((l) => document.getElementById(l.dataset.spy!)).filter(Boolean) as HTMLElement[];
+  if (targets.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          links.forEach((l) => l.setAttribute('aria-current', String(l.dataset.spy === e.target.id)));
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    targets.forEach((t) => io.observe(t));
+  }
+  // Close the menu after tapping a link inside it.
+  document.getElementById('menu')?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) (document.getElementById('menu') as HTMLElement).hidePopover();
+  });
+</script>

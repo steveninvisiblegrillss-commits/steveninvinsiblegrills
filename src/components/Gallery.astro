@@ -1,0 +1,65 @@
+---
+import { Picture, getImage } from 'astro:assets';
+import { getCollection, getEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+const projects = (await getCollection('projects')).sort((a, b) => +b.data.date - +a.data.date);
+const items = await Promise.all(
+  projects.map(async (p) => {
+    const photo = p.data.photos[0];
+    const area = await getEntry(p.data.area);
+    const full = await getImage({ src: photo.src, width: 1400, format: 'webp' });
+    return { id: p.id, title: p.data.title, photo, area: area!.data.name, full: full.src };
+  }),
+);
+---
+{items.length > 0 && (
+  <section id="gallery" class="scroll-mt-24 bg-surface-2">
+    <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
+      <h2 class="max-w-2xl text-3xl font-bold md:text-4xl">Real installations by our team</h2>
+      <p class="mt-3 max-w-[60ch] text-ink-soft">Tap a photo to enlarge it.</p>
+      <ul class="no-scrollbar -mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3">
+        {items.map((it) => (
+          <li class="w-[82%] shrink-0 snap-center sm:w-auto">
+            <button type="button" data-lightbox data-full={it.full} data-alt={it.photo.alt} data-caption={it.title} class="group relative block w-full overflow-hidden rounded-2xl text-left">
+              <Picture src={it.photo.src} alt={it.photo.alt} widths={[400, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 82vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.05]" />
+              <span class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-brand-deep/90 to-transparent p-4 text-white">
+                <span class="font-semibold">{it.title}</span>
+                <span class="shrink-0 rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-md">{it.area}</span>
+              </span>
+              <span class="absolute right-3 top-3 grid size-10 place-items-center rounded-full border border-white/20 bg-white/15 text-white opacity-0 backdrop-blur-md transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                <Icon name="ph:magnifying-glass-plus-duotone" class="size-5" />
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      <a href="/projects/" class="mt-8 inline-flex items-center gap-2 font-semibold text-brand">See all projects<Icon name="ph:arrow-right-bold" class="size-4" /></a>
+    </div>
+
+    <dialog id="lightbox" class="m-auto max-h-[92dvh] w-[min(96vw,64rem)] overflow-hidden rounded-2xl border border-white/10 bg-brand-deep p-0 text-white" aria-label="Photo viewer">
+      <form method="dialog" class="absolute right-3 top-3 z-10">
+        <button class="grid size-11 place-items-center rounded-full border border-white/20 bg-brand-deep/80" aria-label="Close photo"><Icon name="ph:x-bold" class="size-5" /></button>
+      </form>
+      <img id="lightbox-img" alt="Enlarged project photo" width="1400" height="1050" class="max-h-[78dvh] w-full object-contain" />
+      <p id="lightbox-caption" class="p-4 text-sm text-white/80"></p>
+    </dialog>
+  </section>
+)}
+<script>
+  // Lightbox on the native <dialog>: focus trap, Esc to close and backdrop are built in.
+  const dlg = document.getElementById('lightbox') as HTMLDialogElement | null;
+  if (dlg) {
+    const img = document.getElementById('lightbox-img') as HTMLImageElement;
+    const cap = document.getElementById('lightbox-caption')!;
+    document.querySelectorAll<HTMLButtonElement>('[data-lightbox]').forEach((b) =>
+      b.addEventListener('click', () => {
+        img.src = b.dataset.full!;
+        img.alt = b.dataset.alt!;
+        cap.textContent = b.dataset.caption!;
+        dlg.showModal();
+      }),
+    );
+    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+  }
+</script>

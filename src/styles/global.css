@@ -3,33 +3,33 @@
 
 @theme {
   --font-sans: "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
-  --color-ink: #0e1a2f;
-  --color-ink-soft: #4a5873;
-  --color-surface: #f5f7fa;
-  --color-surface-2: #e8edf4;
+  --color-ink: #0f172a;
+  --color-ink-soft: #475569;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1f5f9;
   --color-card: #ffffff;
-  --color-line: #d5dce8;
-  --color-brand: #1f45b5;
-  --color-brand-deep: #13285e;
-  --color-accent: #f2b227;
-  --color-accent-ink: #1a1405;
-  --color-wa: #1d9e52;
-  --radius-card: 20px;
+  --color-line: #e2e8f0;
+  --color-brand: #1e3a8a;
+  --color-brand-deep: #0b132b;
+  --color-accent: #f59e0b;
+  --color-accent-ink: #1a1103;
+  --color-wa: #15803d;
+  --radius-card: 16px;
   --radius-input: 12px;
-  --shadow-soft: 0 1px 2px rgb(19 40 94 / 0.06), 0 12px 32px -12px rgb(19 40 94 / 0.18);
+  --shadow-soft: 0 1px 2px rgb(11 19 43 / 0.06), 0 12px 32px -12px rgb(11 19 43 / 0.22);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-ink: #e9eef7;
-    --color-ink-soft: #a9b6cc;
-    --color-surface: #0b1426;
-    --color-surface-2: #111d35;
-    --color-card: #14213b;
-    --color-line: #263552;
-    --color-brand: #8fa8f7;
-    --color-brand-deep: #060d1c;
+    --color-ink: #e2e8f0;
+    --color-ink-soft: #94a3b8;
+    --color-surface: #0b132b;
+    --color-surface-2: #0f172a;
+    --color-card: #131d3b;
+    --color-line: #1e293b;
+    --color-brand: #93c5fd;
+    --color-brand-deep: #060b1c;
   }
 }
 
@@ -49,3 +49,25 @@ p, li { text-wrap: pretty; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Mobile feel */
+html { -webkit-tap-highlight-color: transparent; }
+a, button, summary { touch-action: manipulation; }
+body { font-size: 1.0625rem; line-height: 1.6; }
+@media (min-width: 768px) { body { font-size: 1rem; } }
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Hero entrance: one sequence on load, enhances an already-visible default */
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise 0.9s var(--ease-out-quint) both; animation-delay: calc(var(--i, 0) * 90ms); }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  .hero-zoom { animation: hero-zoom 1.6s var(--ease-out-quint) both; }
+  @keyframes hero-zoom { from { transform: scale(1.06); } to { transform: none; } }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .float { animation: float 7s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+}
+dialog::backdrop { background: rgb(11 19 43 / 0.85); }

@@ -7,20 +7,16 @@ import { dirname } from 'node:path';
 const SRC = 'research/original-assets/';
 const OUT = 'src/assets/images/';
 const map = {
-  'about/PG1.jpg': 'projects/balcony-safety-net-installation-hyderabad.webp',
+  // Held out (faces, client consent pending): about/PG1.jpg, about/H-12.jpg, about/H-16.jpg. Held out (unclear subject): about/H-15.jpg.
   'about/PG3.jpg': 'projects/balcony-safety-net-apartment-hyderabad.webp',
-  'about/H-12.jpg': 'projects/child-safe-balcony-safety-net-hyderabad.webp',
-  'about/H-13.jpg': 'projects/pigeon-net-balcony-installation-hyderabad-1.webp',
-  'about/H-14.jpg': 'projects/pigeon-net-balcony-installation-hyderabad-2.webp',
-  'about/H-15.jpg': 'projects/pigeon-net-balcony-installation-hyderabad-3.webp',
-  'about/H-16.jpg': 'projects/pigeon-net-balcony-installation-hyderabad-4.webp',
+  'about/H-13.jpg': 'projects/cricket-practice-net-installation-hyderabad.webp',
+  'about/H-14.jpg': 'projects/bird-spikes-installation-tiled-roof-hyderabad.webp',
   'services/balcony-safety-net.webp': 'services/balcony-safety-nets-hyderabad.webp',
   'services/pigeon-nets-balcony.jpg': 'services/pigeon-safety-nets-balcony-hyderabad.webp',
   'services/anti-bird-net.jpg': 'services/anti-bird-nets-hyderabad.webp',
   'services/duct-area-nets.jpg': 'services/duct-area-safety-nets-hyderabad.webp',
   'services/invisible-grille-for-staircase.jpg': 'services/staircase-safety-nets-hyderabad.webp',
   'services/construction-safety-nets.jpg': 'services/construction-safety-nets-hyderabad.webp',
-  'services/monkey-nets.png': 'services/monkey-safety-nets-hyderabad.webp',
   'services/cricket-nets.jpg': 'services/cricket-practice-nets-hyderabad.webp',
   'services/all-sports-nets.jpg': 'services/all-sports-nets-hyderabad.webp',
   'services/invisible-grills.jpg': 'services/invisible-grills-hyderabad.webp',

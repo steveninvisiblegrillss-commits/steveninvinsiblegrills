@@ -34,3 +34,11 @@ Real job, real photos, project page, service and area links, GBP post, review. E
 
 ## Still open
 D5 real photos (30+, with area and service), D6 logo, premium imagery decision, consent for photos showing faces, owner confirmation of "10+ years", "free installation", counters and testimonials.
+
+## Home page redesign (2026-10-06, per design brief)
+- Palette: midnight navy `#0B132B`, slate neutrals, amber `#F59E0B` for high-intent CTAs only, white sections. WhatsApp green darkened to `#15803D` so white text passes AA.
+- Floating glass header (dark glass, zero layout height). Mobile menu uses the native Popover API so the blur cannot clip it. Scroll-spy is a 15-line IntersectionObserver.
+- Home sections: Hero, "What do you need to fix?", ServicesGrid (4 pillar cards, native `<details name="pillar">` accordion with every sub-service as a pill), Process, Gallery (native `<dialog>` lightbox), ServiceAreas, FAQ (native accordion), CTA band. Fixed bottom call and WhatsApp bar on mobile only.
+- Not shown until confirmed: "4.9 star rating" (renders from `site.rating` once a real Google rating is set), "Free on-site measurement", and neighbourhood tags like Gachibowli or Jubilee Hills (gallery tags say "Hyderabad" until real localities are known). No pricing calculator: the price guide page covers it.
+- H1 is now "Unobstructed views. Uncompromised safety." Keywords sit in the sub-headline, title tag and meta description. Revisit if Search Console shows the home page missing "invisible grills Hyderabad" queries.
+- Photo audit: project photos were relabelled after viewing every file. Held out of public pages until the client approves: `PG1`, `H-12`, `H-16` (identifiable faces), `H-15` (unclear subject). The monkey net image was removed because it carries another company's watermark.

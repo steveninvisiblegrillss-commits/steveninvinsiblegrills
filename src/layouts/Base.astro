@@ -4,11 +4,11 @@ import fontUrl from '@fontsource-variable/plus-jakarta-sans/files/plus-jakarta-s
 import Seo from '../components/Seo.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import MobileActionBar from '../components/MobileActionBar.astro';
+import MobileCTA from '../components/MobileCTA.astro';
 import { graph, businessNode, websiteNode } from '../lib/schema';
 
-interface Props { title: string; description: string; path: string; image?: string; schema?: object[]; noindex?: boolean; service?: string; area?: string }
-const { schema = [], service, area, ...seo } = Astro.props;
+interface Props { title: string; description: string; path: string; image?: string; schema?: object[]; noindex?: boolean; service?: string; area?: string; flush?: boolean }
+const { schema = [], service, area, flush = false, ...seo } = Astro.props;
 const GA = import.meta.env.PUBLIC_GA_ID;
 const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
 ---
@@ -48,9 +48,9 @@ const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
   <body class="min-h-[100dvh] antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-2 focus:top-2 focus:z-50 focus:rounded-full focus:bg-card focus:px-4 focus:py-2">Skip to content</a>
     <Header service={service} area={area} />
-    <main id="main"><slot /></main>
+    <main id="main" class={flush ? '' : 'pt-20'}><slot /></main>
     <Footer />
-    <MobileActionBar service={service} area={area} />
+    <MobileCTA service={service} area={area} />
     <script is:inline>
       // One delegated listener tracks every lead link (GA4 key events: lead_whatsapp, lead_call).
       document.addEventListener('click', (e) => {

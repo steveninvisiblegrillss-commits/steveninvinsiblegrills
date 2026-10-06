@@ -1,0 +1,32 @@
+---
+import { Icon } from 'astro-icon/components';
+import { waLink, quoteMessage } from '../lib/whatsapp';
+
+const steps = [
+  { icon: 'ph:camera-duotone', title: 'Snap and send a photo', text: 'Send a photo of your balcony or window on WhatsApp, with a rough size.' },
+  { icon: 'ph:receipt-duotone', title: 'Get an upfront quote', text: 'You get the full price in writing before we start. No surprises.' },
+  { icon: 'ph:hammer-duotone', title: 'We install for free', text: 'Our team measures, fits it neatly and checks it with you. Installation is free.' },
+];
+const wa = waLink(quoteMessage({ path: '/' }));
+---
+<section id="process" class="scroll-mt-24">
+  <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-28">
+    <h2 class="max-w-2xl text-3xl font-bold md:text-4xl">From photo to installed in three steps</h2>
+    <ol class="mt-12 grid gap-10 md:grid-cols-3 md:gap-6">
+      {steps.map((s, i) => (
+        <li class="relative flex gap-5 md:block">
+          {i < steps.length - 1 && <span aria-hidden="true" class="absolute left-6 top-14 h-[calc(100%+1.5rem)] w-px bg-line md:left-[4.5rem] md:top-6 md:h-px md:w-[calc(100%-3rem)]"></span>}
+          <span class="relative grid size-12 shrink-0 place-items-center rounded-full bg-brand-deep text-accent ring-8 ring-surface">
+            <Icon name={s.icon} class="size-6" />
+          </span>
+          <div class="md:mt-6">
+            <p class="text-sm font-semibold text-brand">Step {i + 1}</p>
+            <h3 class="mt-1 text-xl font-semibold">{s.title}</h3>
+            <p class="mt-2 max-w-[34ch] text-ink-soft">{s.text}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <a href={wa} class="mt-12 inline-flex min-h-12 items-center rounded-full bg-accent px-6 font-semibold text-accent-ink transition-transform active:scale-[0.98]">Send a photo on WhatsApp</a>
+  </div>
+</section>

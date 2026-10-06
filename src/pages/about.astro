@@ -5,7 +5,7 @@ import Button from '../components/Button.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { site } from '../config/site';
 import { waLink, quoteMessage } from '../lib/whatsapp';
-import photo from '../assets/images/projects/balcony-safety-net-installation-hyderabad.webp';
+import photo from '../assets/images/projects/balcony-safety-net-apartment-hyderabad.webp';
 
 const wa = waLink(quoteMessage({ path: '/about/' }));
 ---
@@ -21,7 +21,7 @@ const wa = waLink(quoteMessage({ path: '/about/' }));
       <div class="mt-8"><Button href={wa} variant="accent">Get a free quote</Button></div>
     </div>
     <div class="lg:col-span-5">
-      <Picture src={photo} alt="Our installer next to a balcony safety net fitted on a curved railing in Hyderabad" widths={[480, 800]} sizes="(min-width: 1024px) 40vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[3/4] w-full rounded-[var(--radius-card)] object-cover" />
+      <Picture src={photo} alt="White balcony safety net fitted along the railing of an apartment balcony" widths={[480, 800]} sizes="(min-width: 1024px) 40vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full rounded-[var(--radius-card)] object-cover" />
     </div>
   </div>
   <CtaBand />

@@ -1,0 +1,22 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props { faqs: { q: string; a: string }[]; heading?: string }
+const { faqs, heading = 'Questions people ask before they call' } = Astro.props;
+---
+<section id="faq" class="scroll-mt-24 bg-surface-2">
+  <div class="mx-auto max-w-4xl px-4 py-16 md:px-8 md:py-28">
+    <h2 class="text-3xl font-bold md:text-4xl">{heading}</h2>
+    <div class="mt-10 grid gap-3">
+      {faqs.map((f) => (
+        <details name="faq" class="group rounded-2xl border border-line bg-card px-5 open:shadow-[var(--shadow-soft)]">
+          <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg font-semibold">
+            {f.q}
+            <Icon name="ph:caret-down-bold" class="size-5 shrink-0 text-brand transition-transform duration-300 group-open:rotate-180" />
+          </summary>
+          <p class="max-w-[65ch] pb-5 text-ink-soft">{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

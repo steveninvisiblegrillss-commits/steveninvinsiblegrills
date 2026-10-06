@@ -1,0 +1,46 @@
+---
+import { Picture } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import type { ImageMetadata } from 'astro';
+import { site } from '../config/site';
+import { waLink, quoteMessage } from '../lib/whatsapp';
+
+interface Props { image: ImageMetadata; imageAlt: string }
+const { image, imageAlt } = Astro.props;
+const wa = waLink(quoteMessage({ path: '/' }));
+// Only confirmed facts. The rating badge renders once a real Google rating is set in site.ts.
+const trust = [
+  site.rating && { icon: 'ph:star-fill', text: `${site.rating.value} Google rating` },
+  { icon: 'ph:calendar-check-duotone', text: `${site.yearsClaim} in Hyderabad` },
+  site.freeInstallation && { icon: 'ph:wrench-duotone', text: 'Free installation' },
+  { icon: 'ph:ruler-duotone', text: 'Measured on site' },
+].filter(Boolean) as { icon: string; text: string }[];
+---
+<section class="relative isolate overflow-hidden bg-brand-deep text-white">
+  <div class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60rem_30rem_at_85%_-10%,rgb(30_58_138/0.55),transparent)]"></div>
+  <div class="mx-auto grid max-w-7xl items-center lg:grid-cols-12 lg:gap-12 lg:px-8 lg:pb-20 lg:pt-36">
+    <div class="relative lg:order-2 lg:col-span-6">
+      <Picture src={image} alt={imageAlt} widths={[480, 800, 1100]} sizes="(min-width: 1024px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="hero-zoom aspect-[4/3] w-full object-cover sm:aspect-[16/9] lg:float lg:aspect-[5/4] lg:rounded-2xl lg:border lg:border-white/10 lg:shadow-2xl lg:shadow-black/40" />
+      <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-brand-deep to-transparent lg:hidden"></div>
+      <div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-brand-deep/80 to-transparent lg:hidden"></div>
+    </div>
+    <div class="relative -mt-14 px-4 pb-32 md:px-8 lg:order-1 lg:col-span-6 lg:mt-0 lg:p-0">
+      <h1 class="rise text-[2.5rem] font-bold leading-[1.04] sm:text-5xl lg:text-6xl" style="--i:0">Unobstructed views. Uncompromised safety.</h1>
+      <p class="rise mt-5 max-w-[50ch] text-lg text-white/80 md:text-xl" style="--i:1">Invisible grills, pigeon safety nets and balcony nets for Hyderabad homes, installed by our own team.</p>
+      <div class="rise mt-8 grid gap-3 sm:flex sm:flex-wrap" style="--i:2">
+        <a href={wa} class="group inline-flex min-h-12 items-center justify-between gap-3 rounded-full bg-accent py-2 pl-6 pr-2 font-semibold text-accent-ink transition-transform duration-300 active:scale-[0.98] sm:justify-start">
+          Get instant WhatsApp quote
+          <span class="grid size-8 place-items-center rounded-full bg-black/10 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-px"><Icon name="ph:arrow-up-right-bold" class="size-4" /></span>
+        </a>
+        <a href="#services" class="hidden min-h-12 items-center rounded-full border border-white/25 bg-white/10 px-6 font-semibold backdrop-blur-md transition-colors hover:bg-white/20 sm:inline-flex">Explore services</a>
+      </div>
+      <ul class="rise mt-10 flex flex-wrap gap-2.5" style="--i:3">
+        {trust.map((t) => (
+          <li class="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-2 text-sm text-white/90">
+            <Icon name={t.icon} class="size-4 text-accent" />{t.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

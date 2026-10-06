@@ -28,13 +28,16 @@ const facts = [
   <Breadcrumbs crumbs={crumbs} />
   <div class="mt-6 grid gap-12 lg:grid-cols-12">
     <article class="lg:col-span-8">
+      <div class="flex flex-col">
+      <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 1024px) 66vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="hero-zoom order-first -mx-4 mb-6 aspect-[4/3] w-[calc(100%+2rem)] max-w-none object-cover sm:mx-0 sm:w-full sm:rounded-[var(--radius-card)] lg:order-none lg:mb-0 lg:mt-10 lg:aspect-[16/10]" />
       <h1 class="text-4xl font-bold leading-[1.05] md:text-5xl">{d.title}</h1>
       <p class="mt-5 max-w-[65ch] text-lg text-ink-soft md:text-xl">{d.answer}</p>
       <div class="mt-7 flex flex-wrap gap-3">
         <Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button>
         <Button href={telLink()} variant="ghost" icon="ph:phone-duotone" data-service={d.name}>Call {site.phoneDisplay}</Button>
       </div>
-      <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 1024px) 66vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="mt-10 aspect-[16/10] w-full rounded-[var(--radius-card)] object-cover" />
+
+      </div>
 
       <dl class="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-line sm:grid-cols-2">
         {facts.map(([k, v]) => (

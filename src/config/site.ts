@@ -22,13 +22,20 @@ export const site = {
   address: null as null | { street: string; postalCode: string }, // D2
   geo: null as null | { lat: number; lng: number }, // D2
   hours: null as null | { days: string[]; opens: string; closes: string }[], // D3
-  yearsClaim: '10+ years', // on the live site, client to confirm
-  freeInstallation: true, // on the live site
+  yearsClaim: '10+ years', // confirmed by the client 2026-10-06
+  freeInstallation: true, // confirmed by the client 2026-10-06
   rating: null as null | { value: number; count: number }, // D8: display only, never in schema
   gbpUrl: null as null | string,
   reviewUrl: null as null | string,
   sameAs: [] as string[],
   areas: areaNames.map((name) => ({ name, slug: slugify(name) })) satisfies Area[],
+  sections: [
+    { label: 'Services', href: '/#services', id: 'services' },
+    { label: 'Process', href: '/#process', id: 'process' },
+    { label: 'Gallery', href: '/#gallery', id: 'gallery' },
+    { label: 'Service areas', href: '/#areas', id: 'areas' },
+    { label: 'FAQ', href: '/#faq', id: 'faq' },
+  ],
   nav: [
     { label: 'Safety Nets', href: '/safety-nets/' },
     { label: 'Invisible Grills', href: '/invisible-grills/' },
