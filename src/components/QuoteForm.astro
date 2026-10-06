@@ -21,7 +21,7 @@ const field = 'rounded-[var(--radius-input)] border border-ink-soft/50 bg-card p
     </select></div>
   <div class="grid gap-2"><label for="q-msg" class="font-medium">Details (optional)</label>
     <textarea id="q-msg" name="msg" rows="3" class={field}></textarea>
-    <p class="text-sm text-ink-soft">Opens WhatsApp with your message. Nothing is stored on this website.</p></div>
+    <p class="text-sm text-ink-soft">Opens WhatsApp with your message. We'll call you within 30 minutes. Nothing is stored on this website.</p></div>
   <button class="min-h-12 rounded-full bg-wa px-6 py-3 font-semibold text-white transition-transform active:scale-[0.98]">Send on WhatsApp</button>
   <p data-quote-status role="status" class="text-sm text-ink-soft" hidden></p>
 </form>
@@ -39,7 +39,7 @@ const field = 'rounded-[var(--radius-input)] border border-ink-soft/50 bg-card p
       // Fallback: the enquiry only reaches us once it is sent in WhatsApp, so keep a visible link in case the app did not open.
       const status = f.querySelector<HTMLElement>('[data-quote-status]')!;
       status.hidden = false;
-      status.innerHTML = 'Opening WhatsApp. Press send there to finish. If nothing opened, <a class="font-semibold text-brand underline" href="' + link + '">tap here to open WhatsApp</a>.';
+      status.innerHTML = 'Opening WhatsApp. Press send there to finish, and we will call you within 30 minutes. If nothing opened, <a class="font-semibold text-brand underline" href="' + link + '">tap here to open WhatsApp</a>.';
       window.location.href = link;
     }),
   );
