@@ -43,6 +43,10 @@ const map = {
 };
 for (const [from, to] of Object.entries(map)) {
   mkdirSync(dirname(OUT + to), { recursive: true });
-  await sharp(SRC + from).rotate().resize({ width: 1600, withoutEnlargement: true }).webp({ quality: to.startsWith('projects/') ? 50 : 62 }).toFile(OUT + to);
+  // Stock service images carry a 1px red frame baked in; trim 4px on every side to drop it.
+  const src = sharp(SRC + from).rotate();
+  const { width: w, height: h } = await sharp(SRC + from).metadata();
+  const trimmed = from.startsWith('services/') ? src.extract({ left: 4, top: 4, width: w - 8, height: h - 8 }) : src;
+  await trimmed.resize({ width: 1600, withoutEnlargement: true }).webp({ quality: to.startsWith('projects/') ? 50 : 62 }).toFile(OUT + to);
 }
 console.log(`imported ${Object.keys(map).length} images`);

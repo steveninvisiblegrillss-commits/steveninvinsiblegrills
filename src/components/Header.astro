@@ -12,9 +12,9 @@ const all = (await getCollection('services')).sort((a, b) => a.data.order - b.da
 const hubs = all.filter((s) => s.data.kind === 'hub');
 const wa = waLink(quoteMessage({ service, area, path: here }));
 ---
-<header class="sticky top-0 z-30 border-b border-line bg-surface/90 backdrop-blur">
+<header class="sticky top-0 z-30 border-b border-line bg-surface">
   <div class="mx-auto flex h-[68px] max-w-7xl items-center justify-between gap-4 px-4 md:px-8">
-    <a href="/" class="text-lg font-bold tracking-tight text-brand-deep dark:text-ink" aria-label={`${site.name} home`}>{site.name}</a>
+    <a href="/" class="whitespace-nowrap text-base font-bold tracking-tight text-brand-deep sm:text-lg dark:text-ink" aria-label={`${site.name} home`}>{site.name}</a>
 
     <nav class="hidden items-center gap-6 lg:flex" aria-label="Main">
       {site.nav.map((n) => (
@@ -26,7 +26,7 @@ const wa = waLink(quoteMessage({ service, area, path: here }));
       <a href={telLink()} data-service={service} class="hidden items-center gap-2 text-sm font-semibold text-ink xl:flex">
         <Icon name="ph:phone-duotone" class="size-5 text-brand" />{site.phoneDisplay}
       </a>
-      <Button href={wa} variant="wa" icon="ph:whatsapp-logo-duotone" class="hidden sm:inline-flex" data-service={service} data-area={area}>WhatsApp us</Button>
+      <div class="hidden sm:block"><Button href={wa} variant="wa" icon="ph:whatsapp-logo-duotone" data-service={service} data-area={area}>WhatsApp us</Button></div>
       <details class="group lg:hidden">
         <summary class="grid size-11 cursor-pointer list-none place-items-center rounded-full border border-line" aria-label="Menu">
           <Icon name="ph:list-bold" class="size-5 group-open:hidden" />

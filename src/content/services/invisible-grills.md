@@ -1,7 +1,7 @@
 ---
 kind: hub
 category: invisible-grills
-order: 0
+order: 1
 name: "Invisible Grills"
 title: "Invisible Grills in Hyderabad"
 seoTitle: "Invisible Grills in Hyderabad, Balcony and Window"

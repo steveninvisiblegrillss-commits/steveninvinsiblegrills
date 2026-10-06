@@ -1,7 +1,7 @@
 ---
 kind: hub
 category: cloth-hangers
-order: 0
+order: 2
 name: "Cloth Hangers"
 title: "Cloth Hangers in Hyderabad"
 seoTitle: "Cloth Hangers in Hyderabad, Ceiling and Balcony"

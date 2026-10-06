@@ -1,7 +1,7 @@
 ---
 kind: hub
 category: sports-nets
-order: 0
+order: 3
 name: "Sports Nets"
 title: "Sports Nets in Hyderabad"
 seoTitle: "Sports Nets in Hyderabad, Cricket and More"
