@@ -7,8 +7,8 @@ title: "Pigeon Safety Nets in Hyderabad"
 seoTitle: "Pigeon Safety Nets in Hyderabad, Free Installation"
 description: "Pigeon safety nets for balconies, ducts and open areas across Hyderabad. Keeps birds out without blocking air or light. Free installation. WhatsApp for a quote."
 answer: "Pigeon safety nets are strong, weather-resistant nets fixed across balconies, ducts and open areas to stop pigeons and other birds from entering or nesting. Steven Invisible Grills installs them for apartments, offices and commercial buildings across Hyderabad and Secunderabad, with free installation. Send a photo of your balcony on WhatsApp to get a quote."
-hero: ../../assets/images/services/pigeon-safety-nets-balcony-hyderabad.webp
-heroAlt: "Pigeon safety net fitted across an apartment balcony in Hyderabad"
+hero: ../../assets/images/services/pigeon-bird-net-balcony.webp
+heroAlt: "Green pigeon net fitted across a sunlit balcony with a pigeon on the outside ledge"
 uses:
   - "Apartment balconies"
   - "Utility and duct areas"

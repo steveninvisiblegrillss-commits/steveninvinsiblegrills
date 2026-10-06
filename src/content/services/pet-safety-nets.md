@@ -7,8 +7,8 @@ title: "Pet Safety Nets in Hyderabad"
 seoTitle: "Pet Safety Nets in Hyderabad, Free Installation"
 description: "Pet safety nets for apartment balconies and windows in Hyderabad. Keep cats and dogs safe at height and keep the view open. Free installation."
 answer: "Pet safety nets are fixed across balconies and windows so cats and dogs cannot slip out or fall, while the view and airflow stay open. Steven Invisible Grills installs them in apartments across Hyderabad with free installation. Send a photo of your balcony on WhatsApp for a quote."
-hero: ../../assets/images/services/pet-safety-nets-hyderabad.webp
-heroAlt: "Pet safety net on an apartment balcony in Hyderabad"
+hero: ../../assets/images/services/tabby-cat-balcony-net.webp
+heroAlt: "Tabby cat sitting safely behind a clear net on a balcony looking at the city"
 uses:
   - "Apartment balconies"
   - "Windows"

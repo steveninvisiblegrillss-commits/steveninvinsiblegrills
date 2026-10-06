@@ -16,19 +16,15 @@ const map = {
   'about/H-13.jpg': 'projects/cricket-practice-net-installation-hyderabad.webp',
   'about/H-14.jpg': 'projects/bird-spikes-installation-tiled-roof-hyderabad.webp',
   'services/balcony-safety-net.webp': 'services/balcony-safety-nets-hyderabad.webp',
-  'services/pigeon-nets-balcony.jpg': 'services/pigeon-safety-nets-balcony-hyderabad.webp',
-  'services/anti-bird-net.jpg': 'services/anti-bird-nets-hyderabad.webp',
   'services/duct-area-nets.jpg': 'services/duct-area-safety-nets-hyderabad.webp',
   'services/invisible-grille-for-staircase.jpg': 'services/staircase-safety-nets-hyderabad.webp',
   'services/construction-safety-nets.jpg': 'services/construction-safety-nets-hyderabad.webp',
   'services/invisible-grill-balcony.jpg': 'services/invisible-grills-for-balconies-hyderabad.webp',
   'services/invisible-grill-windows.jpg': 'services/invisible-grills-for-windows-hyderabad.webp',
   'services/stainless-grills.jpg': 'services/stainless-steel-invisible-grills-hyderabad.webp',
-  'services/invisible-grill-balcony-price.jpg': 'services/invisible-grill-price-hyderabad.webp',
   'services/cloth-hanger-balcony.png': 'services/balcony-cloth-hangers-hyderabad.webp',
   'services/pull-and-dry-hanger.png': 'services/pull-and-dry-cloth-hangers-hyderabad.webp',
   'services/ceiling-hangers.jpg': 'services/ceiling-cloth-hangers-hyderabad.webp',
-  'products/petsafetynet.jpg': 'services/pet-safety-nets-hyderabad.webp',
 };
 for (const [from, to] of Object.entries(map)) {
   mkdirSync(dirname(OUT + to), { recursive: true });

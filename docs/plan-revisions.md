@@ -65,3 +65,9 @@ The "Safety and fall prevention" card now uses the real child-safe net project p
 - Tap targets: all links and buttons 44px or taller on mobile (measured on 7 page types). Mobile footer lists categories only.
 - `favicon.ico` added. `_headers` adds X-Content-Type-Options, Referrer-Policy, Strict-Transport-Security, X-Frame-Options, Permissions-Policy and one-year immutable caching for hashed assets.
 - Quote form shows a fallback WhatsApp link after submit. Not added, pending owner confirmation: a "we will call you within 30 minutes" promise, "from ₹X per sq ft" prices, 300 to 500 words per area page (needs real local jobs).
+
+## New photography and full logo (2026-10-06)
+Supplied by the site owner and placed: sunlit invisible-grill balcony (home hero), golden-hour clear net (Safety Nets hub), green pigeon net with pigeon (Pigeon and Anti Bird pages and the home bird card), tabby cat behind a net (Pet page), invisible grill being measured (Price page). The two "Pigeon and Bird Net" files were identical.
+These look AI-generated. They are used only as service illustrations with neutral alt text, never on project pages or in the gallery as the client's own work. Originals are kept in `research/new-images/` (git-ignored).
+Full logo lockup is now `public/logo.png` (schema logo) and the social share image `public/og-default.jpg`. The header still uses the S mark with live text for legibility at small sizes.
+Still using older stock images and worth replacing the same way: balcony cloth hangers (floor rack, wrong product), staircase nets (shows wires), stainless steel page, construction, duct, window grills, and a second distinct image for Anti Bird Nets.

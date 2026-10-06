@@ -7,3 +7,4 @@ public/_redirects
 .qa/
 .qa-*
 .playwright-mcp/
+research/new-images/*.png
