@@ -9,6 +9,8 @@ const walk = (d) => readdirSync(d).flatMap((f) => (statSync(join(d, f)).isDirect
 const files = walk(DIST);
 const errors = [];
 const titles = new Map();
+const inbound = new Map();
+const pages = [];
 const descs = new Map();
 
 for (const f of files.filter((f) => f.endsWith('.html'))) {
@@ -16,6 +18,7 @@ for (const f of files.filter((f) => f.endsWith('.html'))) {
   const html = readFileSync(f, 'utf8');
   const doc = parse(html);
   const err = (m) => errors.push(`${page}: ${m}`);
+  pages.push(page);
   if (/durga/i.test(html)) err('contains "Durga"');
   if (/[–—]/.test(doc.querySelector('body')?.text ?? '')) err('visible em/en dash');
   if (page === '/404.html') continue;
@@ -40,12 +43,20 @@ for (const f of files.filter((f) => f.endsWith('.html'))) {
   }
   for (const a of doc.querySelectorAll('a[href^="/"]')) {
     const href = a.getAttribute('href').split('#')[0];
+    if (href && href !== page) inbound.set(href, (inbound.get(href) ?? 0) + 1);
     if (href && !existsSync(join(DIST, href, 'index.html')) && !existsSync(join(DIST, href))) err(`broken link ${href}`);
   }
 }
-for (const line of readFileSync(join(DIST, '_redirects'), 'utf8').trim().split('\n')) {
-  const to = line.split(' ')[1];
-  if (!existsSync(join(DIST, to, 'index.html'))) errors.push(`_redirects target missing: ${line}`);
+const rules = readFileSync(join(DIST, '_redirects'), 'utf8').trim().split('\n').map((l) => l.split(' '));
+const sources = new Set(rules.map((r) => r[0]));
+for (const [from, to] of rules) {
+  if (!existsSync(join(DIST, to, 'index.html'))) errors.push(`_redirects target missing: ${from} -> ${to}`);
+  if (sources.has(to)) errors.push(`redirect chain: ${from} -> ${to} is itself redirected`);
+}
+// Every public page must be reachable from at least one other page.
+for (const p of pages) {
+  if (['/', '/404.html', '/privacy-policy/'].includes(p)) continue;
+  if (!inbound.get(p)) errors.push(`${p}: orphan page, no internal link points to it`);
 }
 for (const f of files.filter((f) => /\.(avif|webp|jpe?g|png)$/.test(f))) {
   const kb = statSync(f).size / 1024;

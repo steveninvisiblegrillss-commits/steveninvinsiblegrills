@@ -6,6 +6,10 @@ export const GET = () =>
     `User-agent: *
 Allow: /
 
+User-agent: Googlebot
+Allow: /
+User-agent: Bingbot
+Allow: /
 User-agent: GPTBot
 Allow: /
 User-agent: OAI-SearchBot

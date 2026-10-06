@@ -58,3 +58,8 @@ export const articleNode = (g: { title: string; description: string; path: strin
 
 export const graph = (...nodes: object[]) =>
   JSON.stringify({ '@context': 'https://schema.org', '@graph': nodes }).replace(/</g, '\\u003c');
+
+export const imageNode = (i: { path: string; caption: string; src: string; area: string }) => ({
+  '@type': 'ImageObject', '@id': `${abs(i.path)}#image`, contentUrl: abs(i.src), caption: i.caption,
+  contentLocation: { '@type': 'Place', name: `${i.area}, ${site.city}` }, creditText: site.name, creator: { '@id': BIZ },
+});

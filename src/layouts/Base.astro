@@ -18,7 +18,8 @@ const CLARITY = import.meta.env.PUBLIC_CLARITY_ID;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="preload" href={fontUrl} as="font" type="font/woff2" crossorigin />
-    <meta name="theme-color" content="#13285e" />
+    <link rel="icon" href="data:," />
+    <meta name="theme-color" content="#0b132b" />
     <Seo {...seo} />
     <script type="application/ld+json" set:html={graph(businessNode(), websiteNode(), ...schema)} />
     {(GA || CLARITY) && (

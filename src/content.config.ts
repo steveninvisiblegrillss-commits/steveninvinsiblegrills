@@ -49,6 +49,9 @@ const projects = defineCollection({
       area: reference('areas'),
       services: z.array(reference('services')).min(1),
       photos: z.array(z.object({ src: image(), alt: z.string().min(15) })).min(1),
+      propertyType: z.string().optional(), // e.g. 3BHK apartment, villa, office
+      problem: z.string().optional(),
+      solution: z.string().optional(),
       before: image().optional(),
       after: image().optional(),
     }),

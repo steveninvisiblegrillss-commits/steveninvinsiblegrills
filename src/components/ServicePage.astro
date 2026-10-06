@@ -48,7 +48,7 @@ const facts = [
       </dl>
 
       <section class="pt-14">
-        <h2 class="text-3xl font-bold md:text-4xl">What it solves</h2>
+        <h2 class="text-3xl font-bold md:text-4xl">What problems do {d.name.toLowerCase()} solve?</h2>
         <ul class="mt-6 grid gap-3">
           {d.problems.map((p: string) => (
             <li class="flex gap-3"><Icon name="ph:check-circle-duotone" class="mt-0.5 size-6 shrink-0 text-brand" /><span class="max-w-[65ch]">{p}</span></li>
@@ -62,7 +62,7 @@ const facts = [
 
       {d.installSteps.length > 0 && (
         <section class="py-14">
-          <h2 class="text-3xl font-bold md:text-4xl">How we install</h2>
+          <h2 class="text-3xl font-bold md:text-4xl">How do we install {d.name.toLowerCase()}?</h2>
           <ol class="mt-8 grid gap-4 sm:grid-cols-2">
             {d.installSteps.map((s: string, i: number) => (
               <li class="flex gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5">
@@ -76,7 +76,7 @@ const facts = [
 
       {d.priceFactors.length > 0 && (
         <section class="pb-14">
-          <h2 class="text-3xl font-bold md:text-4xl">What decides the price</h2>
+          <h2 class="text-3xl font-bold md:text-4xl">What decides the price of {d.name.toLowerCase()}?</h2>
           <ul class="mt-6 flex flex-wrap gap-3">
             {d.priceFactors.map((f: string) => <li class="rounded-full border border-line bg-card px-4 py-2">{f}</li>)}
           </ul>
