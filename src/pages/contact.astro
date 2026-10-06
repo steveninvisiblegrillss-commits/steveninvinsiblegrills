@@ -4,6 +4,7 @@
 import { Icon } from 'astro-icon/components';
 import Base from '../layouts/Base.astro';
 import QuoteForm from '../components/QuoteForm.astro';
+import PhotoGuide from '../components/PhotoGuide.astro';
 import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
 
@@ -79,6 +80,8 @@ const checklist = [
       </ul>
     </div>
   </section>
+
+  <PhotoGuide />
 
   {/* 4. Work order with a live WhatsApp preview */}
   <section id="quote" data-cta-band class="wires dusk-glow scroll-mt-24 text-white">

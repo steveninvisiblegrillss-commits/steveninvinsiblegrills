@@ -5,7 +5,7 @@ import { Icon } from 'astro-icon/components';
 import { waLink, quoteMessage } from '../lib/whatsapp';
 
 interface Props { faqs: { q: string; a: string }[]; heading?: string; tag?: string; service?: string }
-const { faqs, heading = 'Questions people ask before they call', tag = '06 / Questions', service } = Astro.props;
+const { faqs, heading = 'Questions people ask before they call', tag = '07 / Questions', service } = Astro.props;
 const wa = waLink(quoteMessage({ service, path: Astro.url.pathname }));
 ---
 {faqs.length > 0 && (

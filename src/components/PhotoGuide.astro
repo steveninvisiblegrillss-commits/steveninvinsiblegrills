@@ -1,0 +1,50 @@
+---
+// "Photo guide": three viewfinder frames showing the three photos that let us quote without a second round of questions.
+const shots = [
+  {
+    n: '01', t: 'Stand back', d: 'Stand in the doorway so the whole opening fits in the frame, edge to edge. This shows the size and shape.',
+    art: '<rect x="40" y="30" width="160" height="100" fill="none" stroke="#C9D1DC" stroke-width="1.5"/><line x1="40" y1="130" x2="200" y2="130" stroke="#F2A541" stroke-width="2"/><line x1="40" y1="30" x2="40" y2="130" stroke="#F2A541" stroke-width="2"/>',
+  },
+  {
+    n: '02', t: 'Move close', d: 'Photograph the corners and the spot where the frame meets the wall or ceiling. This shows where fixings can go.',
+    art: '<path d="M60 40 H140 V120" fill="none" stroke="#C9D1DC" stroke-width="1.5"/><circle cx="140" cy="40" r="14" fill="none" stroke="#F2A541" stroke-width="2"/><circle cx="140" cy="40" r="3" fill="#F2A541"/>',
+  },
+  {
+    n: '03', t: 'Look out', d: 'Take one photo of the view outward or downward. This shows the floor height and how the team can reach the space.',
+    art: '<line x1="20" y1="110" x2="220" y2="110" stroke="#C9D1DC" stroke-width="1.5"/><path d="M60 110 V70 H100 V110 M120 110 V50 H165 V110" fill="none" stroke="#C9D1DC" stroke-width="1.2" opacity="0.7"/><path d="M200 30 V110" stroke="#F2A541" stroke-width="2"/><path d="M194 102 L200 112 L206 102" fill="none" stroke="#F2A541" stroke-width="2"/>',
+  },
+];
+---
+<section class="bg-night text-white">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <p class="sec-tag text-dusk">Photo guide</p>
+    <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Three photos, <em class="em-accent">one quote</em></h2>
+    <p class="mt-5 max-w-[56ch] text-white/70">Send these three on WhatsApp and we can usually quote without a second round of questions.</p>
+    <ol class="no-scrollbar -mx-4 mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0">
+      {shots.map((s) => (
+        <li class="w-[82%] shrink-0 snap-center md:w-auto">
+          <div class="vf relative aspect-[4/3] border border-steel/40 bg-night-2">
+            <svg viewBox="0 0 240 160" class="absolute inset-0 size-full" aria-hidden="true" set:html={s.art} />
+            <span class="vf-grid pointer-events-none absolute inset-0" aria-hidden="true"></span>
+            <span class="mono-tag absolute left-3 top-3 text-dusk">Shot {s.n}</span>
+            <span class="vf-dot absolute right-3 top-3 size-2 rounded-full bg-dusk" aria-hidden="true"></span>
+          </div>
+          <h3 class="mt-5 font-display text-3xl">{s.t}</h3>
+          <p class="mt-2 text-white/70">{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .vf::before, .vf::after { content: ""; position: absolute; inset: 10px; pointer-events: none; --m: rgb(201 209 220 / 0.85);
+    background:
+      linear-gradient(var(--m), var(--m)) 0 0 / 16px 1px no-repeat, linear-gradient(var(--m), var(--m)) 0 0 / 1px 16px no-repeat,
+      linear-gradient(var(--m), var(--m)) 100% 0 / 16px 1px no-repeat, linear-gradient(var(--m), var(--m)) 100% 0 / 1px 16px no-repeat,
+      linear-gradient(var(--m), var(--m)) 0 100% / 16px 1px no-repeat, linear-gradient(var(--m), var(--m)) 0 100% / 1px 16px no-repeat,
+      linear-gradient(var(--m), var(--m)) 100% 100% / 16px 1px no-repeat, linear-gradient(var(--m), var(--m)) 100% 100% / 1px 16px no-repeat; }
+  .vf::after { inset: 50% auto auto 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; background: linear-gradient(var(--m), var(--m)) 50% 0 / 1px 100% no-repeat, linear-gradient(var(--m), var(--m)) 0 50% / 100% 1px no-repeat; }
+  .vf-grid { background-image: linear-gradient(90deg, transparent 33%, rgb(201 209 220 / 0.14) 33% calc(33% + 1px), transparent calc(33% + 1px) 66%, rgb(201 209 220 / 0.14) 66% calc(66% + 1px), transparent calc(66% + 1px)), linear-gradient(transparent 33%, rgb(201 209 220 / 0.14) 33% calc(33% + 1px), transparent calc(33% + 1px) 66%, rgb(201 209 220 / 0.14) 66% calc(66% + 1px), transparent calc(66% + 1px)); }
+  @media (prefers-reduced-motion: no-preference) { .vf-dot { animation: rec 1.6s ease-in-out infinite; } @keyframes rec { 50% { opacity: 0.25; } } }
+</style>

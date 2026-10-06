@@ -1,0 +1,137 @@
+---
+// "Which one do I need?": three taps (space, worry, floor) recommend a service and open WhatsApp with the answers filled in.
+// The recommendations only point at services the site already offers; the floor answer goes into the message for the team.
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+const all = await getCollection('services');
+const names = Object.fromEntries(all.map((s) => [s.id, s.data.name]));
+
+const spaces = [
+  ['balcony', 'Balcony', 'ph:door-open-duotone'],
+  ['window', 'Window', 'ph:app-window-duotone'],
+  ['duct', 'Duct or shaft', 'ph:columns-duotone'],
+  ['staircase', 'Staircase', 'ph:stairs-duotone'],
+  ['terrace', 'Terrace or roof', 'ph:house-line-duotone'],
+] as const;
+const worries = [
+  ['children', 'Children', 'ph:baby-duotone'],
+  ['pets', 'Pets', 'ph:paw-print-duotone'],
+  ['birds', 'Pigeons or birds', 'ph:bird-duotone'],
+  ['monkeys', 'Monkeys', 'ph:tree-duotone'],
+  ['clothes', 'Drying clothes', 'ph:t-shirt-duotone'],
+] as const;
+const floors = ['Ground to 3rd floor', '4th to 10th floor', '11th floor or higher', 'Not sure'];
+
+// space + worry -> service ids, best first. A "*" worry is the space's default.
+const rec: Record<string, string[]> = {
+  'balcony:children': ['children-safety-nets', 'invisible-grills-for-balconies'],
+  'balcony:pets': ['pet-safety-nets', 'invisible-grills-for-balconies'],
+  'balcony:birds': ['pigeon-safety-nets', 'anti-bird-nets'],
+  'balcony:monkeys': ['monkey-safety-nets'],
+  'balcony:clothes': ['balcony-cloth-hangers', 'pull-and-dry-cloth-hangers'],
+  'window:children': ['invisible-grills-for-windows', 'children-safety-nets'],
+  'window:pets': ['pet-safety-nets', 'invisible-grills-for-windows'],
+  'window:birds': ['anti-bird-nets', 'bird-spikes'],
+  'window:monkeys': ['monkey-safety-nets'],
+  'window:clothes': ['ceiling-cloth-hangers'],
+  'duct:*': ['duct-area-safety-nets', 'pigeon-safety-nets'],
+  'staircase:*': ['staircase-safety-nets', 'children-safety-nets'],
+  'terrace:children': ['children-safety-nets'],
+  'terrace:pets': ['pet-safety-nets'],
+  'terrace:birds': ['pigeon-safety-nets', 'bird-spikes'],
+  'terrace:monkeys': ['monkey-safety-nets'],
+  'terrace:clothes': ['ceiling-cloth-hangers', 'pull-and-dry-cloth-hangers'],
+};
+const data = { rec, names, spaces: Object.fromEntries(spaces.map(([k, l]) => [k, l])), worries: Object.fromEntries(worries.map(([k, l]) => [k, l])) };
+const step = 'mono-tag text-ink-soft';
+const opt = 'opt group flex min-h-16 items-center gap-3 border border-ink/25 bg-card px-4 py-3 text-left transition-colors hover:border-night aria-pressed:border-night aria-pressed:bg-night aria-pressed:text-white';
+---
+<section id="finder" class="scroll-mt-24 bg-paper-2" data-quiz data-json={JSON.stringify(data)}>
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <p class="sec-tag text-ink-soft">03 / Quick finder</p>
+    <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Which one do <em class="em-brand">I need</em>?</h2>
+    <p class="mt-5 max-w-[56ch] text-ink-soft">Three taps. We suggest the right service and open WhatsApp with your answers filled in.</p>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-[1.3fr_1fr]">
+      <div class="grid gap-9">
+        <fieldset data-step="space">
+          <legend class={step}>01 / Where is it?</legend>
+          <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {spaces.map(([k, l, ic]) => <button type="button" data-v={k} aria-pressed="false" class={opt}><Icon name={ic} class="size-7 shrink-0 text-dusk-text group-aria-pressed:text-dusk" /><span class="font-medium">{l}</span></button>)}
+          </div>
+        </fieldset>
+        <fieldset data-step="worry">
+          <legend class={step}>02 / What worries you?</legend>
+          <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {worries.map(([k, l, ic]) => <button type="button" data-v={k} aria-pressed="false" class={opt}><Icon name={ic} class="size-7 shrink-0 text-dusk-text group-aria-pressed:text-dusk" /><span class="font-medium">{l}</span></button>)}
+          </div>
+        </fieldset>
+        <fieldset data-step="floor">
+          <legend class={step}>03 / Which floor?</legend>
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            {floors.map((f) => <button type="button" data-v={f} aria-pressed="false" class={opt}><span class="font-medium">{f}</span></button>)}
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <div class="border border-ink/25 bg-card p-6 md:p-8" aria-live="polite">
+          <p class="mono-tag text-dusk-text">Our suggestion</p>
+          <div data-empty class="mt-4 text-ink-soft">Answer the three questions and your suggestion appears here.
+            <noscript> No JavaScript? Browse <a class="font-semibold text-night underline" href="/safety-nets/">safety nets</a>, <a class="font-semibold text-night underline" href="/invisible-grills/">invisible grills</a> or <a class="font-semibold text-night underline" href="/cloth-hangers/">cloth hangers</a>.</noscript>
+          </div>
+          <div data-result hidden>
+            <a data-main href="#" class="mt-3 block font-display text-4xl leading-tight hover:text-dusk-text"></a>
+            <p data-why class="mt-3 text-ink-soft"></p>
+            <p data-alt-wrap class="mt-4 text-sm text-ink-soft" hidden>Also worth a look: <a data-alt href="#" class="font-semibold text-night underline decoration-dusk-text underline-offset-4"></a></p>
+            <a data-wa href="#" class="group mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-wa px-6 py-3 font-semibold text-white transition-transform active:scale-[0.98]">
+              Send these answers on WhatsApp <Icon name="ph:paper-plane-tilt-duotone" class="size-5 transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:translate-x-1.5" />
+            </a>
+            <p class="mt-3 text-xs text-ink-soft">Free installation. We will call you within 30 minutes to confirm a visit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { waLink, quoteMessage } from '../lib/whatsapp';
+  const root = document.querySelector<HTMLElement>('[data-quiz]');
+  if (root) {
+    const data = JSON.parse(root.dataset.json!) as { rec: Record<string, string[]>; names: Record<string, string>; spaces: Record<string, string>; worries: Record<string, string> };
+    const pick: Record<string, string> = {};
+    const $ = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)!;
+    const render = () => {
+      if (!pick.space || !pick.worry) return;
+      const ids = data.rec[`${pick.space}:${pick.worry}`] ?? data.rec[`${pick.space}:*`] ?? [];
+      if (!ids.length) return;
+      const main = data.names[ids[0]];
+      const first = $('[data-result]').hidden;
+      $('[data-empty]').hidden = true;
+      $('[data-result]').hidden = false;
+      const a = $<HTMLAnchorElement>('[data-main]');
+      a.textContent = main; a.href = `/${ids[0]}/`;
+      $('[data-why]').textContent = `For your ${data.spaces[pick.space].toLowerCase()}, with ${data.worries[pick.worry].toLowerCase()} on your mind.`;
+      const alt = ids[1];
+      $('[data-alt-wrap]').hidden = !alt;
+      if (alt) { const l = $<HTMLAnchorElement>('[data-alt]'); l.textContent = data.names[alt]; l.href = `/${alt}/`; }
+      let m = quoteMessage({ service: main, path: location.pathname });
+      m += ` Space: ${data.spaces[pick.space].toLowerCase()}. Worry: ${data.worries[pick.worry].toLowerCase()}.`;
+      if (pick.floor && pick.floor !== 'Not sure') m += ` Floor: ${pick.floor}.`;
+      const wa = $<HTMLAnchorElement>('[data-wa]');
+      wa.href = waLink(m);
+      if (first && matchMedia('(max-width: 1023px)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) $('[data-result]').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      wa.onclick = () => (window as any).gtag?.('event', 'quiz_whatsapp', { service: main });
+    };
+    root.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-v]');
+      if (!b) return;
+      const step = b.closest<HTMLElement>('[data-step]')!.dataset.step!;
+      pick[step] = b.dataset.v!;
+      b.closest('[data-step]')!.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      render();
+    });
+  }
+</script>
