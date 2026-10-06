@@ -1,4 +1,6 @@
 ---
+// Contact: three wires (call, WhatsApp, email), "we come to you", a photo checklist, and the work-order form with a live WhatsApp preview.
+// No closing CTA band: the form is the last thing on the page.
 import { Icon } from 'astro-icon/components';
 import Base from '../layouts/Base.astro';
 import QuoteForm from '../components/QuoteForm.astro';
@@ -6,41 +8,109 @@ import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
 
 const wa = waLink(quoteMessage({ path: '/contact/' }));
-const rows = [
-  { icon: 'ph:phone-duotone', label: 'Call', value: site.phoneDisplay, href: telLink() },
-  { icon: 'ph:whatsapp-logo-duotone', label: 'WhatsApp', value: site.phoneDisplay, href: wa },
-  site.email && { icon: 'ph:envelope-simple-duotone', label: 'Email', value: site.email, href: `mailto:${site.email}` },
-].filter(Boolean) as { icon: string; label: string; value: string; href: string }[];
+const wires = [
+  { icon: 'ph:phone-duotone', label: 'Call', value: site.phoneDisplay, href: telLink(), note: 'Talk to us directly' },
+  { icon: 'ph:whatsapp-logo-duotone', label: 'WhatsApp', value: site.phoneDisplay, href: wa, note: 'Fastest: send a photo' },
+  site.email && { icon: 'ph:envelope-simple-duotone', label: 'Email', value: site.email, href: `mailto:${site.email}`, note: 'For longer details' },
+].filter(Boolean) as { icon: string; label: string; value: string; href: string; note: string }[];
+const checklist = [
+  'A photo of the balcony, window, duct or area',
+  'Rough width and height, if you know them',
+  'Your area or apartment community',
+  'Whether children or pets use the space',
+];
 ---
-<Base title="Contact Steven Invisible Grills, Hyderabad" description="Call or WhatsApp Steven Invisible Grills for safety nets, pigeon nets, invisible grills and cloth hangers in Hyderabad. Free installation." path="/contact/" service="" area="">
-  <div class="mx-auto grid max-w-7xl gap-12 px-4 pt-10 md:px-8 lg:grid-cols-2">
-    <div>
-      <h1 class="text-5xl md:text-6xl">Contact Steven Invisible Grills</h1>
-      <p class="mt-5 max-w-[50ch] text-lg text-ink-soft">The fastest way to a quote is a photo of your balcony or window on WhatsApp.</p>
-      <ul class="mt-8 grid gap-4">
-        {rows.map((r) => (
-          <li><a href={r.href} class="flex min-h-16 items-center gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5 hover:border-brand">
-            <Icon name={r.icon} class="size-8 text-brand" />
-            <span><span class="block text-sm text-ink-soft">{r.label}</span><span class="font-semibold">{r.value}</span></span>
-          </a></li>
+<Base title="Contact Steven Invisible Grills, Hyderabad" description="Call or WhatsApp Steven Invisible Grills for safety nets, pigeon nets, invisible grills and cloth hangers in Hyderabad. Free installation." path="/contact/" service="" area="" flush darkHero>
+  {/* 1. Three wires */}
+  <section class="wires bg-night text-white">
+    <div class="mx-auto max-w-7xl px-4 pb-16 pt-28 md:px-8 md:pb-24 md:pt-36">
+      <p class="sec-tag text-dusk">Contact</p>
+      <h1 class="mt-5 max-w-4xl text-5xl md:text-7xl">Contact <em class="em-accent">Steven Invisible Grills</em></h1>
+      <p class="mt-6 max-w-[52ch] text-lg text-white/80 md:text-xl">The fastest way to a quote is a photo of your balcony or window on WhatsApp.</p>
+      <ul class="mt-14 border-t border-steel/30">
+        {wires.map((w) => (
+          <li class="border-b border-steel/30">
+            <a href={w.href} class="wire-row group grid min-h-24 items-center gap-x-6 gap-y-1 py-6 md:grid-cols-[3rem_9rem_1fr_auto_2.5rem]">
+              <Icon name={w.icon} class="size-8 text-dusk" />
+              <span class="mono-tag text-white/60">{w.label}</span>
+              <span class:list={["font-display [overflow-wrap:anywhere] md:text-4xl", w.value.length > 20 ? "text-[1.2rem] sm:text-2xl" : "text-2xl"]}>{w.value}</span>
+              <span class="mono-tag hidden text-white/50 md:block">{w.note}</span>
+              <span class="plug hidden items-center md:flex" aria-hidden="true"><i class="block h-px w-8 bg-steel/60 transition-[width,background-color] duration-500 ease-[var(--ease-out-quint)] group-hover:w-14 group-hover:bg-dusk"></i><b class="size-2.5 rotate-45 border border-dusk bg-night transition-colors group-hover:bg-dusk"></b></span>
+            </a>
+          </li>
         ))}
       </ul>
+    </div>
+  </section>
 
-      <h2 class="mt-12 text-2xl font-bold">How we work with you</h2>
-      <p class="mt-3 max-w-[60ch] text-ink-soft">We are a service-area business: our team comes to you across Hyderabad and Secunderabad, so there is no shop to visit. We confirm the visit time with you on WhatsApp or by phone. See the <a href="/areas/" class="font-semibold text-brand underline-offset-4 hover:underline">areas we serve</a>.</p>
+  {/* 2. We come to you */}
+  <section class="bg-paper">
+    <div class="grid-paper">
+      <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-2">
+        <div>
+          <p class="sec-tag text-ink-soft">How we work with you</p>
+          <h2 class="mt-5 text-4xl md:text-6xl">No shop to visit. <em class="em-brand">We come to you.</em></h2>
+          <p class="mt-6 max-w-[55ch] text-lg text-ink-soft">We are a service-area business: our team comes to you across Hyderabad and Secunderabad. We confirm the visit time with you on WhatsApp or by phone. See the <a href="/areas/" class="font-semibold text-night underline decoration-dusk-text underline-offset-4">areas we serve</a>.</p>
+        </div>
+        <svg viewBox="0 0 520 200" class="draw-scope block h-auto w-full" role="img" aria-label="Our team travels from our base to your door">
+          <path d="M60 140 C 150 40, 250 200, 330 100 S 440 70, 460 60" class="cable-draw" style="stroke:rgb(22 24 29 / 0.55);stroke-dasharray:1" pathLength="1" />
+          <circle cx="60" cy="140" r="8" fill="#16181d" /><text x="60" y="172" text-anchor="middle" font-family="var(--font-mono)" font-size="11" letter-spacing="1.2" fill="#16181d">OUR TEAM</text>
+          <circle cx="460" cy="60" r="12" fill="none" stroke="#16181d" stroke-dasharray="3 4" /><circle cx="460" cy="60" r="6" fill="#f2a541" stroke="#16181d" /><text x="460" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="11" letter-spacing="1.2" fill="#16181d">YOUR BALCONY</text>
+        </svg>
+      </div>
+    </div>
+  </section>
 
-      <h2 class="mt-10 text-2xl font-bold">What to send for a quick quote</h2>
-      <ul class="mt-4 grid max-w-[60ch] list-disc gap-2 pl-5 text-ink-soft">
-        <li>A photo of the balcony, window, duct or area</li>
-        <li>Rough width and height, if you know them</li>
-        <li>Your area or apartment community</li>
-        <li>Whether children or pets use the space</li>
+  {/* 3. Photo checklist */}
+  <section class="bg-night-2 text-white">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-dusk">Before you message</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">What to send for a <em class="em-accent">quick quote</em></h2>
+      <ul class="mt-12 grid gap-4 sm:grid-cols-2">
+        {checklist.map((c, i) => (
+          <li>
+            <label class="check flex min-h-20 cursor-pointer items-center gap-5 border border-steel/30 bg-night p-5 transition-colors has-[:checked]:border-dusk">
+              <input type="checkbox" class="peer sr-only" />
+              <span class="grid size-8 shrink-0 place-items-center border border-steel/60 transition-colors peer-checked:border-dusk peer-checked:bg-dusk peer-checked:text-night peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-dusk"><Icon name="ph:check-bold" class="size-5 scale-0 transition-transform duration-300 ease-[var(--ease-out-quint)] [.check:has(:checked)_&]:scale-100" /></span>
+              <span><span class="mono-tag block text-dusk">Item {String(i + 1).padStart(2, '0')}</span><span class="mt-1 block text-lg">{c}</span></span>
+            </label>
+          </li>
+        ))}
       </ul>
     </div>
-    <div class="h-fit rounded-[var(--radius-card)] border border-line bg-card p-6 shadow-[var(--shadow-soft)] md:p-8">
-      <h2 class="mb-5 text-2xl font-bold">Request a quote</h2>
-      <QuoteForm />
+  </section>
+
+  {/* 4. Work order with a live WhatsApp preview */}
+  <section id="quote" data-cta-band class="wires dusk-glow scroll-mt-24 text-white">
+    <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+      <div class="text-ink" data-contact-form><QuoteForm /></div>
+      <div>
+        <p class="sec-tag text-dusk">Live preview</p>
+        <h2 class="mt-5 text-4xl md:text-5xl">This is the message <em class="em-accent">we will receive</em></h2>
+        <div class="mt-8 max-w-sm rounded-[1.4rem] border border-steel/40 bg-[#0e1a2c] p-4">
+          <p class="mono-tag mb-3 text-white/45">WhatsApp / {site.phoneDisplay}</p>
+          <p data-preview class="ml-auto w-fit max-w-[92%] rounded-2xl rounded-br-sm bg-wa px-4 py-3 text-[0.95rem] leading-snug text-white" aria-live="polite">{quoteMessage({ path: '/contact/' })}</p>
+        </div>
+        <p class="mt-4 max-w-sm text-sm text-white/60">It updates as you type. Nothing is sent until you press send in WhatsApp.</p>
+      </div>
     </div>
-  </div>
-  <div class="pb-16"></div>
+  </section>
 </Base>
+
+<script>
+  import { quoteMessage } from '../lib/whatsapp';
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form] form');
+  const out = document.querySelector<HTMLElement>('[data-preview]');
+  if (form && out) {
+    const render = () => {
+      const d = new FormData(form);
+      const text = (k: string) => String(d.get(k) ?? '').trim();
+      let m = quoteMessage({ service: text('service') || undefined, area: text('area') || undefined, path: '/contact/' });
+      if (text('name')) m += ` Name: ${text('name')}.`;
+      if (text('msg')) m += ` ${text('msg')}`;
+      out.textContent = m;
+    };
+    form.addEventListener('input', render);
+    form.addEventListener('change', render);
+  }
+</script>
