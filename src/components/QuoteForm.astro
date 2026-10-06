@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
 
+interface Props { service?: string }
+const { service: preset } = Astro.props;
 const services = (await getCollection('services')).filter((s) => s.data.kind === 'service').sort((a, b) => a.data.order - b.data.order);
 // Underline-only fields, like filling in a printed work order.
 const field = 'w-full border-0 border-b border-ink/40 bg-transparent px-0 py-2.5 text-lg text-ink placeholder:text-ink-soft/60 focus:border-night focus:outline-none focus:ring-0';
@@ -24,7 +26,7 @@ const lab = 'mono-tag text-ink-soft';
   <div class="grid gap-1"><label for="q-service" class={lab}>03 Service</label>
     <select id="q-service" name="service" required class={field}>
       <option value="">Choose a service</option>
-      {services.map((s) => <option>{s.data.name}</option>)}
+      {services.map((s) => <option selected={s.data.name === preset}>{s.data.name}</option>)}
     </select></div>
   <div class="grid gap-1"><label for="q-msg" class={lab}>04 Details (optional)</label>
     <textarea id="q-msg" name="msg" rows="2" class={field}></textarea>

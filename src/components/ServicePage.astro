@@ -1,13 +1,14 @@
 ---
+// Service page. Parts: Spec Sheet (hero), what it solves, With vs Without (only when real before/after photos exist), Proof Polaroids,
+// Installation Diagram, Price Dials with a WhatsApp estimator (no prices are invented), chat FAQ, Area Ticker, Next on the Wire, Work Order.
 import { Picture } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
 import Breadcrumbs from './Breadcrumbs.astro';
 import Button from './Button.astro';
-import ProjectGrid from './ProjectGrid.astro';
-import FaqList from './FaqList.astro';
-import AreaChips from './AreaChips.astro';
+import FAQ from './FAQ.astro';
 import QuoteForm from './QuoteForm.astro';
 import { headings, priceBasis } from '../config/headings';
 
@@ -17,94 +18,226 @@ const d = entry.data;
 const path = Astro.url.pathname;
 const wa = waLink(quoteMessage({ service: d.name, path }));
 const h = headings[entry.id] ?? { solves: `What does ${d.name.toLowerCase()} solve?`, install: `How is ${d.name.toLowerCase()} installed?`, price: `What decides the price?` };
-const facts = [
+const specs = [
   ['Used for', d.uses.join(', ')],
   ['Where', `Homes, apartments and buildings across ${site.city}`],
   d.material ? ['Material', d.material] : null,
   site.freeInstallation ? ['Installation', 'Free'] : null,
   d.priceRange ? ['Price', d.priceRange] : ['Price basis', priceBasis[d.category]],
 ].filter(Boolean) as string[][];
+const pad = (n: number) => String(n).padStart(2, '0');
+
+const projects = (await getCollection('projects')).sort((a, b) => +b.data.date - +a.data.date);
+const mine = projects.filter((p) => p.data.services.some((s) => s.id === entry.id));
+const compare = mine.find((p) => p.data.before && p.data.after);
+const tilt = [-2.5, 1.8, -1.2, 2.6, -2, 1.4];
+const ticker = site.areas.map((a) => a.name);
 ---
-<div class="mx-auto max-w-7xl px-4 pt-8 md:px-8">
-  <Breadcrumbs crumbs={crumbs} />
-  <div class="mt-6 grid gap-12 lg:grid-cols-12">
-    <article class="lg:col-span-8">
-      <div class="flex flex-col">
-      <div class="order-first -mx-4 mb-6 sm:mx-0 lg:order-last lg:mb-0 lg:mt-10">
-        <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 1024px) 66vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="hero-zoom aspect-[4/3] w-full object-cover sm:rounded-[var(--radius-card)] lg:aspect-[16/10]" />
-      </div>
-      <h1 class="text-5xl md:text-6xl">{d.title}</h1>
-      <p class="mt-5 max-w-[65ch] text-lg text-ink-soft md:text-xl">{d.answer}</p>
-      <div class="mt-7 flex flex-wrap gap-3">
+{/* 1. Spec Sheet */}
+<section class="wires relative overflow-hidden bg-night text-white">
+  <div class="mx-auto grid max-w-7xl gap-10 px-4 pb-14 pt-28 md:px-8 md:pb-20 md:pt-36 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+    <div>
+      <Breadcrumbs crumbs={crumbs} dark />
+      <h1 class="mt-6 max-w-3xl text-5xl md:text-7xl">{d.title}</h1>
+      <p class="mt-6 max-w-[60ch] text-lg text-white/80 md:text-xl">{d.answer}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
         <Button href={wa} variant="accent" data-service={d.name}>Get a free quote</Button>
-        <Button href={telLink()} variant="ghost" icon="ph:phone-duotone" data-service={d.name}>Call {site.phoneDisplay}</Button>
+        <Button href={telLink()} variant="light" icon="ph:phone-duotone" data-service={d.name}>Call {site.phoneDisplay}</Button>
       </div>
-
-      </div>
-
-      <dl class="mt-10 grid gap-px overflow-hidden rounded-[var(--radius-card)] bg-line sm:grid-cols-2">
-        {facts.map(([k, v]) => (
-          <div class="bg-card p-5"><dt class="text-sm text-ink-soft">{k}</dt><dd class="mt-1 font-semibold">{v}</dd></div>
+    </div>
+    <div class="crop-marks">
+      <Picture src={d.hero} alt={d.heroAlt} widths={[640, 1000, 1400]} sizes="(min-width: 1024px) 45vw, 100vw" formats={['avif']} fallbackFormat="webp" loading="eager" fetchpriority="high" class="hero-zoom aspect-[4/3] w-full border border-steel/40 object-cover" />
+      <dl class="relative -mt-px border border-steel/40 bg-night-2/95 p-5">
+        <p class="mono-tag mb-3 text-dusk">Spec sheet</p>
+        {specs.map(([k, v]) => (
+          <div class="grid grid-cols-[6.5rem_1fr] gap-3 border-t border-steel/20 py-2.5 text-sm first-of-type:border-t-0">
+            <dt class="mono-tag pt-0.5 text-white/55">{k}</dt><dd class="text-white/90">{v}</dd>
+          </div>
         ))}
       </dl>
+    </div>
+  </div>
+</section>
 
-      <section class="pt-14">
-        <h2 class="text-4xl md:text-5xl">{h.solves}</h2>
-        <ul class="mt-6 grid gap-3">
-          {d.problems.map((p: string) => (
-            <li class="flex gap-3"><Icon name="ph:check-circle-duotone" class="mt-0.5 size-6 shrink-0 text-brand" /><span class="max-w-[65ch]">{p}</span></li>
+{/* 2. What it solves */}
+<section class="bg-paper">
+  <div class="grid-paper">
+    <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1fr_1fr]">
+      <div>
+        <p class="sec-tag text-ink-soft">What it solves</p>
+        <h2 class="mt-5 text-4xl md:text-6xl">{h.solves}</h2>
+        <ol class="mt-10 border-t border-ink/25">
+          {d.problems.map((p: string, i: number) => (
+            <li class="grid grid-cols-[3rem_1fr] gap-3 border-b border-ink/25 py-5"><span class="mono-tag pt-1.5 text-dusk-text">{pad(i + 1)}</span><span class="max-w-[52ch] text-lg">{p}</span></li>
           ))}
-        </ul>
-      </section>
+        </ol>
+      </div>
+      <div class="grid content-start gap-4 text-lg text-ink-soft lg:pt-24"><slot /></div>
+    </div>
+  </div>
+</section>
 
-      <div class="prose-body mt-10 grid max-w-[65ch] gap-4 text-lg"><slot /></div>
+{/* 3. With vs Without: needs a real before and after photo of the same job, so it only appears when one exists. */}
+{compare && (
+  <section class="bg-night text-white">
+    <div class="mx-auto max-w-5xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-dusk">Before and after</p>
+      <h2 class="mt-5 text-4xl md:text-6xl">Without it, and <em class="em-accent">with it</em></h2>
+      <div class="ba crop-marks relative mt-12 aspect-[4/3] select-none overflow-hidden border border-steel/40" style="--p:50%">
+        <Picture src={compare.data.after!} alt="After installation" widths={[800, 1400]} sizes="(min-width: 1024px) 64rem, 100vw" formats={['avif']} fallbackFormat="webp" class="absolute inset-0 size-full object-cover" />
+        <div class="absolute inset-0 [clip-path:inset(0_calc(100%-var(--p))_0_0)]">
+          <Picture src={compare.data.before!} alt="Before installation" widths={[800, 1400]} sizes="(min-width: 1024px) 64rem, 100vw" formats={['avif']} fallbackFormat="webp" class="size-full object-cover" />
+        </div>
+        <span class="absolute inset-y-0 w-px bg-dusk" style="left:var(--p)" aria-hidden="true"></span>
+        <span class="mono-tag absolute left-3 top-3 bg-night/80 px-2 py-1">Without</span>
+        <span class="mono-tag absolute right-3 top-3 bg-night/80 px-2 py-1 text-dusk">With</span>
+        <input type="range" min="0" max="100" value="50" aria-label="Drag to compare before and after" class="absolute inset-0 size-full cursor-ew-resize opacity-0" oninput="this.parentElement.style.setProperty('--p', this.value + '%')" />
+      </div>
+    </div>
+  </section>
+)}
 
-      <ProjectGrid service={entry.id} heading={`${d.name} we have installed`} />
+{/* 4. Proof Polaroids */}
+{mine.length > 0 && (
+  <section class="bg-paper-2">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-ink-soft">Proof</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{d.name} <em class="em-brand">we have installed</em></h2>
+      <ul class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+        {mine.slice(0, 6).map((p, i) => (
+          <li class="polaroid" style={`--r:${tilt[i % tilt.length]}deg`}>
+            <a href={`/projects/${p.id}/`} class="group block bg-white p-3 pb-5 shadow-[0_14px_30px_-18px_rgb(11_19_43/0.5)]">
+              <Picture src={p.data.photos[0].src} alt={p.data.photos[0].alt} widths={[400, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-square w-full object-cover" />
+              <span class="mt-4 block font-display text-xl leading-snug group-hover:text-dusk-text">{p.data.title}</span>
+              <span class="mono-tag mt-1 block text-ink-soft">{pad(i + 1)} / Hyderabad</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
 
-      {d.installSteps.length > 0 && (
-        <section class="py-14">
-          <h2 class="text-4xl md:text-5xl">{h.install}</h2>
-          <ol class="mt-8 grid gap-4 sm:grid-cols-2">
-            {d.installSteps.map((s: string, i: number) => (
-              <li class="flex gap-4 rounded-[var(--radius-card)] border border-line bg-card p-5">
-                <span class="grid size-9 shrink-0 place-items-center rounded-full bg-brand text-sm font-bold text-white">{i + 1}</span>
-                <span>{s}</span>
+{/* 5. Installation Diagram */}
+{d.installSteps.length > 0 && (
+  <section class="bg-night text-white">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-dusk">Installation</p>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{h.install}</h2>
+      <ol class="relative mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
+        <span class="thread absolute bottom-0 left-[0.45rem] top-0 w-px bg-steel/50 md:bottom-auto md:left-0 md:right-0 md:top-[0.45rem] md:h-px md:w-auto" aria-hidden="true"></span>
+        {d.installSteps.map((s: string, i: number) => (
+          <li class="relative pl-9 md:pl-0 md:pt-9">
+            <span class="absolute left-0 top-1 size-3.5 rotate-45 border border-dusk bg-night md:top-0" aria-hidden="true"></span>
+            <p class="mono-tag text-dusk">Step {pad(i + 1)}</p>
+            <p class="mt-2 text-lg text-white/85">{s}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+)}
+
+{/* 6. Price Dials and estimator. It collects details for a quote and shows no price. */}
+{d.priceFactors.length > 0 && (
+  <section class="bg-paper">
+    <div class="grid-paper">
+      <div class="mx-auto grid max-w-7xl gap-14 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1fr_0.9fr]">
+        <div>
+          <p class="sec-tag text-ink-soft">Price</p>
+          <h2 class="mt-5 text-4xl md:text-6xl">{h.price}</h2>
+          <ul class="mt-12 grid gap-6 sm:grid-cols-2">
+            {d.priceFactors.map((f: string, i: number) => (
+              <li class="flex items-center gap-4">
+                <svg viewBox="0 0 48 48" class="size-14 shrink-0" aria-hidden="true">
+                  <circle cx="24" cy="24" r="21" fill="none" stroke="#16181d" stroke-opacity="0.3" stroke-dasharray="2 4" />
+                  <circle cx="24" cy="24" r="21" fill="none" stroke="#e07a2e" stroke-width="2" pathLength="1" stroke-dasharray={`${0.35 + i * 0.12} 1`} transform="rotate(-90 24 24)" />
+                  <text x="24" y="28" text-anchor="middle" font-family="var(--font-mono)" font-size="11" fill="#16181d">{pad(i + 1)}</text>
+                </svg>
+                <span class="text-lg leading-snug">{f}</span>
               </li>
             ))}
-          </ol>
-        </section>
-      )}
-
-      {d.priceFactors.length > 0 && (
-        <section class="pb-14">
-          <h2 class="text-4xl md:text-5xl">{h.price}</h2>
-          <ul class="mt-6 flex flex-wrap gap-3">
-            {d.priceFactors.map((f: string) => <li class="rounded-full border border-line bg-card px-4 py-2">{f}</li>)}
           </ul>
-        </section>
-      )}
-
-      <FaqList faqs={d.faqs} />
-      <AreaChips />
-
-      {related.length > 0 && (
-        <section class="py-14">
-          <h2 class="text-4xl md:text-5xl">Related services</h2>
-          <ul class="mt-6 grid gap-3 sm:grid-cols-2">
-            {related.map((r) => (
-              <li><a href={`/${r.id}/`} class="flex items-center justify-between rounded-[var(--radius-card)] border border-line bg-card p-5 font-semibold hover:border-brand">{r.data.name}<Icon name="ph:arrow-right-bold" class="size-5 text-brand" /></a></li>
-            ))}
-          </ul>
-        </section>
-      )}
-    </article>
-
-    <aside class="lg:col-span-4">
-      <div class="top-24 rounded-[var(--radius-card)] border border-line bg-card p-6 shadow-[var(--shadow-soft)] lg:sticky">
-        <h2 class="text-xl font-bold">Get a free quote</h2>
-        <p class="mb-5 mt-1 text-sm text-ink-soft">Tell us the area and service. We reply on WhatsApp.</p>
-        <QuoteForm />
+        </div>
+        <form data-estimate data-service={d.name} class="relative grid content-start gap-5 border border-ink/20 bg-card p-6 md:p-8">
+          <p class="mono-tag text-ink-soft">Quote estimator / no price shown</p>
+          <p class="text-ink-soft">Fill in what you know. We reply on WhatsApp with a clear price.</p>
+          <div class="grid gap-1"><label for="e-area" class="mono-tag text-ink-soft">Approximate area (sq ft)</label>
+            <input id="e-area" name="area" inputmode="numeric" placeholder="For example 40" class="w-full border-0 border-b border-ink/40 bg-transparent px-0 py-2.5 text-lg focus:border-night focus:outline-none focus:ring-0" /></div>
+          <div class="grid gap-1"><label for="e-floor" class="mono-tag text-ink-soft">Floor</label>
+            <select id="e-floor" name="floor" class="w-full border-0 border-b border-ink/40 bg-transparent px-0 py-2.5 text-lg focus:border-night focus:outline-none focus:ring-0">
+              <option value="">Not sure</option><option>Ground to 3rd floor</option><option>4th to 10th floor</option><option>11th floor or higher</option>
+            </select></div>
+          <div class="grid gap-1"><label for="e-open" class="mono-tag text-ink-soft">Number of openings</label>
+            <input id="e-open" name="openings" inputmode="numeric" placeholder="For example 2" class="w-full border-0 border-b border-ink/40 bg-transparent px-0 py-2.5 text-lg focus:border-night focus:outline-none focus:ring-0" /></div>
+          <button class="group inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-wa px-6 py-3 font-semibold text-white transition-transform active:scale-[0.98]">
+            Get my quote on WhatsApp <Icon name="ph:paper-plane-tilt-duotone" class="size-5 transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:translate-x-1.5" />
+          </button>
+        </form>
       </div>
-    </aside>
+    </div>
+  </section>
+)}
+
+{/* 7. Chat FAQ */}
+<FAQ faqs={d.faqs} tag="Questions" service={d.name} />
+
+{/* 8. Area Ticker: decorative; the full list of areas is in the footer-linked Areas page */}
+<section class="overflow-hidden border-y border-steel/30 bg-night py-5 text-white" aria-label="Areas we serve">
+  <div class="ticker flex w-max gap-10 whitespace-nowrap" aria-hidden="true">
+    {[0, 1].map(() => ticker.map((n) => <span class="mono-tag flex items-center gap-10 text-white/70">{n}<i class="size-1.5 rotate-45 bg-dusk"></i></span>))}
   </div>
-</div>
+  <p class="sr-only">We install in {ticker.join(', ')}.</p>
+</section>
+
+{/* 9. Next on the Wire */}
+{related.length > 0 && (
+  <section class="bg-paper">
+    <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+      <p class="sec-tag text-ink-soft">Next on the wire</p>
+      <h2 class="mt-5 text-4xl md:text-6xl">Related services</h2>
+      <ul class="relative mt-12 grid gap-4 sm:grid-cols-2">
+        {related.map((r, i) => (
+          <li><a href={`/${r.id}/`} class="group flex items-center justify-between gap-4 border border-ink/25 bg-card p-6 transition-colors hover:border-night">
+            <span><span class="mono-tag text-dusk-text">{pad(i + 1)}</span><span class="mt-2 block font-display text-2xl">{r.data.name}</span></span>
+            <Icon name="ph:arrow-right-light" class="size-7 shrink-0 transition-transform duration-300 group-hover:translate-x-1.5" />
+          </a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+)}
+
+{/* 10. Work Order */}
+<section id="quote" data-cta-band class="wires dusk-glow scroll-mt-24 text-white">
+  <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1fr_0.9fr] lg:items-center">
+    <div>
+      <p class="sec-tag text-dusk">Free quote</p>
+      <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Tell us the area and the space. <em class="em-accent">We reply on WhatsApp.</em></h2>
+      <p class="mt-5 max-w-md text-white/75">Free installation. We will call you within 30 minutes to confirm a visit.</p>
+    </div>
+    <div class="text-ink"><QuoteForm service={d.name} /></div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 640px) { .polaroid { transform: rotate(var(--r)); transition: transform 500ms var(--ease-out-quint); } .polaroid:hover { transform: rotate(0deg) translateY(-4px); } }
+  @media (prefers-reduced-motion: no-preference) { .ticker { animation: tick 60s linear infinite; } .ticker:hover { animation-play-state: paused; } }
+  @keyframes tick { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .polaroid { transform: none !important; } .ticker { flex-wrap: wrap; width: auto; padding-inline: 1rem; } }
+</style>
+
+<script>
+  // Estimator: builds a WhatsApp message from whatever the visitor filled in. It never shows a price.
+  import { waLink, quoteMessage } from '../lib/whatsapp';
+  document.querySelectorAll<HTMLFormElement>('[data-estimate]').forEach((f) =>
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const d = new FormData(f);
+      const bits = [d.get('area') && `Area: about ${d.get('area')} sq ft`, d.get('floor') && `Floor: ${d.get('floor')}`, d.get('openings') && `Openings: ${d.get('openings')}`].filter(Boolean);
+      const m = `${quoteMessage({ service: f.dataset.service, path: location.pathname })}${bits.length ? ' ' + bits.join('. ') + '.' : ''}`;
+      (window as any).gtag?.('event', 'lead_estimator', { service: f.dataset.service, page: location.pathname });
+      window.location.href = waLink(m);
+    }),
+  );
+</script>

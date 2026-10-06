@@ -4,13 +4,14 @@
 import { Icon } from 'astro-icon/components';
 import { waLink, quoteMessage } from '../lib/whatsapp';
 
-interface Props { faqs: { q: string; a: string }[]; heading?: string }
-const { faqs, heading = 'Questions people ask before they call' } = Astro.props;
-const wa = waLink(quoteMessage({ path: '/' }));
+interface Props { faqs: { q: string; a: string }[]; heading?: string; tag?: string; service?: string }
+const { faqs, heading = 'Questions people ask before they call', tag = '06 / Questions', service } = Astro.props;
+const wa = waLink(quoteMessage({ service, path: Astro.url.pathname }));
 ---
+{faqs.length > 0 && (
 <section id="faq" class="scroll-mt-24 bg-night-2 text-white">
   <div class="mx-auto max-w-4xl px-4 py-20 md:px-8 md:py-28">
-    <p class="sec-tag text-dusk">06 / Questions</p>
+    <p class="sec-tag text-dusk">{tag}</p>
     <h2 class="mt-5 text-4xl md:text-6xl">{heading}</h2>
     <div class="mt-12 grid gap-5">
       {faqs.map((f, i) => (
@@ -29,3 +30,4 @@ const wa = waLink(quoteMessage({ path: '/' }));
     </div>
   </div>
 </section>
+)}
