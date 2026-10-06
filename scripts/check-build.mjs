@@ -38,7 +38,10 @@ for (const f of files.filter((f) => f.endsWith('.html'))) {
     try { JSON.parse(s.text); } catch { err('invalid JSON-LD'); }
   }
   for (const img of doc.querySelectorAll('img')) {
-    if (!img.getAttribute('alt')?.trim()) err(`img without alt: ${img.getAttribute('src')}`);
+    const alt = img.getAttribute('alt');
+    // Missing alt always fails. Empty alt is valid only for decorative images inside a link or label that already has text.
+    const decorativeOk = alt === '' && Boolean(img.closest('a')?.text.trim() || img.parentNode?.text.trim());
+    if (alt === null || alt === undefined || (!alt.trim() && !decorativeOk)) err(`img without alt: ${img.getAttribute('src')}`);
     if (!img.getAttribute('width') || !img.getAttribute('height')) err(`img without dimensions: ${img.getAttribute('src')}`);
   }
   for (const a of doc.querySelectorAll('a[href^="/"]')) {

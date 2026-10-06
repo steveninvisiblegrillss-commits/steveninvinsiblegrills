@@ -20,9 +20,9 @@ describe('schema', () => {
     expect(biz['@type']).toBe('HomeAndConstructionBusiness');
     expect(biz.areaServed).toHaveLength(site.areas.length);
   });
-  it('omits address and logo until confirmed', () => {
+  it('omits address until confirmed and publishes the square logo', () => {
     expect(biz.address).toBeUndefined();
-    expect(biz.logo).toBeUndefined();
+    expect(biz.logo.url).toBe(`${site.url}/logo.png`);
   });
   it('service references business by @id', () => {
     const svc = json['@graph'].find((n: any) => n['@type'] === 'Service');

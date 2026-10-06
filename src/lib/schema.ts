@@ -3,7 +3,6 @@ import { site } from '../config/site';
 const abs = (p: string) => new URL(p, site.url).href;
 const BIZ = `${site.url}/#business`;
 
-// No `logo`: the brand has no logo yet (client commissioning one). Add `logo` here when it exists.
 export function businessNode() {
   const n: Record<string, unknown> = {
     '@type': 'HomeAndConstructionBusiness',
@@ -12,6 +11,7 @@ export function businessNode() {
     alternateName: site.alternateNames,
     slogan: site.tagline,
     url: abs('/'),
+    logo: { '@type': 'ImageObject', url: abs('/logo.png'), width: 512, height: 512 },
     image: abs('/og-default.jpg'),
     telephone: site.phoneE164,
     email: site.email,

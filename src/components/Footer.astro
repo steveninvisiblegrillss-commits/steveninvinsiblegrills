@@ -1,5 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import markLight from '../assets/brand/logo-mark-light.png';
 import { site } from '../config/site';
 import { telLink } from '../lib/whatsapp';
 
@@ -9,7 +11,7 @@ const hubs = services.filter((s) => s.data.kind === 'hub');
 <footer class="bg-brand-deep pb-24 text-white/85 md:pb-0">
   <div class="mx-auto grid max-w-7xl gap-10 px-4 py-16 md:grid-cols-5 md:px-8">
     <div class="grid content-start gap-3">
-      <p class="text-lg font-bold text-white">{site.name}</p>
+      <p class="flex items-center gap-2.5 text-lg font-bold text-white"><Image src={markLight} alt="" width={80} height={80} class="size-10" />{site.name}</p>
       <p class="max-w-xs text-sm">Safety nets, invisible grills and cloth hangers for homes and buildings across Hyderabad and Secunderabad.</p>
       <a href={telLink()} class="font-semibold text-white">{site.phoneDisplay}</a>
       <a href={`mailto:${site.email}`} class="text-sm underline-offset-4 hover:underline">{site.email}</a>

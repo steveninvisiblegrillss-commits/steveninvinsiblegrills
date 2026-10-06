@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
+import { Image } from 'astro:assets';
+import markLight from '../assets/brand/logo-mark-light.png';
 import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
 
@@ -15,7 +17,10 @@ const wa = waLink(quoteMessage({ service, area, path: here }));
 <header class="sticky top-0 z-30 h-0">
   <div class="mx-auto max-w-7xl px-3 pt-3 md:px-6">
     <div class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/80 px-4 text-white shadow-lg shadow-black/20 backdrop-blur-md">
-      <a href="/" class="whitespace-nowrap text-base font-bold tracking-tight sm:text-lg" aria-label={`${site.name} home`}>{site.name}</a>
+      <a href="/" class="flex items-center gap-2.5 whitespace-nowrap text-base font-bold tracking-tight sm:text-lg" aria-label={`${site.name} home`}>
+        <Image src={markLight} alt="" width={64} height={64} loading="eager" class="size-9" />
+        {site.name}
+      </a>
 
       <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
         {site.sections.map((n) => (
@@ -41,7 +46,7 @@ const wa = waLink(quoteMessage({ service, area, path: here }));
 {/* Native popover: renders in the top layer, so the glass bar above cannot clip it. */}
 <div id="menu" popover class="m-0 size-full max-h-none max-w-none overflow-y-auto border-0 bg-brand-deep p-6 text-white">
   <div class="flex items-center justify-between">
-    <span class="text-lg font-bold">{site.name}</span>
+    <span class="flex items-center gap-2.5 text-lg font-bold"><Image src={markLight} alt="" width={64} height={64} class="size-8" />{site.name}</span>
     <button popovertarget="menu" popovertargetaction="hide" class="grid size-10 place-items-center rounded-full border border-white/20" aria-label="Close menu">
       <Icon name="ph:x-bold" class="size-5" />
     </button>
