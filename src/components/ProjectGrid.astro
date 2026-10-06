@@ -18,9 +18,9 @@ const chips = [...new Map(items.flatMap((i) => i.svc).map((s) => [s.id, s.data.n
     {heading && <h2 class="text-3xl font-bold md:text-4xl">{heading}</h2>}
     {filters && chips.length > 1 && (
       <div class="mt-6 flex flex-wrap gap-2" role="group" aria-label="Filter projects by service" data-filters>
-        <button type="button" data-filter="all" aria-pressed="true" class="min-h-11 rounded-full border border-brand px-4 text-sm font-semibold aria-pressed:bg-brand aria-pressed:text-white dark:aria-pressed:text-brand-deep">All</button>
+        <button type="button" data-filter="all" aria-pressed="true" class="min-h-11 rounded-full border border-brand px-4 text-sm font-semibold aria-pressed:bg-brand aria-pressed:text-white">All</button>
         {chips.map(([id, name]) => (
-          <button type="button" data-filter={id} aria-pressed="false" class="min-h-11 rounded-full border border-line bg-card px-4 text-sm font-medium aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-white dark:aria-pressed:text-brand-deep">{name}</button>
+          <button type="button" data-filter={id} aria-pressed="false" class="min-h-11 rounded-full border border-line bg-card px-4 text-sm font-medium aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-white">{name}</button>
         ))}
       </div>
     )}
