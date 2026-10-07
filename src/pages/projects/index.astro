@@ -6,6 +6,7 @@ import Base from '../../layouts/Base.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { waLink, quoteMessage } from '../../lib/whatsapp';
+import { categories } from '../../config/categories';
 
 const all = (await getCollection('projects')).sort((a, b) => +a.data.date - +b.data.date);
 // Log numbers run oldest to newest, so a job keeps its number as new ones are added. The page shows newest first.
@@ -13,7 +14,8 @@ const jobs = await Promise.all(
   all.map(async (p, i) => ({ p, n: i + 1, area: (await getEntry(p.data.area))!.data.name, svc: await getEntries(p.data.services) })),
 );
 const items = [...jobs].reverse();
-const chips = [...new Map(jobs.flatMap((j) => j.svc).map((s) => [s.id, s.data.name])).entries()];
+// One switch per service group, so a job never sits under two overlapping switches (for example All Sports Nets and Cricket Practice Nets).
+const chips = Object.entries(categories).filter(([id]) => jobs.some((j) => j.svc.some((s) => s.data.category === id))).map(([id, c]) => [id, c.label] as [string, string]);
 const total = jobs.length;
 const pad = (n: number) => String(n).padStart(2, '0');
 const digits = pad(total).split('');
@@ -58,7 +60,7 @@ const wa = waLink(quoteMessage({ path: '/projects/' }));
 
         <ul class="mt-10 grid gap-y-14 md:block md:columns-2 md:gap-x-8 lg:columns-3" data-journal>
           {items.map(({ p, n, area, svc }, i) => (
-            <li class="journal-item md:mb-14 md:break-inside-avoid" data-services={svc.map((s) => s.id).join(' ')}>
+            <li class="journal-item md:mb-14 md:break-inside-avoid" data-services={[...new Set(svc.map((s) => s.data.category))].join(' ')}>
               <a href={`/projects/${p.id}/`} class="group block">
                 <span class="crop-marks crop-marks-ink block">
                   <span class="relative block overflow-hidden border border-ink/20 bg-night">

@@ -15,7 +15,7 @@ const here = Astro.url.pathname;
 const all = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const hubs = all.filter((s) => s.data.kind === 'hub');
 const wa = waLink(quoteMessage({ service, area, path: here }));
-const groups = hubs.map((h) => ({ hub: h, items: all.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category) }));
+const groups = hubs.map((h) => ({ hub: h, items: all.filter((s) => s.data.kind === 'service' && s.data.listed && s.data.category === h.data.category) }));
 // Preview photos for the mega menu (small, lazy, only shown while hovering a service).
 const previews = new Map<string, string>();
 for (const s of all) previews.set(s.id, (await getImage({ src: s.data.hero, width: 480, format: 'webp', quality: 60 })).src);

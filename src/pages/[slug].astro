@@ -1,4 +1,5 @@
 ---
+import { getImage } from 'astro:assets';
 import { getCollection, getEntries, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import ServicePage from '../components/ServicePage.astro';
@@ -28,7 +29,7 @@ const { type, service, area } = Astro.props;
 const path = Astro.url.pathname;
 const d = service.data;
 const hubPath = `/${d.category}/`;
-const hubName = d.category.replace('-', ' ');
+const hubName = (await getEntries([{ collection: 'services', id: d.category }]))[0]?.data.name ?? d.category;
 const crumbs = [
   { name: 'Home', path: '/' },
   ...(d.kind === 'service' ? [{ name: hubName, path: hubPath }] : []),
@@ -40,13 +41,14 @@ const schema = [
   ...(d.faqs.length ? [faqNode(d.faqs, path)] : []),
 ];
 const { Content } = await render(service);
+const og = await getImage({ src: d.hero, width: 1200, height: 630, fit: 'cover', format: 'jpeg' });
 const related = await getEntries(d.related);
 const title = area ? `${d.name} in ${area.data.name}, Hyderabad` : d.seoTitle;
 const description = area
   ? `${d.name} in ${area.data.name}. Real installations by Steven Invisible Grills, free installation. WhatsApp for a quote.`
   : d.description;
 ---
-<Base title={title} description={description} path={path} schema={schema} service={d.name} area={area?.data.name} flush darkHero>
+<Base title={title} description={description} path={path} image={og.src} schema={schema} service={d.name} area={area?.data.name} flush darkHero>
   {type === 'hub' && <HubPage entry={service} crumbs={crumbs}><Content /></HubPage>}
   {type === 'service' && <ServicePage entry={service} related={related} crumbs={crumbs}><Content /></ServicePage>}
   {type === 'combo' && <ComboPage entry={service} area={area} crumbs={crumbs} />}

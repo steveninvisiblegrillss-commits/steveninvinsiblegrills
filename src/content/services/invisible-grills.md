@@ -39,9 +39,6 @@ finder:
   - label: "Rust and upkeep"
     services:
       - "stainless-steel-invisible-grills"
-  - label: "Not sure about the price"
-    services:
-      - "invisible-grill-price"
 faqs:
   - q: "What is an invisible grill?"
     a: "It is a set of thin stainless steel wires fixed close together across an opening. It protects like a grill but looks almost invisible."

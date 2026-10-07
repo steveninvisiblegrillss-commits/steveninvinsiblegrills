@@ -16,9 +16,9 @@ const wa = waLink(quoteMessage({ service, area, path: Astro.url.pathname }));
     <div>
       <p class="sec-tag text-dusk">Free quote</p>
       {area ? (
-        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">In {area}? <em class="em-accent">Send us a photo.</em></h2>
+        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">In {area}? Send us a photo.</h2>
       ) : service ? (
-        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Want {service.toLowerCase()}? <em class="em-accent">Send a photo of the space.</em></h2>
+        <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Want {service.toLowerCase()}? Send a photo of the space.</h2>
       ) : (
         <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Send us a photo of your balcony. <em class="em-accent">We reply with a quote.</em></h2>
       )}

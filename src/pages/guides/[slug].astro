@@ -16,10 +16,11 @@ const path = Astro.url.pathname;
 const { Content } = await render(guide);
 const services = await getEntries(d.services);
 const img = await getImage({ src: d.hero, width: 1200, format: 'webp' });
+const og = await getImage({ src: d.hero, width: 1200, height: 630, fit: 'cover', format: 'jpeg' });
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Guides', path: '/guides/' }, { name: d.title, path }];
 const wa = waLink(quoteMessage({ path }));
 ---
-<Base title={d.seoTitle} description={d.description} path={path} schema={[breadcrumbNode(crumbs), articleNode({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, image: img.src })]} flush darkHero>
+<Base title={d.seoTitle} image={og.src} description={d.description} path={path} schema={[breadcrumbNode(crumbs), articleNode({ title: d.title, description: d.description, path, published: d.published, updated: d.updated, image: img.src })]} flush darkHero>
   <PageHero tag="Guide" title={d.title} lead={d.answer} crumbs={crumbs} narrow>
     <p class="mono-tag mt-6 text-white/55">By Steven Invisible Grills / Published {d.published.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
   </PageHero>

@@ -81,7 +81,7 @@ const tilt = [-2.5, 1.8, -1.2, 2.6, -2, 1.4];
   <section class="bg-night text-white">
     <div class="mx-auto max-w-5xl px-4 py-20 md:px-8 md:py-28">
       <p class="sec-tag text-dusk">Before and after</p>
-      <h2 class="mt-5 text-4xl md:text-6xl">Without it, and <em class="em-accent">with it</em></h2>
+      <h2 class="mt-5 text-4xl md:text-6xl">Without it, and with it</h2>
       <div class="ba crop-marks relative mt-12 aspect-[4/3] select-none overflow-hidden border border-steel/40" style="--p:50%">
         <Picture src={compare.data.after!} alt="After installation" widths={[800, 1400]} sizes="(min-width: 1024px) 64rem, 100vw" formats={['avif']} fallbackFormat="webp" class="absolute inset-0 size-full object-cover" />
         <div class="absolute inset-0 [clip-path:inset(0_calc(100%-var(--p))_0_0)]">
@@ -101,7 +101,7 @@ const tilt = [-2.5, 1.8, -1.2, 2.6, -2, 1.4];
   <section class="bg-paper-2">
     <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
       <p class="sec-tag text-ink-soft">Proof</p>
-      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{d.name} <em class="em-brand">we have installed</em></h2>
+      <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{d.name} we have installed</h2>
       <ul class="mt-14 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
         {mine.slice(0, 6).map((p, i) => (
           <li class="polaroid" style={`--r:${tilt[i % tilt.length]}deg`}>
@@ -204,7 +204,7 @@ const tilt = [-2.5, 1.8, -1.2, 2.6, -2, 1.4];
   <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1fr_0.9fr] lg:items-center">
     <div>
       <p class="sec-tag text-dusk">Free quote</p>
-      <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Tell us the area and the space. <em class="em-accent">We reply on WhatsApp.</em></h2>
+      <h2 class="mt-5 max-w-xl text-4xl md:text-6xl">Tell us the area and the space. We reply on WhatsApp.</h2>
       <p class="mt-5 max-w-md text-white/75">Free installation. We will call you within 30 minutes to confirm a visit.</p>
     </div>
     <div class="text-ink"><QuoteForm service={d.name} /></div>

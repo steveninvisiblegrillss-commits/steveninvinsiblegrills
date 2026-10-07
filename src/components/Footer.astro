@@ -58,7 +58,7 @@ const glow = { tower: 7, floor: 3 }; // the one window that is lit
           <div>
             <a href={`/${h.id}/`} class="inline-flex min-h-11 items-center font-display text-xl text-white hover:text-dusk">{h.data.name}</a>
             <ul class="hidden gap-1 text-[0.9rem] md:grid">
-              {services.filter((s) => s.data.kind === 'service' && s.data.category === h.data.category).map((s) => (
+              {services.filter((s) => s.data.kind === 'service' && s.data.listed && s.data.category === h.data.category).map((s) => (
                 <li><a href={`/${s.id}/`} class="text-white/65 hover:text-white hover:underline">{s.data.name}</a></li>
               ))}
             </ul>

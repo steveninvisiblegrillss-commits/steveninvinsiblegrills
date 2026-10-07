@@ -10,7 +10,7 @@ import { categories } from '../config/categories';
 const all = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const groups = all
   .filter((s) => s.data.kind === 'hub')
-  .map((hub) => ({ hub, items: all.filter((s) => s.data.kind === 'service' && s.data.category === hub.data.category), c: categories[hub.data.category as keyof typeof categories] }));
+  .map((hub) => ({ hub, items: all.filter((s) => s.data.kind === 'service' && s.data.listed && s.data.category === hub.data.category), c: categories[hub.data.category as keyof typeof categories] }));
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <section id="services" class="scroll-mt-24 bg-night text-white">
@@ -18,7 +18,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   <div class="mx-auto max-w-7xl px-4 pb-6 pt-20 md:px-8 md:pt-28">
     <p class="sec-tag text-dusk">03 / Services</p>
     <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Everything we <em class="em-accent">install</em></h2>
-    <p class="mt-5 max-w-[60ch] text-white/70">{all.filter((s) => s.data.kind === 'service').length} services in four groups. Every one is fitted by our team, with free installation. Tap Get a quote on any of them to send us a photo on WhatsApp.</p>
+    <p class="mt-5 max-w-[60ch] text-white/70">{all.filter((s) => s.data.kind === 'service' && s.data.listed).length} services in four groups. Every one is fitted by our team, with free installation. Tap Get a quote on any of them to send us a photo on WhatsApp.</p>
     <nav aria-label="Jump to a service group" class="mt-8 flex flex-wrap gap-2.5">
       {groups.map(({ hub, items, c }) => (
         <a href={`#group-${hub.id}`} style={`--a:${c.acc}`} class="mono-tag inline-flex min-h-11 items-center gap-2.5 border border-white/25 px-4 transition-colors hover:bg-[var(--a)] hover:text-night"><i class="size-2.5 rounded-full" style={`background:${c.acc}`}></i>{hub.data.name}<span class="opacity-70">{items.length}</span></a>

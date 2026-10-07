@@ -18,11 +18,12 @@ const [area] = await getEntries([d.area]);
 const services = await getEntries(d.services);
 const { Content } = await render(project);
 const imgs = await Promise.all(d.photos.map(async (ph) => ({ ph, url: (await getImage({ src: ph.src, width: 1200, format: 'webp' })).src })));
+const og = await getImage({ src: d.photos[0].src, width: 1200, height: 630, fit: 'cover', format: 'jpeg' });
 const crumbs = [{ name: 'Home', path: '/' }, { name: 'Projects', path: '/projects/' }, { name: d.title, path }];
 const pad = (x: number) => String(x).padStart(2, '0');
 const card = [['Property', d.propertyType], ['Problem', d.problem], ['Solution', d.solution]].filter(([, v]) => v) as string[][];
 ---
-<Base title={d.title} description={`${d.title} in ${area.data.name}. Real installation by Steven Invisible Grills. Free installation, WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs), ...imgs.map(({ ph, url }) => imageNode({ path, caption: ph.alt, src: url, area: area.data.name }))]} service={services[0]?.data.name} area={area.data.name} flush darkHero>
+<Base title={d.title} image={og.src} description={`${d.title} in ${area.data.name}. Real installation by Steven Invisible Grills. Free installation, WhatsApp for a quote.`} path={path} schema={[breadcrumbNode(crumbs), ...imgs.map(({ ph, url }) => imageNode({ path, caption: ph.alt, src: url, area: area.data.name }))]} service={services[0]?.data.name} area={area.data.name} flush darkHero>
   <section class="wires bg-night text-white">
     <div class="mx-auto max-w-7xl px-4 pb-12 pt-28 md:px-8 md:pb-16 md:pt-36">
       <Breadcrumbs crumbs={crumbs} dark />

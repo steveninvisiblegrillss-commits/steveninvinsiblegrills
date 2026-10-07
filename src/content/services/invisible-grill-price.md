@@ -1,5 +1,6 @@
 ---
 kind: service
+listed: false
 category: invisible-grills
 order: 16
 name: "Invisible Grill Price"

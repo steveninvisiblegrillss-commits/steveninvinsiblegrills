@@ -28,6 +28,7 @@ const services = defineCollection({
       faqs: z.array(faq).default([]),
       related: z.array(reference('services')).default([]),
       legacyUrls: z.array(z.string().regex(/^\/.*\.php$/)).default([]),
+      listed: z.boolean().default(true), // false: the page exists but is not offered as a service in menus, forms or lists
       order: z.number(),
     }),
 });
