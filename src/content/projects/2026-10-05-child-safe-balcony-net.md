@@ -9,4 +9,4 @@ photos:
   - src: ../../assets/images/projects/child-safe-balcony-net-hyderabad.webp
     alt: "Child looking out through a white balcony safety net at night on an apartment balcony"
 ---
-Real installation by our team. Locality and net details to be added by the client.
+Real installation by our team.

@@ -8,4 +8,4 @@ photos:
   - src: ../../assets/images/projects/bird-spikes-installation-tiled-roof-hyderabad.webp
     alt: "Rows of bird spikes fixed along red roof tiles to stop pigeons landing"
 ---
-Real installation by our team. Location and client details to be confirmed by the client.
+Real installation by our team.

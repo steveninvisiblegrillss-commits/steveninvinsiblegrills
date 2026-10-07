@@ -8,4 +8,4 @@ photos:
   - src: ../../assets/images/projects/balcony-net-installer-with-fitted-net-hyderabad.webp
     alt: "Our installer standing beside a balcony safety net fitted along a curved apartment railing"
 ---
-Real installation by our team. Locality, flat type and net details to be added by the client.
+Real installation by our team.

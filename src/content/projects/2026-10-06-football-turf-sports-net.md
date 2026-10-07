@@ -8,4 +8,4 @@ photos:
   - src: ../../assets/images/projects/football-turf-sports-net-hyderabad.webp
     alt: "Children playing football on an artificial turf enclosed by a green sports net"
 ---
-Real installation by our team. Location and net details to be added by the client.
+Real installation by our team.

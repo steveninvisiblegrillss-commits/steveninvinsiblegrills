@@ -9,4 +9,4 @@ photos:
   - src: ../../assets/images/projects/cricket-practice-net-installation-hyderabad.webp
     alt: "Green cricket practice net corridor with a pole frame installed on a ground"
 ---
-Real installation by our team. Location and client details to be confirmed by the client.
+Real installation by our team.
