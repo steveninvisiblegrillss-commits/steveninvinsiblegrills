@@ -62,7 +62,7 @@ const groups = Object.entries(categories) as [CategoryId, (typeof categories)[Ca
 
     <ul class="mt-10 columns-2 gap-3 md:columns-3 md:gap-5 lg:columns-4" data-mosaic>
       {tiles.map(([img, caption, href, alt, cat], i) => (
-        <li class="tile mb-3 break-inside-avoid transition-[opacity,filter] duration-500 md:mb-5" data-cat={cat} style={`--c:${categories[cat].acc}`}>
+        <li class:list={['tile mb-3 break-inside-avoid transition-[opacity,filter] duration-500 md:mb-5', i >= 12 && 'extra max-md:hidden']} data-cat={cat} style={`--c:${categories[cat].acc}`}>
           <a href={href} class="group relative block overflow-hidden border border-white/15 bg-night-2">
             <Picture src={img} alt={alt} widths={[372, 500, 800]} sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw" formats={['avif']} fallbackFormat="webp" loading={i < 6 ? 'eager' : 'lazy'} class="h-auto w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.06]" />
             <span class="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-night/90 via-night/55 to-transparent px-3 pb-3 pt-10 text-sm font-semibold leading-tight">
@@ -73,6 +73,8 @@ const groups = Object.entries(categories) as [CategoryId, (typeof categories)[Ca
         </li>
       ))}
     </ul>
+    <button type="button" data-more class="mono-tag mt-6 flex min-h-12 w-full items-center justify-center border border-white/30 text-white transition-colors hover:bg-white/10 md:hidden">Show {tiles.length - 12} more photos</button>
+    <noscript><style>.extra { display: block !important; } [data-more] { display: none; }</style></noscript>
   </div>
 </section>
 
@@ -86,6 +88,8 @@ const groups = Object.entries(categories) as [CategoryId, (typeof categories)[Ca
   // Colour chips: choosing a group dims the other photos. Nothing is hidden, and without JavaScript every photo stays in full colour.
   const bar = document.querySelector<HTMLElement>('[data-mosaic-chips]');
   const tiles = document.querySelectorAll<HTMLElement>('[data-mosaic] .tile');
+  const more = document.querySelector<HTMLButtonElement>('[data-more]');
+  more?.addEventListener('click', () => { document.querySelectorAll('[data-mosaic] .extra').forEach((t) => t.classList.remove('max-md:hidden')); more.remove(); });
   bar?.addEventListener('click', (e) => {
     const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
     if (!btn) return;

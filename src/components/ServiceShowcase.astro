@@ -47,9 +47,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
           </div>
         </div>
 
-        <ul class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <p class="mono-tag mt-8 text-[color:var(--a)] sm:hidden">Swipe to see all {items.length} →</p>
+        <ul class="no-scrollbar -mx-4 mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {items.map((s, i) => (
-            <li class:list={['flex flex-col p-4 md:p-5', dark ? 'bg-white/[0.06]' : 'bg-white/70']}>
+            <li class:list={['flex w-[84%] shrink-0 snap-center flex-col p-4 sm:w-auto md:p-5', dark ? 'bg-white/[0.06]' : 'bg-white/70']}>
               <a href={`/${s.id}/`} class="group block">
                 <span class="relative block overflow-hidden">
                   <Picture src={s.data.hero} alt={s.data.heroAlt} widths={[400, 700, 1000]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.05]" />
@@ -70,7 +71,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
               </div>
             </li>
           ))}
-          <li class:list={['flex flex-col justify-center border-2 border-dashed border-[color:var(--a)] p-7', ['lg:col-span-3', 'lg:col-span-2', 'lg:col-span-1'][items.length % 3 === 0 ? 0 : 3 - (items.length % 3) === 2 ? 1 : 2]]}>
+          <li class:list={['flex w-[84%] shrink-0 snap-center flex-col justify-center border-2 border-dashed border-[color:var(--a)] p-7 sm:w-auto', ['lg:col-span-3', 'lg:col-span-2', 'lg:col-span-1'][items.length % 3 === 0 ? 0 : 3 - (items.length % 3) === 2 ? 1 : 2]]}>
             <p class="mono-tag text-[color:var(--a)]">Not sure which one?</p>
             <p class="mt-3 font-display text-3xl leading-snug">Send a photo of your space. We will suggest the right {hub.data.name.toLowerCase()} option.</p>
             <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">

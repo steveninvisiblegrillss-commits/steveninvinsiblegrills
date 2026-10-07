@@ -16,9 +16,9 @@ const doors = [
   <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
     <p class="sec-tag text-ink-soft">02 / What you need</p>
     <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">What do you need to fix?</h2>
-    <ul class="mt-14 grid gap-14 md:grid-cols-3 md:gap-8">
+    <ul class="no-scrollbar -mx-4 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-6 md:mx-0 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:px-0 md:pb-0">
       {doors.map((d, i) => (
-        <li class:list={['group', i === 1 && 'md:translate-y-10']}>
+        <li class:list={['group w-[78%] shrink-0 snap-center md:w-auto', i === 1 && 'md:translate-y-10']}>
           {/* Blueprint dimension arrow above the opening */}
           <div class="mono-tag mb-3 flex items-center gap-2 text-ink-soft" aria-hidden="true">
             <svg viewBox="0 0 12 8" class="h-2 w-3 shrink-0"><path d="M11 4H1M4 1L1 4l3 3" fill="none" stroke="currentColor" stroke-width="1" /></svg>
