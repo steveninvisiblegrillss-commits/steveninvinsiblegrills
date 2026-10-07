@@ -1,0 +1,29 @@
+---
+// Four things the client has confirmed, shown as big numbers. Used on the home page and About.
+import { Icon } from 'astro-icon/components';
+
+interface Props { tag?: string; heading?: string }
+const { tag = 'What you can rely on', heading = 'Four things we' } = Astro.props;
+const pillars = [
+  { big: '10+', small: 'years', text: 'Experience installing for Hyderabad homes, apartments and offices.', icon: 'ph:calendar-check-duotone' },
+  { big: 'Free', small: 'installation', text: 'We do not charge for installation. Send a photo and we quote the job.', icon: 'ph:wrench-duotone' },
+  { big: 'Free', small: 'site visit', text: 'We visit and measure the openings properly before we quote the job.', icon: 'ph:ruler-duotone' },
+  { big: '30', small: 'minutes', text: 'Send an enquiry and we call you within 30 minutes to confirm a visit.', icon: 'ph:phone-call-duotone' },
+];
+---
+<section class="bg-night text-white">
+  <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
+    <p class="sec-tag text-dusk">{tag}</p>
+    <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{heading} <em class="em-accent">stand behind</em></h2>
+    <ul class="mt-14 grid gap-px border border-steel/25 bg-steel/25 sm:grid-cols-2 lg:grid-cols-4">
+      {pillars.map((p) => (
+        <li class="bg-night p-7">
+          <Icon name={p.icon} class="size-8 text-dusk" />
+          <p class="mt-6 font-display text-6xl leading-none text-white">{p.big}</p>
+          <p class="mono-tag mt-2 text-dusk">{p.small}</p>
+          <p class="mt-4 text-white/70">{p.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

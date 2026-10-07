@@ -1,0 +1,31 @@
+---
+// "Who we are" on the home page, so a visitor who never opens About still meets the team and the range.
+import { Picture } from 'astro:assets';
+import { site } from '../config/site';
+import { waLink, quoteMessage } from '../lib/whatsapp';
+import Button from './Button.astro';
+import photo from '../assets/images/projects/balcony-net-installer-with-fitted-net-hyderabad.webp';
+
+const wa = waLink(quoteMessage({ path: '/' }));
+---
+<section class="bg-paper">
+  <div class="grid-paper">
+    <div class="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1.1fr_0.9fr]">
+      <div>
+        <p class="sec-tag text-ink-soft">Who we are</p>
+        <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Safety work done properly, <em class="em-brand">across Hyderabad</em></h2>
+        <div class="mt-6 grid max-w-[60ch] gap-4 text-lg text-ink-soft">
+          <p>{site.name} installs balcony safety nets, pigeon nets, invisible grills, cloth hangers and sports nets for homes, apartment communities and offices in Hyderabad and Secunderabad. We have {site.yearsClaim} of experience, and installation is free.</p>
+          <p>Most of our work starts with a worry: a child near an open balcony, pigeons nesting in a duct, a window with no protection. We ask for a photo first, then recommend the option that fits your space.</p>
+        </div>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <Button href={wa} variant="accent">Get a free quote</Button>
+          <Button href="/about/" variant="ghost" icon="ph:arrow-right-bold">About us</Button>
+        </div>
+      </div>
+      <div class="crop-marks crop-marks-ink">
+        <Picture src={photo} alt="Our installer standing beside a balcony safety net fitted along a curved apartment railing" widths={[480, 800]} sizes="(min-width: 1024px) 40vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/5] w-full border border-ink/20 object-cover" />
+      </div>
+    </div>
+  </div>
+</section>

@@ -7,8 +7,8 @@ title: "Anti Bird Nets in Hyderabad"
 seoTitle: "Anti Bird Nets in Hyderabad, Free Installation"
 description: "High-strength nylon anti bird nets cut to size for Hyderabad balconies, buildings and open areas. Weather-resistant, fitted free."
 answer: "Anti bird nets are high-strength nylon nets cut to the size and shape of your site to keep pigeons, crows and sparrows out of balconies, buildings and open areas. They resist harsh weather and keep the space clean. Steven Invisible Grills installs them across Hyderabad with free installation. WhatsApp a photo for a quote."
-hero: ../../assets/images/services/pigeon-bird-net-balcony.webp
-heroAlt: "Green anti bird net across a balcony opening keeping a pigeon on the outside ledge"
+hero: ../../assets/images/services/anti-bird-net-balcony-hyderabad.webp
+heroAlt: "Anti bird net stretched along a balcony with potted plants behind it"
 uses:
   - "Residential buildings and high-rises"
   - "Balconies and ducts"
