@@ -52,18 +52,18 @@ const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit'
 </section>
 
 <style>
-  .track { transition: transform 550ms cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
+  .track { transition: transform 450ms cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
   .track.snap { transition: none; }
   @media (prefers-reduced-motion: reduce) { .track { transition: none; } }
 </style>
 
 <script>
-  // Slides on its own every 2.6 seconds. Pauses while the page is hidden or the mouse is over the hero. Swipe on touch screens.
+  // Slides on its own every 1.8 seconds. Pauses while the page is hidden or the mouse is over the hero. Swipe on touch screens.
   const root = document.querySelector<HTMLElement>('[data-reel]');
   const track = root?.querySelector<HTMLElement>('[data-track]');
   if (root && track && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const n = track.children.length - 1; // the last child is the repeat of the first
-    const EVERY = 2600;
+    const EVERY = 1800;
     let i = 0, timer: number | undefined, hold = false;
     const set = (k: number, animate = true) => {
       track.classList.toggle('snap', !animate);
@@ -73,7 +73,7 @@ const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit'
     const next = () => {
       i += 1;
       set(i);
-      if (i === n) setTimeout(() => { i = 0; set(0, false); }, 600); // after sliding on to the repeat, snap back to the real first photo
+      if (i === n) setTimeout(() => { i = 0; set(0, false); }, 500); // after sliding on to the repeat, snap back to the real first photo
     };
     const prev = () => {
       if (i === 0) { i = n; set(n, false); }
