@@ -1,11 +1,10 @@
 ---
-// "Photo Reel" hero: full-screen photos that crossfade (swipe, tap the thumbnails, or let it play), each tagged with its service group's colour.
-// On scroll the photo drifts and a colour ribbon slides sideways, using CSS scroll timelines, so the hero keeps moving as you leave it.
+// Photo hero: full-screen photos that slide across on their own (swipe works too), with the headline and quote buttons on top.
+// No captions, thumbnails or ribbons: the photos carry the page. On scroll the photo drifts slightly, via a CSS scroll timeline.
 import { Picture } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
 import { waLink, quoteMessage, telLink } from '../lib/whatsapp';
-import { categories } from '../config/categories';
 import sunset from '../assets/images/services/golden-balcony-sunset-net.webp';
 import balcony from '../assets/images/hero/modern-balcony-grill-city-view.webp';
 import cat from '../assets/images/services/tabby-cat-balcony-net.webp';
@@ -14,129 +13,91 @@ import hangers from '../assets/images/services/balcony-cloth-hangers-hyderabad.w
 
 const wa = waLink(quoteMessage({ path: '/' }));
 const slides = [
-  { img: sunset, cat: 'safety-nets', title: 'Balcony safety nets', href: '/balcony-safety-nets/', alt: 'Clear safety net fitted across a balcony at sunset with a view over the city' },
-  { img: balcony, cat: 'invisible-grills', title: 'Invisible grills for balconies', href: '/invisible-grills-for-balconies/', alt: 'Sunlit apartment balcony with an invisible grill of thin stainless steel wires and a clear view of the city' },
-  { img: cat, cat: 'safety-nets', title: 'Pet safety nets', href: '/pet-safety-nets/', alt: 'Tabby cat sitting behind a safety net on a sunny balcony' },
-  { img: windows, cat: 'invisible-grills', title: 'Invisible grills for windows', href: '/invisible-grills-for-windows/', alt: 'Apartment building with thin stainless steel invisible grills over the windows' },
-  { img: hangers, cat: 'cloth-hangers', title: 'Balcony cloth hangers', href: '/balcony-cloth-hangers/', alt: 'Cloth hanger frame on a balcony railing holding folded clothes' },
-] as const;
+  { img: sunset, alt: 'Clear safety net fitted across a balcony at sunset with a view over the city' },
+  { img: balcony, alt: 'Sunlit apartment balcony with an invisible grill of thin stainless steel wires and a clear view of the city' },
+  { img: cat, alt: 'Tabby cat sitting behind a safety net on a sunny balcony' },
+  { img: windows, alt: 'Apartment building with thin stainless steel invisible grills over the windows' },
+  { img: hangers, alt: 'Cloth hanger frame on a balcony railing holding folded clothes' },
+];
+// The first photo is repeated at the end so the last slide slides on to the first without a jump backwards.
+const track = [...slides, { ...slides[0], clone: true }];
 const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit']];
-const ribbon = Object.values(categories);
 ---
-<section class="reel relative isolate flex min-h-[100dvh] flex-col overflow-hidden bg-night text-white" data-reel data-meta={JSON.stringify(slides.map((s) => ({ title: s.title, href: s.href, acc: categories[s.cat].acc })))}>
+<section class="reel relative isolate flex min-h-[100dvh] flex-col overflow-hidden bg-night text-white" data-reel>
   <div class="reel-photos absolute inset-0 -z-20" aria-hidden="true">
-    {slides.map((s, i) => (
-      <div class:list={['slide absolute inset-0', i === 0 && 'is-on']} data-slide>
-        <Picture src={s.img} alt={s.alt} widths={[640, 1100, 1672]} sizes="100vw" formats={['avif']} fallbackFormat="webp" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} class="kb size-full object-cover" />
-      </div>
-    ))}
+    <div class="track flex h-full" data-track style={`width:${track.length * 100}%`}>
+      {track.map((s, i) => (
+        <div class="h-full flex-none" style={`width:${100 / track.length}%`}>
+          <Picture src={s.img} alt={s.alt} widths={[640, 1100, 1672]} sizes="100vw" formats={['avif']} fallbackFormat="webp" loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} class="size-full object-cover" />
+        </div>
+      ))}
+    </div>
   </div>
   <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(11_19_43/0.88)_0%,rgb(11_19_43/0.55)_45%,rgb(11_19_43/0.1)_100%)] md:bg-[linear-gradient(90deg,rgb(11_19_43/0.85)_0%,rgb(11_19_43/0.4)_50%,transparent_100%)]" aria-hidden="true"></div>
-  <div class="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-night/90 to-transparent" aria-hidden="true"></div>
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-night/80 to-transparent" aria-hidden="true"></div>
 
-  <div class="reel-copy relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-6 pt-28 md:px-8 md:pt-24">
+  <div class="reel-copy relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-28 pt-28 md:px-8 md:pb-16 md:pt-24">
     <div class="max-w-2xl">
-      <p class="rise mono-tag inline-flex items-center gap-2 border border-white/25 bg-night/40 px-3 py-2" style="--i:0"><span class="size-1.5 rounded-full bg-dusk"></span>Hyderabad and Secunderabad</p>
-      <h1 class="rise mt-5 text-[3.1rem] leading-[0.95] sm:text-6xl lg:text-7xl" style="--i:1">Invisible grills and safety nets for <em class="em-accent">Hyderabad homes</em></h1>
-      <p class="rise mt-6 max-w-[48ch] text-lg text-white/85 md:text-xl" style="--i:2">Protect balconies, children and pets without blocking the view. Professional installation, and installation is free.</p>
-      <div class="rise mt-8 flex flex-wrap gap-4" style="--i:3">
+      <h1 class="rise text-[3.1rem] leading-[0.95] sm:text-6xl lg:text-7xl" style="--i:0">Invisible grills and safety nets for <em class="em-accent">Hyderabad homes</em></h1>
+      <p class="rise mt-6 max-w-[48ch] text-lg text-white/85 md:text-xl" style="--i:1">Protect balconies, children and pets without blocking the view. Professional installation, and installation is free.</p>
+      <div class="rise mt-8 flex flex-wrap gap-4" style="--i:2">
         <a href={wa} data-service="" class="btn-tail group inline-flex min-h-12 items-center gap-3 rounded-full bg-dusk py-2 pl-6 pr-2 font-semibold text-night transition-transform active:scale-[0.98]">Get a free quote <span class="grid size-8 place-items-center rounded-full bg-black/10"><Icon name="ph:arrow-up-right-bold" class="size-4" /></span></a>
         <a href={telLink()} class="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/30 bg-night/40 px-6 font-semibold backdrop-blur-md transition-colors hover:bg-white/15"><Icon name="ph:phone-duotone" class="size-5" />Call {site.phoneDisplay.replace('+91 ', '')}</a>
       </div>
-      <ul class="rise mt-8 flex flex-wrap gap-x-7 gap-y-2" style="--i:4">
+      <ul class="rise mt-8 flex flex-wrap gap-x-7 gap-y-2" style="--i:3">
         {trust.map(([big, small]) => <li class="flex items-baseline gap-2"><span class="font-display text-3xl text-dusk">{big}</span><span class="mono-tag text-white/70">{small}</span></li>)}
       </ul>
-    </div>
-  </div>
-
-  {/* Caption, progress and thumbnails */}
-  <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pb-24 md:px-8 md:pb-16">
-    <div class="flex flex-wrap items-end justify-between gap-5">
-      <div class="min-w-0">
-        <a data-caption href={slides[0].href} class="inline-flex min-h-11 items-center gap-3 border border-white/25 bg-night/55 px-4 text-sm font-semibold backdrop-blur-md transition-colors hover:bg-night/80">
-          <i data-dot class="size-2.5 rounded-full" style={`background:${categories[slides[0].cat].acc}`}></i><span data-title>{slides[0].title}</span><Icon name="ph:arrow-right-light" class="size-4" />
-        </a>
-        <div class="mt-4 flex gap-1.5" role="group" aria-label="Choose a photo" data-bars>
-          {slides.map((s, i) => (
-            <button type="button" data-go={i} aria-label={`Show ${s.title}`} class="bar relative h-6 w-10 sm:w-14"><span class="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 bg-white/30"></span><span class="fill absolute left-0 top-1/2 h-1 w-0 -translate-y-1/2" style={`background:${categories[s.cat].acc}`}></span></button>
-          ))}
-        </div>
-      </div>
-      <ul class="hidden gap-3 md:flex" aria-label="Photos">
-        {slides.map((s, i) => (
-          <li><button type="button" data-go={i} aria-label={`Show ${s.title}`} class="thumb relative block h-16 w-24 overflow-hidden border border-white/30 opacity-70 transition-opacity hover:opacity-100">
-            <Picture src={s.img} alt={s.title} widths={[200]} sizes="96px" formats={['avif']} fallbackFormat="webp" class="size-full object-cover" />
-            <span class="absolute inset-x-0 bottom-0 h-1" style={`background:${categories[s.cat].acc}`}></span>
-          </button></li>
-        ))}
-      </ul>
-    </div>
-  </div>
-
-  {/* Colour ribbon that slides sideways as the page scrolls */}
-  <div class="absolute inset-x-0 bottom-0 z-10 overflow-hidden border-t border-white/15 bg-night/70 py-2.5 backdrop-blur-sm md:py-3" aria-hidden="true">
-    <div class="ribbon flex w-max gap-10 whitespace-nowrap">
-      {[0, 1, 2].map(() => ribbon.map((c) => <span class="mono-tag flex items-center gap-10" style={`color:${c.acc}`}>{c.label}<i class="size-1.5 rotate-45" style={`background:${c.acc}`}></i></span>))}
     </div>
   </div>
 </section>
 
 <style>
-  .slide { opacity: 0; transition: opacity 1200ms var(--ease-out-quint); }
-  .slide.is-on { opacity: 1; }
-  .bar .fill { transition: none; }
-  .bar.done .fill { width: 100%; }
-  .bar.on .fill { animation: fill var(--dur, 6000ms) linear forwards; }
-  @keyframes fill { from { width: 0; } to { width: 100%; } }
-  .thumb.on { opacity: 1; outline: 2px solid #f2a541; outline-offset: 2px; }
+  .track { transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
+  .track.snap { transition: none; }
   @media (prefers-reduced-motion: no-preference) {
-    .slide.is-on .kb { animation: kb 9s ease-out both; }
-    @keyframes kb { from { transform: scale(1.08); } to { transform: scale(1); } }
     @supports (animation-timeline: scroll()) {
       .reel-photos { animation-name: drift; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: scroll(root); animation-range: 0 100vh; }
       .reel-copy { animation-name: lift; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: scroll(root); animation-range: 0 70vh; }
-      .ribbon { animation-name: ribbon; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: scroll(root); animation-range: 0 120vh; }
-      @keyframes drift { to { transform: translateY(12vh) scale(1.12); } }
+      @keyframes drift { to { transform: translateY(12vh) scale(1.1); } }
       @keyframes lift { to { transform: translateY(-6vh); opacity: 0.15; } }
-      @keyframes ribbon { from { transform: translateX(0); } to { transform: translateX(-33%); } }
     }
   }
-  @media (prefers-reduced-motion: reduce) { .slide { transition: none; } .bar.on .fill { animation: none; width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .track { transition: none; } }
 </style>
 
 <script>
-  // Auto-advance every 6 seconds. Pauses while the page is hidden or the visitor hovers or touches the hero. Swipe or tap the bars and thumbnails to move.
+  // Slides on its own every 3.5 seconds. Pauses while the page is hidden or the mouse is over the hero. Swipe on touch screens.
   const root = document.querySelector<HTMLElement>('[data-reel]');
-  if (root) {
-    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
-    const bars = [...root.querySelectorAll<HTMLElement>('[data-bars] .bar')];
-    const thumbs = [...root.querySelectorAll<HTMLElement>('.thumb')];
-    const caption = root.querySelector<HTMLAnchorElement>('[data-caption]')!;
-    const meta = JSON.parse(root.dataset.meta ?? '[]') as { title: string; href: string; acc: string }[];
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const DUR = 6000;
-    let i = 0, timer: number | undefined, paused = false;
-    root.style.setProperty('--dur', DUR + 'ms');
-    const show = (n: number) => {
-      i = (n + slides.length) % slides.length;
-      slides.forEach((s, k) => s.classList.toggle('is-on', k === i));
-      bars.forEach((b, k) => { b.classList.remove('on', 'done'); if (k < i) b.classList.add('done'); });
-      thumbs.forEach((t, k) => t.classList.toggle('on', k === i));
-      void bars[i].offsetWidth;
-      if (!calm) bars[i].classList.add('on'); else bars[i].classList.add('done');
-      const m = meta[i];
-      if (m) { caption.href = m.href; caption.querySelector('[data-title]')!.textContent = m.title; (caption.querySelector('[data-dot]') as HTMLElement).style.background = m.acc; }
-      clearTimeout(timer);
-      if (!calm && !paused) timer = window.setTimeout(() => show(i + 1), DUR);
+  const track = root?.querySelector<HTMLElement>('[data-track]');
+  if (root && track && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const n = track.children.length - 1; // the last child is the repeat of the first
+    const EVERY = 3500;
+    let i = 0, timer: number | undefined, hold = false;
+    const set = (k: number, animate = true) => {
+      track.classList.toggle('snap', !animate);
+      track.style.transform = `translateX(-${(k * 100) / (n + 1)}%)`;
+      if (!animate) void track.offsetWidth;
     };
-    root.querySelectorAll<HTMLElement>('[data-go]').forEach((b) => b.addEventListener('click', () => show(Number(b.dataset.go))));
-    const hold = (v: boolean) => { paused = v; if (v) { clearTimeout(timer); bars[i].classList.remove('on'); bars[i].classList.add('done'); } else show(i); };
-    root.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') hold(true); });
-    root.addEventListener('pointerleave', (e) => { if ((e as PointerEvent).pointerType === 'mouse') hold(false); });
-    document.addEventListener('visibilitychange', () => hold(document.hidden));
+    const next = () => {
+      i += 1;
+      set(i);
+      if (i === n) setTimeout(() => { i = 0; set(0, false); }, 750); // after sliding on to the repeat, snap back to the real first photo
+    };
+    const prev = () => {
+      if (i === 0) { i = n; set(n, false); }
+      i -= 1;
+      requestAnimationFrame(() => set(i));
+    };
+    const loop = () => { clearInterval(timer); if (!hold && !document.hidden) timer = window.setInterval(next, EVERY); };
+    root.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') { hold = true; loop(); } });
+    root.addEventListener('pointerleave', (e) => { if ((e as PointerEvent).pointerType === 'mouse') { hold = false; loop(); } });
+    document.addEventListener('visibilitychange', loop);
     let x0 = 0;
     root.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
-    root.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 50) show(i + (dx < 0 ? 1 : -1)); }, { passive: true });
-    show(0);
+    root.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); loop(); }
+    }, { passive: true });
+    loop();
   }
 </script>
