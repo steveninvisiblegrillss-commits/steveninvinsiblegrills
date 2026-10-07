@@ -1,6 +1,6 @@
 ---
-// Photo slides: full-width photos that slide across on their own (swipe works too), with a headline and quote buttons on top.
-// It sits right after the "find the grill" opening section, which owns the page's H1.
+// Photo hero: full-screen photos that slide across on their own (swipe works too), with the headline and quote buttons on top.
+// It owns the page's H1.
 import { Picture } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 import { site } from '../config/site';
@@ -23,7 +23,7 @@ const slides = [
 const track = [...slides, { ...slides[0], clone: true }];
 const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit']];
 ---
-<section class="reel relative isolate flex min-h-[92dvh] flex-col overflow-hidden bg-night text-white" data-reel>
+<section class="reel relative isolate flex min-h-[100dvh] flex-col overflow-hidden bg-night text-white" data-reel>
   <div class="absolute inset-0 -z-20" aria-hidden="true">
     <div class="track flex h-full" data-track style={`width:${track.length * 100}%`}>
       {track.map((s, i) => (
@@ -36,9 +36,9 @@ const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit'
   <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(11_19_43/0.88)_0%,rgb(11_19_43/0.55)_45%,rgb(11_19_43/0.1)_100%)] md:bg-[linear-gradient(90deg,rgb(11_19_43/0.85)_0%,rgb(11_19_43/0.4)_50%,transparent_100%)]" aria-hidden="true"></div>
   <div class="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-night/80 to-transparent" aria-hidden="true"></div>
 
-  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-40 pt-20 md:px-8 md:pb-24 md:pt-16">
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-40 pt-28 md:px-8 md:pb-24 md:pt-24">
     <div class="max-w-2xl">
-      <h2 class="text-[2.6rem] leading-[0.98] sm:text-5xl lg:text-6xl">Invisible grills and safety nets for <em class="em-accent">Hyderabad homes</em></h2>
+      <h1 class="rise text-[3.1rem] leading-[0.95] sm:text-6xl lg:text-7xl" style="--i:0">Invisible grills and safety nets for <em class="em-accent">Hyderabad homes</em></h1>
       <p class="mt-6 max-w-[48ch] text-lg text-white/85 md:text-xl">Protect balconies, children and pets without blocking the view. Professional installation, and installation is free.</p>
       <div class="mt-8 flex flex-wrap gap-4">
         <a href={wa} data-service="" class="btn-tail group inline-flex min-h-12 items-center gap-3 rounded-full bg-dusk py-2 pl-6 pr-2 font-semibold text-night transition-transform active:scale-[0.98]">Get a free quote <span class="grid size-8 place-items-center rounded-full bg-black/10"><Icon name="ph:arrow-up-right-bold" class="size-4" /></span></a>
