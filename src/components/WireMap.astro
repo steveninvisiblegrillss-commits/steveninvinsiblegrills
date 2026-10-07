@@ -18,6 +18,8 @@ const C: [number, number] = [405, 262];
 const areas = await getCollection('areas');
 const projects = await getCollection('projects');
 const live = new Set(publishableAreas(areas.map((a) => ({ id: a.id, localNotes: a.data.localNotes })), projects.map((p) => ({ area: p.data.area.id, services: [] }))));
+interface Props { list?: boolean }
+const { list = true } = Astro.props;
 const nodes = site.areas.filter((a) => pos[a.slug]);
 ---
 <section id="areas" class="scroll-mt-24 bg-paper">
@@ -57,6 +59,7 @@ const nodes = site.areas.filter((a) => pos[a.slug]);
         </svg>
       </div>
 
+      {list ? (
       <ul class="mt-10 flex flex-wrap gap-2.5">
         {site.areas.map((a) => (
           <li>
@@ -68,6 +71,9 @@ const nodes = site.areas.filter((a) => pos[a.slug]);
           </li>
         ))}
       </ul>
+      ) : (
+        <a href="/areas/" class="mt-10 inline-flex min-h-11 items-center gap-2 font-semibold text-night underline decoration-dusk-text underline-offset-8">See every area and how booking works <Icon name="ph:arrow-right-light" class="size-5" /></a>
+      )}
     </div>
   </div>
 </section>

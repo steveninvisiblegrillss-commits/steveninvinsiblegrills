@@ -31,7 +31,6 @@ const projects = (await getCollection('projects')).sort((a, b) => +b.data.date -
 const mine = projects.filter((p) => p.data.services.some((s) => s.id === entry.id));
 const compare = mine.find((p) => p.data.before && p.data.after);
 const tilt = [-2.5, 1.8, -1.2, 2.6, -2, 1.4];
-const ticker = site.areas.map((a) => a.name);
 ---
 {/* 1. Spec Sheet */}
 <section class="wires relative overflow-hidden bg-night text-white">
@@ -182,15 +181,7 @@ const ticker = site.areas.map((a) => a.name);
 {/* 7. Chat FAQ */}
 <FAQ faqs={d.faqs} tag="Questions" service={d.name} />
 
-{/* 8. Area Ticker: decorative; the full list of areas is in the footer-linked Areas page */}
-<section class="overflow-hidden border-y border-steel/30 bg-night py-5 text-white" aria-label="Areas we serve">
-  <div class="ticker flex w-max gap-10 whitespace-nowrap" aria-hidden="true">
-    {[0, 1].map(() => ticker.map((n) => <span class="mono-tag flex items-center gap-10 text-white/70">{n}<i class="size-1.5 rotate-45 bg-dusk"></i></span>))}
-  </div>
-  <p class="sr-only">We install in {ticker.join(', ')}.</p>
-</section>
-
-{/* 9. Next on the Wire */}
+{/* 8. Next on the Wire */}
 {related.length > 0 && (
   <section class="bg-paper">
     <div class="mx-auto max-w-7xl px-4 py-20 md:px-8 md:py-28">
@@ -208,7 +199,7 @@ const ticker = site.areas.map((a) => a.name);
   </section>
 )}
 
-{/* 10. Work Order */}
+{/* 9. Work Order */}
 <section id="quote" data-cta-band class="wires dusk-glow scroll-mt-24 text-white">
   <div class="mx-auto grid max-w-7xl gap-12 px-4 py-20 md:px-8 md:py-28 lg:grid-cols-[1fr_0.9fr] lg:items-center">
     <div>
@@ -222,9 +213,7 @@ const ticker = site.areas.map((a) => a.name);
 
 <style>
   @media (min-width: 640px) { .polaroid { transform: rotate(var(--r)); transition: transform 500ms var(--ease-out-quint); } .polaroid:hover { transform: rotate(0deg) translateY(-4px); } }
-  @media (prefers-reduced-motion: no-preference) { .ticker { animation: tick 60s linear infinite; } .ticker:hover { animation-play-state: paused; } }
-  @keyframes tick { to { transform: translateX(-50%); } }
-  @media (prefers-reduced-motion: reduce) { .polaroid { transform: none !important; } .ticker { flex-wrap: wrap; width: auto; padding-inline: 1rem; } }
+  @media (prefers-reduced-motion: reduce) { .polaroid { transform: none !important; } }
 </style>
 
 <script>
