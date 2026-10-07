@@ -1,0 +1,96 @@
+---
+// "See it first": a colourful mosaic of installation photos, straight after the hero. Colour chips dim the photos from other service groups.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { categories, type CategoryId } from '../config/categories';
+
+const wall = import.meta.glob<{ default: ImageMetadata }>('../assets/images/wall/*.webp', { eager: true });
+const projects = import.meta.glob<{ default: ImageMetadata }>('../assets/images/projects/*.webp', { eager: true });
+const services = import.meta.glob<{ default: ImageMetadata }>('../assets/images/services/*.webp', { eager: true });
+const w = (n: string) => wall[`../assets/images/wall/${n}.webp`].default;
+const p = (n: string) => projects[`../assets/images/projects/${n}.webp`].default;
+const s = (n: string) => services[`../assets/images/services/${n}.webp`].default;
+
+// [image, caption, page, alt, group]
+const tiles: [ImageMetadata, string, string, string, CategoryId][] = [
+  [s('golden-balcony-sunset-net'), 'Safety nets at sunset', '/safety-nets/', 'Clear safety net fitted across a balcony at sunset with a view over the city', 'safety-nets'],
+  [w('invisible-grills-windows-apartment'), 'Invisible grills for windows', '/invisible-grills-for-windows/', 'Apartment building with thin stainless steel invisible grills over the windows', 'invisible-grills'],
+  [p('football-turf-sports-net-hyderabad'), 'Football turf net', '/all-sports-nets/', 'Children playing football on a turf ground with a green net overhead', 'sports-nets'],
+  [s('pull-and-dry-cloth-hangers-hyderabad'), 'Pull and dry hangers', '/pull-and-dry-cloth-hangers/', 'Pull and dry cloth hanger rods on a balcony ceiling', 'cloth-hangers'],
+  [p('child-safe-balcony-net-hyderabad'), 'Child-safe balcony net', '/children-safety-nets/', 'Child looking out through a white safety net on an apartment balcony', 'safety-nets'],
+  [w('cricket-practice-net-pitch'), 'Cricket practice nets', '/cricket-practice-nets/', 'Green cricket practice net enclosing a turf pitch', 'sports-nets'],
+  [s('invisible-grills-for-balconies-hyderabad'), 'Invisible grills at night', '/invisible-grills-for-balconies/', 'Invisible grill of fine wires on a balcony overlooking city lights at night', 'invisible-grills'],
+  [w('balcony-safety-net-city-view'), 'Balcony safety nets', '/balcony-safety-nets/', 'Safety net fitted across a high-rise balcony with a view of the city', 'safety-nets'],
+  [s('ceiling-cloth-hangers-hyderabad'), 'Ceiling cloth hangers', '/ceiling-cloth-hangers/', 'Ceiling-mounted cloth hanger rods holding a cloth in a bright room', 'cloth-hangers'],
+  [w('invisible-grill-balcony-view'), 'Invisible grill, open view', '/invisible-grills-for-balconies/', 'Fine vertical stainless steel wires on a balcony with a wide green view', 'invisible-grills'],
+  [w('cricket-practice-net-lane'), 'Cricket net lane', '/cricket-practice-nets/', 'Blue cricket net lane with a green mat', 'sports-nets'],
+  [s('tabby-cat-balcony-net'), 'Pet safety nets', '/pet-safety-nets/', 'Tabby cat sitting behind a safety net on a balcony', 'safety-nets'],
+  [w('anti-bird-net-balcony-plants'), 'Anti bird nets', '/anti-bird-nets/', 'Anti bird net stretched along a balcony with potted plants', 'safety-nets'],
+  [s('stainless-steel-invisible-grills-hyderabad'), 'Stainless steel wires', '/stainless-steel-invisible-grills/', 'Thin stainless steel grill wires against a bright sky and tall buildings', 'invisible-grills'],
+  [w('construction-safety-net-building'), 'Construction safety nets', '/construction-safety-nets/', 'Green safety net covering the scaffolding of a building under construction', 'safety-nets'],
+  [s('balcony-cloth-hangers-hyderabad'), 'Balcony cloth hangers', '/balcony-cloth-hangers/', 'Cloth hanger frame on a balcony railing holding folded clothes', 'cloth-hangers'],
+  [p('cricket-practice-net-installation-hyderabad'), 'Cricket net installation', '/cricket-practice-nets/', 'Long green cricket practice net corridor after installation', 'sports-nets'],
+  [w('invisible-grill-staircase'), 'Invisible grill, staircase', '/invisible-grills/', 'Thin steel wires fitted between staircase railings', 'invisible-grills'],
+  [p('bird-spikes-installation-tiled-roof-hyderabad'), 'Bird spikes on a roof', '/bird-spikes/', 'Rows of bird spikes fixed along a red tiled roof', 'safety-nets'],
+  [w('duct-area-safety-net-building'), 'Duct area nets', '/duct-area-safety-nets/', 'Net closing a vertical duct between apartment blocks', 'safety-nets'],
+  [s('invisible-grill-measurement'), 'Free site measurement', '/invisible-grill-price/', 'Hands measuring a balcony opening with a tape beside a notebook', 'invisible-grills'],
+  [w('sports-ground-net'), 'Ground boundary nets', '/all-sports-nets/', 'Tall green net around a football ground', 'sports-nets'],
+  [p('balcony-net-installer-with-fitted-net-hyderabad'), 'Our team on site', '/about/', 'Our installer standing beside a balcony safety net fitted along a curved railing', 'safety-nets'],
+  [w('balcony-safety-net-close'), 'Balcony net, close up', '/balcony-safety-nets/', 'Safety net fitted along a balcony railing against the sky', 'safety-nets'],
+  [w('ceiling-cloth-hangers-balcony'), 'Hangers on the ceiling', '/ceiling-cloth-hangers/', 'Ceiling-mounted cloth hanger rods fitted in a balcony', 'cloth-hangers'],
+  [s('pigeon-bird-net-balcony'), 'Pigeon safety nets', '/pigeon-safety-nets/', 'Green net across a sunlit balcony with a pigeon on the outside ledge', 'safety-nets'],
+  [w('safety-net-apartment-facade'), 'Net on an apartment facade', '/safety-nets/', 'Safety net fitted across the face of an apartment building', 'safety-nets'],
+  [s('staircase-safety-nets-hyderabad'), 'Staircase safety nets', '/staircase-safety-nets/', 'Black staircase railing with thin wires fitted between the posts', 'safety-nets'],
+  [w('bird-spikes-close-up'), 'Bird spikes, close up', '/bird-spikes/', 'Close-up of stainless steel bird spikes fixed on a ledge', 'safety-nets'],
+  [p('balcony-safety-net-apartment-hyderabad'), 'Apartment balcony net', '/balcony-safety-nets/', 'White balcony safety net fitted along the railing of an apartment balcony', 'safety-nets'],
+];
+const groups = Object.entries(categories) as [CategoryId, (typeof categories)[CategoryId]][];
+---
+<section id="photos" class="scroll-mt-24 bg-night text-white">
+  <div class="mx-auto max-w-7xl px-4 pb-20 pt-16 md:px-8 md:pb-28 md:pt-24">
+    <p class="sec-tag text-dusk">01 / See it first</p>
+    <h2 class="mt-5 max-w-4xl text-4xl md:text-7xl">Nets, grills and hangers, <em class="em-accent">installed in Hyderabad</em></h2>
+    <p class="mt-5 max-w-[56ch] text-white/70">Real photos first. Pick a colour to see one group, tap any photo to open that service.</p>
+
+    <div class="mt-8 flex flex-wrap gap-2.5" role="group" aria-label="Highlight photos by service group" data-mosaic-chips>
+      {groups.map(([id, c]) => (
+        <button type="button" aria-pressed="false" data-cat={id} style={`--c:${c.acc}`} class="chip mono-tag inline-flex min-h-11 items-center gap-2.5 border border-white/25 px-4 text-white transition-colors">
+          <i class="size-2.5 rounded-full" style={`background:${c.acc}`}></i>{c.label}
+        </button>
+      ))}
+    </div>
+
+    <ul class="mt-10 columns-2 gap-3 md:columns-3 md:gap-5 lg:columns-4" data-mosaic>
+      {tiles.map(([img, caption, href, alt, cat], i) => (
+        <li class="tile mb-3 break-inside-avoid transition-[opacity,filter] duration-500 md:mb-5" data-cat={cat} style={`--c:${categories[cat].acc}`}>
+          <a href={href} class="group relative block overflow-hidden border border-white/15 bg-night-2">
+            <Picture src={img} alt={alt} widths={[372, 500, 800]} sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw" formats={['avif']} fallbackFormat="webp" loading={i < 6 ? 'eager' : 'lazy'} class="h-auto w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.06]" />
+            <span class="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-night/90 via-night/55 to-transparent px-3 pb-3 pt-10 text-sm font-semibold leading-tight">
+              <i class="size-2.5 shrink-0 rounded-full" style="background:var(--c)"></i>{caption}
+            </span>
+            <span class="pointer-events-none absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-500 ease-[var(--ease-out-quint)] group-hover:scale-x-100" style="background:var(--c)"></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .chip[aria-pressed="true"] { background: var(--c); border-color: var(--c); color: #0b132b; }
+  .chip[aria-pressed="true"] i { background: #0b132b !important; }
+  .tile.dim { opacity: 0.22; filter: grayscale(0.9); }
+</style>
+
+<script>
+  // Colour chips: choosing a group dims the other photos. Nothing is hidden, and without JavaScript every photo stays in full colour.
+  const bar = document.querySelector<HTMLElement>('[data-mosaic-chips]');
+  const tiles = document.querySelectorAll<HTMLElement>('[data-mosaic] .tile');
+  bar?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+    if (!btn) return;
+    const on = btn.getAttribute('aria-pressed') !== 'true';
+    bar.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn && on)));
+    tiles.forEach((t) => t.classList.toggle('dim', on && t.dataset.cat !== btn.dataset.cat));
+  });
+</script>

@@ -1,9 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
+import HeroSlides from '../components/HeroSlides.astro';
 import ThreeDoors from '../components/ThreeDoors.astro';
 import ServiceShowcase from '../components/ServiceShowcase.astro';
-import PhotoWall from '../components/PhotoWall.astro';
+import PhotoMosaic from '../components/PhotoMosaic.astro';
 import Welcome from '../components/Welcome.astro';
 import Pillars from '../components/Pillars.astro';
 import Quiz from '../components/Quiz.astro';
@@ -13,7 +13,6 @@ import WireMap from '../components/WireMap.astro';
 import FAQ from '../components/FAQ.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { faqNode } from '../lib/schema';
-import hero from '../assets/images/hero/modern-balcony-grill-city-view.webp';
 
 const faqs = [
   { q: 'Which is better for my balcony, a net or an invisible grill?', a: 'Nets cost less and also stop birds. Invisible grills give a cleaner look and keep intruders out too. Send a photo on WhatsApp and we will suggest the right option.' },
@@ -34,15 +33,15 @@ const faqs = [
 >
   {/* One steel cable runs the full height of the page, from the hero to the footer. */}
   <div class="cable-page">
-    <Hero image={hero} imageAlt="Sunlit apartment balcony with an invisible grill of thin stainless steel wires and a clear view of the city" />
+    <HeroSlides />
+    <PhotoMosaic />
     <ThreeDoors />
-    <Pillars />
-    <Welcome />
     <ServiceShowcase />
-    <PhotoWall />
+    <Gallery />
     <Quiz />
     <Process />
-    <Gallery />
+    <Pillars />
+    <Welcome />
     <WireMap />
     <FAQ faqs={faqs} />
     <CtaBand />

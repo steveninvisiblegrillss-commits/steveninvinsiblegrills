@@ -1,93 +1,95 @@
 ---
-// "Everything we do": every service on the home page with its photo, what it solves, who it is for and a quote button.
-// Four category blocks, alternating night and paper, so a visitor who never leaves the home page still sees the full range.
+// "Everything we do": every service with its photo, what it solves, who it is for and a quote button.
+// Each service group has its own colour (teal, amber, coral, green) so the page is easy to scan and the groups are told apart at a glance.
 import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
 import { waLink, quoteMessage } from '../lib/whatsapp';
+import { categories } from '../config/categories';
 
 const all = (await getCollection('services')).sort((a, b) => a.data.order - b.data.order);
 const groups = all
   .filter((s) => s.data.kind === 'hub')
-  .map((hub) => ({ hub, items: all.filter((s) => s.data.kind === 'service' && s.data.category === hub.data.category) }));
+  .map((hub) => ({ hub, items: all.filter((s) => s.data.kind === 'service' && s.data.category === hub.data.category), c: categories[hub.data.category as keyof typeof categories] }));
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <section id="services" class="scroll-mt-24 bg-night text-white">
+  <div class="h-1.5 w-full" style={`background:linear-gradient(90deg, ${groups.map((g) => g.c.acc).join(', ')})`} aria-hidden="true"></div>
   <div class="mx-auto max-w-7xl px-4 pb-6 pt-20 md:px-8 md:pt-28">
-    <p class="sec-tag text-dusk">02 / Services</p>
+    <p class="sec-tag text-dusk">03 / Services</p>
     <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">Everything we <em class="em-accent">install</em></h2>
     <p class="mt-5 max-w-[60ch] text-white/70">{all.filter((s) => s.data.kind === 'service').length} services in four groups. Every one is fitted by our team, with free installation. Tap Get a quote on any of them to send us a photo on WhatsApp.</p>
     <nav aria-label="Jump to a service group" class="mt-8 flex flex-wrap gap-2.5">
-      {groups.map(({ hub, items }) => (
-        <a href={`#group-${hub.id}`} class="mono-tag inline-flex min-h-11 items-center gap-2 border border-steel/40 px-4 transition-colors hover:border-dusk hover:text-dusk">{hub.data.name}<span class="text-dusk">{items.length}</span></a>
+      {groups.map(({ hub, items, c }) => (
+        <a href={`#group-${hub.id}`} style={`--a:${c.acc}`} class="mono-tag inline-flex min-h-11 items-center gap-2.5 border border-white/25 px-4 transition-colors hover:bg-[var(--a)] hover:text-night"><i class="size-2.5 rounded-full" style={`background:${c.acc}`}></i>{hub.data.name}<span class="opacity-70">{items.length}</span></a>
       ))}
     </nav>
   </div>
 </section>
 
-{groups.map(({ hub, items }, gi) => {
-  const dark = gi % 2 === 0;
+{groups.map(({ hub, items, c }, gi) => {
+  const dark = c.dark;
+  const a = dark ? c.acc : c.text;
   return (
-    <section id={`group-${hub.id}`} class:list={['scroll-mt-20', dark ? 'bg-night text-white' : 'bg-paper text-ink']}>
-      <div class:list={[!dark && 'grid-paper']}>
-        <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
-          <div class="grid items-end gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-            <div>
-              <p class:list={['sec-tag', dark ? 'text-dusk' : 'text-ink-soft']}>{pad(gi + 1)} / {hub.data.name}</p>
-              <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{hub.data.name}</h2>
-              <p class:list={['mt-5 max-w-[62ch] text-lg', dark ? 'text-white/75' : 'text-ink-soft']}>{hub.data.answer}</p>
-              <ul class="mt-6 flex flex-wrap gap-2">
-                {hub.data.uses.map((u: string) => <li class:list={['mono-tag border px-3 py-1.5', dark ? 'border-steel/40 text-white/75' : 'border-ink/25 text-ink-soft']}>{u}</li>)}
-              </ul>
-            </div>
-            <div class="crop-marks hidden lg:block">
-              <Picture src={hub.data.hero} alt={hub.data.heroAlt} widths={[480, 800]} sizes="30vw" formats={['avif']} fallbackFormat="webp" class:list={['aspect-[16/10] w-full border object-cover', dark ? 'border-steel/40' : 'border-ink/20']} />
-            </div>
+    <section id={`group-${hub.id}`} class:list={['scroll-mt-20', dark ? 'text-white' : 'text-ink']} style={`background:${c.bg};--a:${a}`}>
+      <div class="mx-auto max-w-7xl px-4 py-16 md:px-8 md:py-24">
+        <div class="grid items-end gap-8 lg:grid-cols-[1.2fr_0.8fr]">
+          <div>
+            <p class="sec-tag text-[color:var(--a)]">{pad(gi + 1)} / {hub.data.name}</p>
+            <h2 class="mt-5 max-w-3xl text-4xl md:text-6xl">{hub.data.name}</h2>
+            <p class:list={['mt-5 max-w-[62ch] text-lg', dark ? 'text-white/80' : 'text-ink/75']}>{hub.data.answer}</p>
+            <ul class="mt-6 flex flex-wrap gap-2">
+              {hub.data.uses.map((u: string) => <li class="mono-tag border border-[color:var(--a)] px-3 py-1.5 text-[color:var(--a)]">{u}</li>)}
+            </ul>
           </div>
+          <div class="crop-marks hidden lg:block">
+            <Picture src={hub.data.hero} alt={hub.data.heroAlt} widths={[480, 800]} sizes="30vw" formats={['avif']} fallbackFormat="webp" class="aspect-[16/10] w-full border-2 border-[color:var(--a)] object-cover" />
+          </div>
+        </div>
 
-          <ul class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {items.map((s, i) => (
-              <li class="flex flex-col">
-                <a href={`/${s.id}/`} class="group block">
-                  <span class="relative block overflow-hidden">
-                    <Picture src={s.data.hero} alt={s.data.heroAlt} widths={[400, 700, 1000]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.04]" />
-                    <span class="mono-tag absolute left-3 top-3 bg-night/85 px-2 py-1 text-dusk">{pad(gi + 1)}.{pad(i + 1)}</span>
-                  </span>
-                  <span class="mt-5 block font-display text-2xl leading-snug transition-colors group-hover:text-dusk md:text-3xl">{s.data.name}</span>
-                </a>
-                <p class:list={['mt-2', dark ? 'text-white/70' : 'text-ink-soft']}>{s.data.description}</p>
-                <ul class="mt-4 grid gap-1.5 text-[0.95rem]">
-                  {s.data.problems.slice(0, 3).map((p: string) => (
-                    <li class="flex gap-2.5"><Icon name="ph:check-circle-duotone" class:list={['mt-0.5 size-5 shrink-0', dark ? 'text-dusk' : 'text-dusk-text']} /><span class={dark ? 'text-white/80' : 'text-ink'}>{p}</span></li>
-                  ))}
-                </ul>
-                <div class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6">
-                  <a href={waLink(quoteMessage({ service: s.data.name, path: '/' }))} data-service={s.data.name} class="inline-flex min-h-11 items-center gap-2 rounded-full bg-wa px-5 text-sm font-semibold text-white transition-transform active:scale-[0.98]"><Icon name="ph:whatsapp-logo-duotone" class="size-5" />Get a quote</a>
-                  <a href={`/${s.id}/`} class:list={['inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline underline-offset-4', dark ? 'text-dusk decoration-dusk/50' : 'text-night decoration-dusk-text']}>Details <Icon name="ph:arrow-right-light" class="size-4" /></a>
-                </div>
-              </li>
-            ))}
-            <li class:list={['flex flex-col justify-center border border-dashed p-7', dark ? 'border-steel/50' : 'border-ink/35', ['lg:col-span-3', 'lg:col-span-2', 'lg:col-span-1'][items.length % 3 === 0 ? 0 : 3 - (items.length % 3) === 2 ? 1 : 2]]}>
-              <p class:list={['mono-tag', dark ? 'text-dusk' : 'text-dusk-text']}>Not sure which one?</p>
-              <p class="mt-3 font-display text-3xl leading-snug">Send a photo of your space. We will suggest the right {hub.data.name.toLowerCase()} option.</p>
-              <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
-                <a href={waLink(quoteMessage({ service: hub.data.name, path: '/' }))} data-service={hub.data.name} class="inline-flex min-h-11 items-center gap-2 rounded-full bg-wa px-5 text-sm font-semibold text-white transition-transform active:scale-[0.98]"><Icon name="ph:whatsapp-logo-duotone" class="size-5" />Send a photo</a>
-                <a href="#finder" class:list={['inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold underline underline-offset-4', dark ? 'text-dusk decoration-dusk/50' : 'text-night decoration-dusk-text']}>Try the quick finder <Icon name="ph:arrow-right-light" class="size-4" /></a>
-              </div>
-            </li>
-          </ul>
-
-          {hub.data.alsoAvailable.length > 0 && (
-            <div class:list={['mt-14 border-t pt-8', dark ? 'border-steel/30' : 'border-ink/25']}>
-              <p class:list={['mono-tag', dark ? 'text-dusk' : 'text-dusk-text']}>Also available, ask us on WhatsApp</p>
-              <ul class="mt-4 flex flex-wrap gap-2.5">
-                {hub.data.alsoAvailable.map((a: string) => (
-                  <li><a href={waLink(quoteMessage({ service: a, path: '/' }))} class:list={['inline-flex min-h-11 items-center border px-4 text-sm transition-colors', dark ? 'border-steel/40 text-white/80 hover:border-dusk hover:text-dusk' : 'border-ink/25 text-ink hover:border-night']}>{a}</a></li>
+        <ul class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((s, i) => (
+            <li class:list={['flex flex-col p-4 md:p-5', dark ? 'bg-white/[0.06]' : 'bg-white/70']}>
+              <a href={`/${s.id}/`} class="group block">
+                <span class="relative block overflow-hidden">
+                  <Picture src={s.data.hero} alt={s.data.heroAlt} widths={[400, 700, 1000]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" formats={['avif']} fallbackFormat="webp" class="aspect-[4/3] w-full object-cover transition-transform duration-700 ease-[var(--ease-out-quint)] group-hover:scale-[1.05]" />
+                  <span class="mono-tag absolute left-3 top-3 px-2 py-1 font-semibold text-night" style={`background:${c.acc}`}>{pad(gi + 1)}.{pad(i + 1)}</span>
+                  <span class="absolute inset-x-0 bottom-0 h-1.5" style={`background:${c.acc}`} aria-hidden="true"></span>
+                </span>
+                <span class="mt-5 block font-display text-2xl leading-snug transition-colors group-hover:text-[color:var(--a)] md:text-3xl">{s.data.name}</span>
+              </a>
+              <p class:list={['mt-2', dark ? 'text-white/75' : 'text-ink/75']}>{s.data.description}</p>
+              <ul class="mt-4 grid gap-1.5 text-[0.95rem]">
+                {s.data.problems.slice(0, 3).map((p: string) => (
+                  <li class="flex gap-2.5"><Icon name="ph:check-circle-duotone" class="mt-0.5 size-5 shrink-0 text-[color:var(--a)]" /><span class={dark ? 'text-white/85' : 'text-ink'}>{p}</span></li>
                 ))}
               </ul>
+              <div class="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6">
+                <a href={waLink(quoteMessage({ service: s.data.name, path: '/' }))} data-service={s.data.name} class="inline-flex min-h-11 items-center gap-2 rounded-full bg-wa px-5 text-sm font-semibold text-white transition-transform active:scale-[0.98]"><Icon name="ph:whatsapp-logo-duotone" class="size-5" />Get a quote</a>
+                <a href={`/${s.id}/`} class="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[color:var(--a)] underline decoration-[color:var(--a)] underline-offset-4">Details <Icon name="ph:arrow-right-light" class="size-4" /></a>
+              </div>
+            </li>
+          ))}
+          <li class:list={['flex flex-col justify-center border-2 border-dashed border-[color:var(--a)] p-7', ['lg:col-span-3', 'lg:col-span-2', 'lg:col-span-1'][items.length % 3 === 0 ? 0 : 3 - (items.length % 3) === 2 ? 1 : 2]]}>
+            <p class="mono-tag text-[color:var(--a)]">Not sure which one?</p>
+            <p class="mt-3 font-display text-3xl leading-snug">Send a photo of your space. We will suggest the right {hub.data.name.toLowerCase()} option.</p>
+            <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+              <a href={waLink(quoteMessage({ service: hub.data.name, path: '/' }))} data-service={hub.data.name} class="inline-flex min-h-11 items-center gap-2 rounded-full bg-wa px-5 text-sm font-semibold text-white transition-transform active:scale-[0.98]"><Icon name="ph:whatsapp-logo-duotone" class="size-5" />Send a photo</a>
+              <a href="#finder" class="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-[color:var(--a)] underline decoration-[color:var(--a)] underline-offset-4">Try the quick finder <Icon name="ph:arrow-right-light" class="size-4" /></a>
             </div>
-          )}
-        </div>
+          </li>
+        </ul>
+
+        {hub.data.alsoAvailable.length > 0 && (
+          <div class="mt-14 border-t border-[color:var(--a)] pt-8">
+            <p class="mono-tag text-[color:var(--a)]">Also available, ask us on WhatsApp</p>
+            <ul class="mt-4 flex flex-wrap gap-2.5">
+              {hub.data.alsoAvailable.map((al: string) => (
+                <li><a href={waLink(quoteMessage({ service: al, path: '/' }))} class:list={['inline-flex min-h-11 items-center border px-4 text-sm transition-colors hover:bg-[var(--a)]', dark ? 'border-white/35 text-white/90 hover:text-night' : 'border-ink/30 text-ink hover:text-white']}>{al}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </section>
   );
