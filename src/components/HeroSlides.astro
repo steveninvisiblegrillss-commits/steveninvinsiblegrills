@@ -36,7 +36,7 @@ const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit'
   <div class="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(11_19_43/0.88)_0%,rgb(11_19_43/0.55)_45%,rgb(11_19_43/0.1)_100%)] md:bg-[linear-gradient(90deg,rgb(11_19_43/0.85)_0%,rgb(11_19_43/0.4)_50%,transparent_100%)]" aria-hidden="true"></div>
   <div class="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-night/80 to-transparent" aria-hidden="true"></div>
 
-  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-40 pt-28 md:px-8 md:pb-24 md:pt-24">
+  <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-4 pb-28 pt-28 md:px-8 md:pb-16 md:pt-24">
     <div class="max-w-2xl">
       <h1 class="rise text-[3.1rem] leading-[0.95] sm:text-6xl lg:text-7xl" style="--i:0">Invisible grills and safety nets for <em class="em-accent">Hyderabad homes</em></h1>
       <p class="mt-6 max-w-[48ch] text-lg text-white/85 md:text-xl">Protect balconies, children and pets without blocking the view. Professional installation, and installation is free.</p>
@@ -49,71 +49,40 @@ const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit'
       </ul>
     </div>
   </div>
-
-  {/* Position indicator: the number of the photo on show and a segmented line that fills while it is on screen */}
-  <div class="absolute inset-x-0 bottom-24 z-10 md:bottom-9">
-    <div class="mx-auto flex max-w-7xl items-center gap-5 px-4 md:px-8">
-      <p class="flex items-baseline gap-1.5 font-display text-white" aria-live="off"><span class="text-3xl leading-none text-dusk" data-num>01</span><span class="mono-tag text-white/60">/ {String(slides.length).padStart(2, '0')}</span></p>
-      <div class="flex flex-1 gap-1.5 md:max-w-sm" role="group" aria-label="Choose a photo" data-bars>
-        {slides.map((s, k) => (
-          <button type="button" data-go={k} aria-label={`Show photo ${k + 1} of ${slides.length}`} class="bar group relative h-7 flex-1"><span class="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 bg-white/30 transition-[height] duration-300 group-hover:h-1"></span><span class="fill absolute left-0 top-1/2 h-[3px] w-0 -translate-y-1/2 bg-dusk transition-[height] duration-300 group-hover:h-1"></span></button>
-        ))}
-      </div>
-    </div>
-  </div>
 </section>
 
 <style>
   .track { transition: transform 550ms cubic-bezier(0.65, 0, 0.35, 1); will-change: transform; }
   .track.snap { transition: none; }
-  .bar .fill { width: 0; }
-  .bar.done .fill { width: 100%; }
-  .bar.on .fill { animation: fill var(--dur, 2600ms) linear forwards; }
-  [data-reel].held .bar.on .fill { animation-play-state: paused; }
-  @keyframes fill { from { width: 0; } to { width: 100%; } }
-  @media (prefers-reduced-motion: reduce) { .track { transition: none; } .bar.on .fill { animation: none; width: 100%; } }
+  @media (prefers-reduced-motion: reduce) { .track { transition: none; } }
 </style>
 
 <script>
-  // Slides on its own every 2.6 seconds. Pauses while the page is hidden or the mouse is over the hero. Swipe on touch screens, or tap a segment to jump.
+  // Slides on its own every 2.6 seconds. Pauses while the page is hidden or the mouse is over the hero. Swipe on touch screens.
   const root = document.querySelector<HTMLElement>('[data-reel]');
   const track = root?.querySelector<HTMLElement>('[data-track]');
-  if (root && track) {
-    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const bars = [...root.querySelectorAll<HTMLElement>('[data-bars] .bar')];
-    const num = root.querySelector<HTMLElement>('[data-num]')!;
-    const n = bars.length; // the track has one extra child, the repeat of the first photo
+  if (root && track && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const n = track.children.length - 1; // the last child is the repeat of the first
     const EVERY = 2600;
-    root.style.setProperty('--dur', EVERY + 'ms');
     let i = 0, timer: number | undefined, hold = false;
-    const mark = (k: number) => {
-      const cur = k % n;
-      bars.forEach((b, j) => { b.classList.remove('on', 'done'); if (j < cur) b.classList.add('done'); });
-      void bars[cur].offsetWidth;
-      bars[cur].classList.add(calm ? 'done' : 'on');
-      num.textContent = String(cur + 1).padStart(2, '0');
-    };
     const set = (k: number, animate = true) => {
       track.classList.toggle('snap', !animate);
       track.style.transform = `translateX(-${(k * 100) / (n + 1)}%)`;
       if (!animate) void track.offsetWidth;
     };
-    const go = (k: number) => { i = k; set(i); mark(i); };
     const next = () => {
       i += 1;
-      set(i); mark(i);
+      set(i);
       if (i === n) setTimeout(() => { i = 0; set(0, false); }, 600); // after sliding on to the repeat, snap back to the real first photo
     };
     const prev = () => {
       if (i === 0) { i = n; set(n, false); }
       i -= 1;
-      requestAnimationFrame(() => { set(i); mark(i); });
+      requestAnimationFrame(() => set(i));
     };
-    const loop = () => { clearInterval(timer); if (!calm && !hold && !document.hidden) timer = window.setInterval(next, EVERY); };
-    root.querySelectorAll<HTMLElement>('[data-go]').forEach((b) => b.addEventListener('click', () => { go(Number(b.dataset.go)); loop(); }));
-    const setHold = (v: boolean) => { hold = v; root.classList.toggle('held', v); loop(); };
-    root.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') setHold(true); });
-    root.addEventListener('pointerleave', (e) => { if ((e as PointerEvent).pointerType === 'mouse') setHold(false); });
+    const loop = () => { clearInterval(timer); if (!hold && !document.hidden) timer = window.setInterval(next, EVERY); };
+    root.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') { hold = true; loop(); } });
+    root.addEventListener('pointerleave', (e) => { if ((e as PointerEvent).pointerType === 'mouse') { hold = false; loop(); } });
     document.addEventListener('visibilitychange', loop);
     let x0 = 0;
     root.addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
@@ -121,7 +90,6 @@ const trust = [['10+', 'years'], ['Free', 'installation'], ['Free', 'site visit'
       const dx = e.changedTouches[0].clientX - x0;
       if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); loop(); }
     }, { passive: true });
-    mark(0);
     loop();
   }
 </script>
